@@ -1,0 +1,11 @@
+{
+  "/api": {
+    "target": "https://ws.wizground.com",
+    "secure": false,
+    "changeOrigin": true,
+    "logLevel": "debug",
+    "pathRewrite": {
+      "^/api": ""
+    }
+  }
+}

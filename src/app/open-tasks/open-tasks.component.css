@@ -1,0 +1,69 @@
+.task-container {
+  max-width: 600px;
+  margin: 40px auto;
+  padding: 20px;
+  background-color: #f8f4fc; /* סגול בהיר */
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(128, 0, 128, 0.2);
+  text-align: center;
+  direction: rtl;
+  font-family: 'Varela Round', sans-serif;
+}
+
+.task-container input {
+  width: 80%;
+  padding: 10px;
+  margin-bottom: 20px;
+  border: 2px solid #a64ca6; /* סגול בינוני */
+  border-radius: 8px;
+  font-size: 16px;
+  outline: none;
+}
+
+.task-container input::placeholder {
+  color: #b280b2;
+}
+
+.task-container button {
+  background-color: white;
+  color: #a64ca6;
+  border: 2px solid #a64ca6;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: 0.3s;
+  margin-bottom: 20px;
+}
+
+.task-container button:hover {
+  background-color: #a64ca6;
+  color: white;
+}
+
+.task-container table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+.task-container th, .task-container td {
+  padding: 12px;
+  border-bottom: 1px solid #d3b3d3;
+  text-align: center;
+}
+
+.task-container th {
+  background-color: #d3b3d3; /* סגול בהיר יותר */
+  color: #4b004b;
+}
+
+.task-container tbody tr:hover {
+  background-color: #f2e6f2;
+}
+
+.task-container div {
+  margin-top: 10px;
+  color: #800080;
+  font-size: 18px;
+}

@@ -1,0 +1,85 @@
+<div class="provider-details-form" *ngIf="myForm">
+  <form [formGroup]="myForm" (ngSubmit)="onSubmit()">
+
+    <div *ngIf="currentStep === 1">
+      <h3> פרטי ספק</h3>
+      <div class="row">
+        <app-custom-input class="child" [data]="supplierId" [control]="getFormControl('supplierId')"></app-custom-input>
+        <app-custom-input class="child" [data]="inputNameModel"
+          [control]="getFormControl('inputNameModel')"></app-custom-input>
+      </div>
+      <h3>פרטי עסק</h3>
+      <div class="row">
+        <app-custom-input class="child" [data]="inputEmailModel"
+          [control]="getFormControl('inputEmailModel')"></app-custom-input>
+        <app-custom-input class="child" [data]="inputPhoneModel"
+          [control]="getFormControl('inputPhoneModel')"></app-custom-input>
+        <app-custom-input class="child" [data]="inputAddressModel"
+          [control]="getFormControl('inputAddressModel')"></app-custom-input>
+      </div>
+
+      <h3>פרטי בנק</h3>
+      <div class="row">
+        <app-custom-input class="child" [data]="inputBankNumberModel" [control]="getFormControl('inputBankNumberModel')"
+          [options]="bankList"></app-custom-input>
+        <app-custom-input class="child" [data]="branchNumber"
+          [control]="getFormControl('branchNumber')"></app-custom-input>
+        <app-custom-input class="child" [data]="inputAccountNumberModel"
+          [control]="getFormControl('inputAccountNumberModel')"></app-custom-input>
+      </div>
+      <button type="button" class="next" (click)="nextStep()">המשך</button>
+    </div>
+
+    <div *ngIf="currentStep === 2">
+      <h3>פרטי פרויקט </h3>
+      <div class="row">
+        <app-custom-input [data]="inputOccupationModel"
+          [control]="getFormControl('inputOccupationModel')"></app-custom-input>
+        <div class="forUnit">
+          <app-custom-input [data]="inputBagTypeModel" [options]="type"
+            [control]="getFormControl('inputBagTypeModel')"></app-custom-input>
+          <label class="note" *ngIf="isOptionSelected(1)">יש להביא חשבונית מס ולא חשבונית עסקה</label>
+        </div>
+        <app-custom-input [data]="inputProjectNameModel"
+          [control]="getFormControl('inputProjectNameModel')"></app-custom-input>
+      </div>
+      <div class="row">
+        <app-custom-input [data]="inputWithDateHoldingTaxEffectModel"
+          [control]="getFormControl('inputWithDateHoldingTaxEffectModel')"></app-custom-input>
+        <app-custom-input [data]="inputDeductionPercentageModel"
+          [control]="getFormControl('inputDeductionPercentageModel')"></app-custom-input>
+        <app-custom-input [data]="inputIncomeTaxFileModel"
+          [control]="getFormControl('inputIncomeTaxFileModel')"></app-custom-input>
+      </div>
+      <div class="button-container">
+        <button type="button" class="next" (click)="nextStep()">המשך</button>
+        <button type="button" class="prev" (click)="prevStep()">חזור</button>
+      </div>
+    </div>
+ <!-- *ngIf="getFormControl('inputBagTypeModel').value ==='עוסק מורשה'" -->
+    <div *ngIf="currentStep === 3">
+      <h3> יצירת קשר ואישורים</h3>
+      <div class="row">
+        <app-custom-input [data]="inputMailFromCompanyModel"
+          [control]="getFormControl('inputMailFromCompanyModel')"></app-custom-input>
+        <app-custom-input [data]="inputNameFromCompanyModel"
+          [control]="getFormControl('inputNameFromCompanyModel')"></app-custom-input>
+      </div>
+      <div class="row">
+        <app-custom-input [data]="inputMailFromMaromModel"
+          [control]="getFormControl('inputMailFromMaromModel')" ></app-custom-input>
+        <app-custom-input [data]="inputNameFromMaromModel" (change)="onOwnerChange($event)"
+        [options]="fromMaromList" [control]="getFormControl('inputNameFromMaromModel')"></app-custom-input>
+      </div>
+      <div class="button-container">
+        <button type="submit">{{ isEditMode ? 'עדכן ספק' : 'שמור ספק ועבור להכנסת טפסים' }}</button>
+        <button type="button" class="prev" (click)="prevStep()">חזור</button>
+      </div>
+    </div>
+  </form>
+</div>
+<div class="error" *ngIf="showErrorForm"> אחד מהנתונים שהוכנסו חסר או שגוי - המידע לא נשמר!</div>
+<div class="succses" *ngIf="showSuccsesForm"> נתוניך נקלטו בהצלחה כעת תועבר להכנסת טפסים</div>
+<div *ngIf="!myForm" class="loading-spinner">
+  <app-spinner></app-spinner>
+</div>

@@ -1,0 +1,38 @@
+.header {
+    text-align: center;
+    background-color: #f8f9fa; /* Purple background */
+    color: #85649B; /* White text */
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Buttons container */
+  .buttons {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+  }
+
+  /* Text and name styling */
+.name-text {
+    font-size: 24px;
+    font-weight: bold;
+  }
+  
+  .text {
+    font-size: 18px;
+    margin-top: 10px;
+    font-weight: bold;
+  }
+  
+  /* No data styling */
+  p {
+    text-align: center;
+    font-size: 18px;
+    color: #8e24aa;
+  }
+
+
+

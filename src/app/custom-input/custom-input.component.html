@@ -1,0 +1,32 @@
+<div class="input-container" *ngIf="isControlReady">
+    <div class="floating-label-container">
+        <ng-container *ngIf="data.type === 'select'; else textInput">
+            <select class="styled-input" 
+                    [id]="data.id" 
+                    [name]="data.name" 
+                    [formControl]="control">
+                <option value="" disabled selected hidden>בחר {{ data.label }}</option>
+                <option *ngFor="let option of options" [value]="option.id">
+                    {{ option.name }}
+                </option>
+            </select>
+        </ng-container>
+
+        <!-- קלט רגיל במקרה שזה לא select -->
+        <ng-template #textInput>
+            <input class="styled-input" 
+                   [id]="data.id" 
+                   [formControl]="control" 
+                   [name]="data.name" 
+                   placeholder=" " 
+                   [type]="data.type" 
+                   maxlength="{{data.maxlength}}"
+                   [readonly]="!isEditMode && data.readonly">
+        </ng-template>
+        <label [for]="data.id" class="floating-label">{{ data.label }}</label>
+
+        <div *ngIf="control?.invalid && control?.touched" class="error">
+            {{ data.error }}
+        </div>
+    </div>
+</div>

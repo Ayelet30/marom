@@ -1,0 +1,92 @@
+.provider-details-form {
+  max-width: 800px;
+  margin: 0 auto;
+  margin-top: 40px;
+  padding: 1em;
+  border: 1px solid #85649B;
+  border-radius: 1em;
+}
+
+.row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 1em;
+}
+
+.floating-label-container {
+  position: relative;
+  flex: 1;
+  margin-right: 1em;
+}
+
+.child:last-child {
+  margin-right: 0;
+}
+
+button {
+  padding: 0.7em;
+  color: #fff;
+  background-color: #85649B;
+  border: none;
+  border-radius: 0.3em;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #b7a0c7;
+}
+
+.button-container {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.prev {
+  text-align: right;
+}
+
+.next {
+  text-align: left;
+}
+
+h3{
+  color: #85649B;
+}
+
+.error{
+  color: red;
+  padding-right: 7em;
+  padding-top: 8px;
+  position: inherit;
+  font-size: 15px;
+  direction: rtl;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.succses{
+  color:#3bbd53;
+  padding-right: 7em;
+  padding-top: 8px;
+  position: inherit;
+  font-size: 15px;
+  direction: rtl;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.note{
+  color:#85649B;
+  position: inherit;
+  font-size: 15px;
+  padding-top: 5px;
+  margin-right: 20px;
+  direction: rtl;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.forUnit{
+  margin-right: -20px !important;
+}

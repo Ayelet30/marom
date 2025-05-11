@@ -1,0 +1,127 @@
+.upload-container {
+  text-align: center;
+  direction: rtl;
+  font-family: 'Varela Round', sans-serif;
+  width: 60%;
+    margin: auto;
+}
+
+.upload-container h2 {
+  margin-top: 20px;
+  color: #85649B;
+  margin-bottom: 30px;
+  font-size: 26px;
+}
+
+.form-group {
+  margin-bottom: 20px;
+  text-align: right;
+}
+
+/* גריד דינאמי להצגת כרטיסיות בשורות */
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
+  justify-items: center;
+}
+
+@media (min-width: 600px) {
+  .form-grid {
+    grid-template-columns: repeat(2, 1fr); /* בדיוק 2 בשורה במסכים רחבים */
+  }
+}
+
+/* כרטיסיית קובץ */
+.file {
+  width: 100%;
+  max-width: 320px;
+  position: relative;
+  border-radius: 10px;
+  box-sizing: border-box;
+  background-color: #fff;
+  padding: 30px 15px;
+  text-align: center;
+  box-shadow: 0 4px 8px rgba(128, 0, 128, 0.2);
+  direction: rtl;
+}
+
+.file {
+  border: 2px dashed #ddd;
+  transition: 0.3s;
+}
+
+.file:hover {
+  border-color: #85649B;
+  background-color: #f9f5fc;
+}
+
+.file.drag-over {
+  border-color: #5e2b8c;
+  background-color: #f2e6f9;
+  box-shadow: 0 0 0 3px rgba(134, 81, 172, 0.3);
+}
+
+
+
+.uploadIcon {
+  position: relative;
+  height: 50px;
+}
+
+.uploadIcon .addIcon {
+  width: 60px;
+  height: 50px;
+  cursor: pointer;
+  margin: auto;
+  border: none !important;
+  background-color: transparent !important;
+  padding: 0;
+}
+
+input[type="file"] {
+  display: none;
+}
+
+.fileText {
+  margin-top: 10px;
+  font-size: 16px;
+  color: #85649B;
+}
+
+.nqtup {
+  position: relative;
+  animation: 1.5s cubic-bezier(0.32, 0.11, 0.21, 0.81) 0s infinite iECmZH;
+  box-sizing: border-box;
+  border-radius: 50%;
+  height: 53px;
+  width: 53px;
+  border-width: 2.65px;
+  border-style: solid;
+  border-color: transparent transparent rgba(128, 0, 128, 0.2) rgba(128, 0, 128, 0.2);
+  display: inline-block;
+}
+
+.btn-submit {
+  margin-top: 20px;
+  background-color: white;
+  color: #85649B;
+  border: 2px solid #85649B;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.btn-submit:hover {
+  background-color: #85649B;
+  color: white;
+}
+
+.btn-submit:disabled {
+  background-color: #f2e6f2;
+  color: #b280b2;
+  border-color: #b280b2;
+  cursor: not-allowed;
+}

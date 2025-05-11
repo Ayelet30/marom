@@ -1,0 +1,10 @@
+<div class="button-container">
+    <button class="styled-button styled-button-big" (click)="SendMail()">שליחת מייל מרוכז</button>
+    <button class="styled-button styled-button-big" (click)="arrangeOpenTasks()">ריכוז משימות פתוחות</button>
+</div>
+<div *ngIf="isEmailSenderVisible">
+    <app-mail-sender></app-mail-sender>
+</div>
+<div *ngIf="isShowOpenTasksTable">
+    <app-open-tasks></app-open-tasks>
+</div>

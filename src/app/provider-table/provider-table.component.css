@@ -1,0 +1,144 @@
+ /* עיצוב הקונטיינר הראשי */
+.main-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 20px;
+  width: 90%;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between; /* h3 לימין, כפתור לשמאל */
+  align-items: center;
+  width: 100%;
+}
+
+h3 {
+  margin: 0;
+  text-align: right;
+}
+
+input{
+  border-color: #85649b;
+  border-width: 0.5px;
+  color: #85649b;
+  font-size: 13px;
+  max-height: 15px;
+}
+
+/* מיכל הטבלה */
+.table-container {
+  flex: 3;
+}
+
+/* מיכל הפרטים */
+.details {
+  flex: 1;
+  min-width: 300px;
+  max-width: 400px;
+}
+
+/* Table styling */
+table {
+  margin-top: 20px;
+  width: 100%;
+  border-collapse: collapse;
+  background-color: #fff;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+th, td {
+  padding: 2px;
+  text-align: center;
+  font-size: 14px;
+  border-bottom: 3px solid #ddd;
+  color: #85649b;
+}
+
+th {
+  background-color: #85649b;
+  color: white !important;
+  padding: 10px !important;
+}
+
+
+tr:hover {
+  background-color: #f8f9fa;
+}
+
+button {
+  padding: 5px 10px;
+  background-color: #85649b;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.3s;
+}
+
+
+button:hover {
+  background-color: #b7a0c7;
+}
+
+button:disabled {
+  background-color: #b7a0c7;
+  cursor: not-allowed;
+}
+
+/* Pagination container */
+.pagination {
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+}
+
+.pagination span {
+  font-size: 18px;
+  color: #85649b;
+}
+
+.details {
+  background-color: #f8f9fa;
+  border: 1px solid #ddd;
+  padding: 20px;
+  padding-top: 0 !important;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  margin-top: 25px;
+  direction: rtl;
+}
+
+.details h3 {
+  margin-block-start: 5px !important;
+  font-size: 1.1rem;
+  color: #85649b;
+  margin-bottom: 15px;
+}
+
+.details strong {
+  color: #85649b;
+}
+
+.details div {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.details p {
+  font-size: 0.8rem;
+  color: #85649b;
+  /* line-height: 1.6; */
+  margin: 3.6px 0;
+  flex: 0 0 100%;
+}
+
+.details p:last-child {
+  margin-bottom: 0;
+}

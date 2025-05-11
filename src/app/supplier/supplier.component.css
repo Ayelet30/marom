@@ -1,0 +1,39 @@
+
+.btn-submit{
+    border: none;
+    background-color: transparent;
+}
+
+.ok-btn {
+    margin-right: 10px;
+    margin-top: 8px;
+    padding: 4px 10px;
+    cursor: pointer;
+    height: 28px;
+    width: 28px;
+    border-radius: 5px;
+    border: 2px solid #85649B;
+}
+
+.ok-btn:hover {
+    background-color: #d2bde0;
+}
+
+.row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 1em;
+  }
+
+  .message-container {
+    text-align: center;
+    padding: 20px;
+    font-size: 18px;
+    font-weight: bold;
+    background-color: #f8f9fa;
+    border: 2px solid #85649B;
+    color: #85649B;
+    border-radius: 8px;
+    width: 80%;
+    margin: 20px auto;
+}

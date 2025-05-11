@@ -1,0 +1,27 @@
+<div class="task-container">
+    <input [(ngModel)]="coordinatorId" placeholder="הכנס מזהה רכז" />
+  
+    <button (click)="loadTasks()">טען משימות פתוחות</button>
+  
+    <div *ngIf="loading">טוען...</div>
+  
+    <table *ngIf="tasks.length > 0">
+      <thead>
+        <tr>
+          <th>תאריך יעד</th>
+          <th>תיאור</th>
+          <th>כותרת</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let task of tasks">
+          <td>{{ task.dueDate | date }}</td>
+          <td>{{ task.description }}</td>
+          <td>{{ task.title }}</td>
+        </tr>
+      </tbody>
+    </table>
+  
+    <div *ngIf="!loading && tasks.length === 0">אין משימות פתוחות</div>
+  </div>
+  

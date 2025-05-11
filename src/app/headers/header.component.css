@@ -1,0 +1,13 @@
+header {
+  display: flex;
+  justify-content: flex-end; /* Aligns content to the right */
+  align-items: center;
+  padding: 10px;
+  background-color: #ffff;
+  border-bottom: thick double #85649B;;
+}
+
+.company-logo {
+  height: 100px;
+  cursor: pointer;
+}

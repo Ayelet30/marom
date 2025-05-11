@@ -1,0 +1,37 @@
+<ng-container *ngIf="!showAddNewForm; else newForm">
+  <form [formGroup]="supplierForm" (ngSubmit)="checkSupplier()">
+    <div class="id-container">
+      <div class="input-container">
+        <button class="btn-submit" type="submit" [disabled]="supplierForm.invalid">
+          <svg class="ok-btn" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path
+              d="M20.285 2.715a1.0001 1.0001 0 0 1 .121 1.41l-11 13a1.0001 1.0001 0 0 1-1.471.09l-7-6.999a1.0001 1.0001 0 1 1 1.414-1.414l6.293 6.293 10.293-12.292a1.0001 1.0001 0 0 1 1.41-.122z" />
+          </svg>
+        </button>
+
+        <div class="row">
+
+          <app-custom-input [data]="inputBranchNumberModel"
+            [control]="getFormControl('inputBranchNumberModel')"></app-custom-input>
+
+            <app-custom-input [data]="inputIDModel"
+            [control]="getFormControl('inputIDModel')"></app-custom-input>
+    
+        </div>
+      </div>
+    </div>
+  </form>
+</ng-container>
+
+<ng-container *ngIf="showMessage">
+  <div class="message-container">
+    <p>לפי הנתונים שבידינו אינך רשום במערכת</p>
+    <p>הינך מועבר לרישום למערכת</p>
+    <p>בהצלחה!</p>
+  </div>
+</ng-container>
+
+<ng-template #newForm>
+  <app-provider-details [supplierId]="inputIDModel" [isEditMode]="false"
+    [branchNumber]="inputBranchNumberModel"></app-provider-details>
+</ng-template>

@@ -1,0 +1,148 @@
+/* You can add global styles to this file, and also import other style files */
+
+/* ============== input ================= */
+.styled-button {
+  padding: 5px 20px;
+  margin: 5px;
+  font-size: 25px;
+  color: #85649B;
+  /* צבע טקסט כחול */
+  background-color: #fff;
+  /* צבע רקע לבן */
+  border: 2px solid #85649B;
+  /* מסגרת כחולה */
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.styled-button:hover {
+  background-color: #85649B;
+  color: #fff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.styled-button:active {
+  background-color: #85649B;
+  color: #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* ============== input ================= */
+.floating-label-container {
+  position: relative;
+  width: 200px;
+  display: flex;
+  flex-direction: column;
+  /* רוחב קבוע */
+}
+
+.floating-label-container + .floating-label-container {
+  margin-left: 15px;
+}
+
+.styled-input {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 16px;
+}
+
+/* עבור כרום, ספארי, אדג' */
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.id-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.input-container {
+  margin-right: 20px;
+  /* להוסיף רווח בין ה-input לכפתור */
+  padding: 5px;
+  display: flex;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.styled-input {
+  padding: 8px;
+  font-size: 16px;
+  color: #85649B;
+  background-color: #fff;
+  border: 2px solid #85649B !important;
+  border-radius: 4px;
+  width: 100%;
+  /* משתמש ברוחב ההורה */
+  text-align: right;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.styled-input:focus {
+  border-color: #85649B;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  outline: none;
+}
+
+.floating-label {
+  position: absolute;
+  top: 50%;
+  right: -10px;
+  transform: translateY(-50%);
+  color: #85649B;
+  background-color: #fff;
+  padding: 0;
+  transition: top 0.3s ease, font-size 0.3s ease, color 0.3s ease;
+  pointer-events: none;
+  /* מבטיח שהתווית לא תתערבב עם ההקלדה */
+}
+
+.styled-input:focus+.floating-label,
+.styled-input:not(:placeholder-shown)+.floating-label {
+  top: 0;
+  font-size: 15px;
+  color: #85649B;
+  background-color: none !important;
+}
+
+.styled-input:selected {
+  appearance: menulist-button;
+  background-image: none !important;
+  background-color: #fff !important;
+  color: fieldtext !important;
+}
+
+
+.styled-input:focus~.floating-label,
+.styled-input:not(:placeholder-shown)~.floating-label {
+  top: 0;
+  font-size: 0.90em;
+  color: #85649B;
+}
+
+input:-webkit-autofill {
+  background-color: transparent !important;
+  box-shadow: 0 0 0px 1000px white inset !important;
+  -webkit-text-fill-color: #000 !important; /* צבע הטקסט */
+}
+
+.error {
+  position: absolute;
+  top: 100%;
+  right: -11px;
+  font-size: 12px;
+  color: red;
+  padding-top: 2px;
+  white-space: nowrap;
+}
+
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }

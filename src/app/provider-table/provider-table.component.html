@@ -1,0 +1,134 @@
+  <div class="main-container">
+    <div class="details">
+      <div class="header">
+      <h3>פרטי ספק נבחר:</h3>
+      <div *ngIf="selectedSupplier">
+        <button *ngIf="managerMode" (click)="toggleEditMode()">
+          {{ isEditing ? 'שמור' : 'ערוך' }}
+        </button>
+      </div>
+    </div>
+      <div *ngIf="selectedSupplier">
+        <p>
+          <strong>שם ספק:   </strong>
+          <span *ngIf="!isEditing">{{ selectedSupplier.name }}</span>
+          <input *ngIf="isEditing" [(ngModel)]="editingSupplier!.name">
+        </p>
+        <p>
+          <strong>מספר עוסק מורשה:   </strong>
+          <span>{{ selectedSupplier.supplierId }}</span>
+        </p>
+        <p>
+          <strong>מספר בנק:   </strong>
+          <span *ngIf="!isEditing">{{ selectedSupplier.bankNumber }}</span>
+          <input *ngIf="isEditing" [(ngModel)]="editingSupplier!.bankNumber">
+        </p>
+        <p>
+          <strong>מספר סניף:   </strong>
+          <span *ngIf="!isEditing">{{ selectedSupplier.branchNumber }}</span>
+          <input *ngIf="isEditing" [(ngModel)]="editingSupplier!.branchNumber">
+        </p>
+        <p>
+          <strong>מספר חשבון:   </strong>
+          <span *ngIf="!isEditing">{{ selectedSupplier.accountNumber }}</span>
+          <input *ngIf="isEditing" [(ngModel)]="editingSupplier!.accountNumber">
+        </p>
+        <p>
+          <strong>כתובת:   </strong>
+          <span *ngIf="!isEditing">{{ selectedSupplier.address }}</span>
+          <input *ngIf="isEditing" [(ngModel)]="editingSupplier!.address">
+        </p>
+        <p>
+          <strong>פלאפון:   </strong>
+          <span *ngIf="!isEditing">{{ selectedSupplier.phone }}</span>
+          <input *ngIf="isEditing" [(ngModel)]="editingSupplier!.phone">
+        </p>
+        <p>
+          <strong>מייל:   </strong>
+          <span *ngIf="!isEditing">{{ selectedSupplier.email }}</span>
+          <input *ngIf="isEditing" [(ngModel)]="editingSupplier!.email">
+        </p>
+        <p>
+          <strong>תוקף ניכוי במקור:   </strong>
+          <span *ngIf="!isEditing">{{ selectedSupplier.DateHoldingTaxEffect }}</span>
+          <input *ngIf="isEditing" [(ngModel)]="editingSupplier!.DateHoldingTaxEffect">
+        </p>
+        <p><strong>אחוזי ניכוי:   </strong>
+           <span *ngIf="!isEditing">{{ selectedSupplier.DeductionPercentage }}</span>
+           <input *ngIf="isEditing" [(ngModel)]="editingSupplier!.DeductionPercentage">
+          </p>
+        <p><strong>תיק במס הכנסה:   </strong>
+          <span *ngIf="!isEditing">{{ selectedSupplier.incomeTaxFile }}</span>
+           <input *ngIf="isEditing" [(ngModel)]="editingSupplier!.incomeTaxFile">
+          </p>
+        <p><strong>שם הפרויקט:   </strong>
+          <span *ngIf="!isEditing">{{ selectedSupplier.ProjectName }}</span>
+           <input *ngIf="isEditing" [(ngModel)]="editingSupplier!.ProjectName">
+          </p>
+        <p><strong>סוג התיק:   </strong>
+          <span *ngIf="!isEditing">{{ selectedSupplier.BagType }}</span>
+          <input *ngIf="isEditing" [(ngModel)]="editingSupplier!.BagType">
+        </p>
+        <p><strong>עיסוק:</strong>
+          <span *ngIf="!isEditing">{{ selectedSupplier.Occupation }}</span>
+          <input *ngIf="isEditing" [(ngModel)]="editingSupplier!.Occupation">
+        </p>
+        <p><strong>איש קשר מטעם הספק:   </strong>
+          <span *ngIf="!isEditing">{{ selectedSupplier.NameFromCompany }}</span>
+          <input *ngIf="isEditing" [(ngModel)]="editingSupplier!.NameFromCompany">
+        </p>
+        <p><strong>מייל איש קשר מטעם הספק:   </strong>
+          <span *ngIf="!isEditing">{{ selectedSupplier.mailFromCompany }}</span>
+          <input *ngIf="isEditing" [(ngModel)]="editingSupplier!.mailFromCompany">
+        </p>
+        <p><strong>איש קשר מטעם מרום:   </strong>
+          <span *ngIf="!isEditing">{{ selectedSupplier.NameFromMarom }}</span>
+          <input *ngIf="isEditing" [(ngModel)]="editingSupplier!.NameFromMarom">
+        </p>
+        <p><strong>מייל איש קשר מטעם מרום:   </strong>
+          <span *ngIf="!isEditing">{{ selectedSupplier.mailFromMarom }}</span>
+          <input *ngIf="isEditing" [(ngModel)]="editingSupplier!.mailFromMarom">
+        </p>
+    </div>
+  </div>
+
+  <div class="table-container">
+    <div class="input-container">
+      <div class="floating-label-container">
+        <input class="styled-input" type="text" placeholder=" " (input)="filterData($event)">
+        <label for="supplierId" class="floating-label"> הכנס טקסט לחיפוש</label>
+      </div>
+    </div>
+    <table>
+      <thead>
+        <tr>
+          <th>איש קשר מטעם הספק </th>
+          <th>מייל</th>
+          <th>פלאפון</th>
+          <th>כתובת</th>
+          <th>עיסוק</th>
+          <th>מספר עוסק מורשה</th>
+          <th>שם ספק</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of currentPageData; let i = index" (click)="selectSupplier(item)">
+          <td>{{ item.NameFromCompany }}</td>
+          <td>{{ item.email }}</td>
+          <td>{{ item.phone }}</td>
+          <td>{{ item.address }}</td>
+          <td>{{ item.Occupation }}</td>
+          <td>{{ item.supplierId }}</td>
+          <td>{{ item.name }}</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="pagination">
+      <button (click)="nextPage()" [disabled]="currentPage === totalPages">הבא</button>
+      <span>עמוד {{ currentPage }}</span>
+      <button (click)="previousPage()" [disabled]="currentPage === 1">הקודם</button>
+    </div>
+  </div>
+
+</div>

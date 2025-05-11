@@ -1,0 +1,33 @@
+
+  <div class="container">
+    <form (ngSubmit)="prepareAndSendEmails()">
+      <div >
+  
+        <div class="row">
+          <app-custom-input class="child" [data]="inputSelectExelModel" (change)="onFileUpload($event, 'excel')"></app-custom-input>
+        </div >
+  
+        <div class="row">
+  
+          <app-custom-input  class="child" [data]="inputSubjectModel"></app-custom-input>
+  
+        </div >
+  
+        <div class="row">
+  
+          <app-custom-input class="child" [data]="inputTextModel"></app-custom-input>
+  
+        </div >
+  
+        <div class="row">
+  
+          <app-custom-input  [data]="inputSelectFileModel" (change)="onFileUpload($event, 'pdf')" required></app-custom-input>
+  
+        </div >
+  
+      </div>
+  
+      <button type="submit">שלח</button>
+    </form>
+  </div>
+  

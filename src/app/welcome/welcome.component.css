@@ -1,0 +1,13 @@
+.button-container {
+    display: flex;
+    flex-direction: column; /* סידור כפתורים אחד מתחת לשני */
+    align-items: center; 
+    gap: 20px;
+    margin-top: 50px;
+  }
+
+  .styled-button-big{
+    width: 220px;
+  }
+  
+  
