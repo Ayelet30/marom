@@ -125,3 +125,14 @@ input[type="file"] {
   border-color: #b280b2;
   cursor: not-allowed;
 }
+
+.file-link {
+  margin-top: 5px;
+}
+
+.file-link a {
+  color: #007bff;
+  text-decoration: underline;
+  font-size: 0.9em;
+}
+

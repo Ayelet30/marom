@@ -1,0 +1,17 @@
+.main-layout {
+  display: flex;
+  height: 100vh; /* גובה מלא */
+}
+
+.button-container {
+  width: 20%;
+  background-color: #f1f1f1; /* רקע אופציונלי */
+  padding: 10px;
+  box-sizing: border-box;
+}
+
+.content-container {
+  width: 80%;
+  box-sizing: border-box;
+  overflow-y: auto;
+}

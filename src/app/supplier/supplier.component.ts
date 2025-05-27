@@ -86,19 +86,19 @@ export class SupplierComponent implements OnInit {
       return;
     }
 
-    const supplierId = this.supplierForm.value.inputIDModel;
+    const taxFileNum = this.supplierForm.value.inputIDModel;
     const branchNumber = this.supplierForm.value.inputBranchNumberModel;
 
-    if (!supplierId) {
-      console.error('Error: supplierId is undefined');
+    if (!taxFileNum) {
+      console.error('Error: taxFileNum is undefined');
       return;
     }
 
     // עדכון המודלים עם הערכים שהוזנו בטופס
-    this.inputIDModel.value = supplierId;
+    this.inputIDModel.value = taxFileNum;
     this.inputBranchNumberModel.value = branchNumber;
 
-    this.supplierData = await this.firestoreService.getDocumentByParameter('providers', "supplierId", supplierId);
+    this.supplierData = await this.firestoreService.getDocumentByParameter('providers', "taxFileNum", taxFileNum);
 
     console.log(this.supplierData)
 

@@ -10,6 +10,8 @@ import { Router, RouterModule } from '@angular/router';
 import { SupplierService } from '../services/supplier.service';
 import { SpinnerComponent } from "../spinner/spinner.component";
 import { ProvidersDetails } from '../models/providers-details.model';
+import { buildPluginData } from '../shared/utils';
+import { WizgroundService } from '../services/wizground.service';
 
 
 @Component({
@@ -29,26 +31,30 @@ export class NewProviderComponent {
   showSuccsesForm: boolean = false;
 
   @Input() isEditMode: boolean = false; // הוספת משתנה למצב עריכה
-  @Input() supplierId!: InputData;
+  @Input() taxFileNum!: InputData;
   @Input() branchNumber!: InputData;
 
   constructor(private firestoreService: FirestoreService,
     private fb: FormBuilder,
     private supplierService: SupplierService,
-    private router: Router) { }
+    private router: Router,
+    private wizground: WizgroundService ) { }
 
   provider: ProvidersDetails = {
-    supplierId: '',
-    name: '',
+    accountKey: "",
+    sortGroup: "89",
+    taxFileNum: '',
+    fullName: '',
     bankNumber: '',
     branchNumber: '',
     accountNumber: '',
     address: '',
+    city: '',
     phone: '',
     email: '',
     DateHoldingTaxEffect: '',
     DeductionPercentage: '',
-    incomeTaxFile: '',
+    deductFile: '',
     ProjectName: '',
     BagType: '',
     Occupation: '',
@@ -96,6 +102,15 @@ export class NewProviderComponent {
     error: "יש להכניס כתובת"
   };
 
+  inputCityModel: InputData = {
+    id: 'city',
+    label: ' עיר',
+    value: '',
+    type: 'text',
+    name: "city",
+    error: "יש להכניס עיר"
+  };
+
   inputPhoneModel: InputData = {
     id: 'phone',
     label: ' פלאפון',
@@ -132,12 +147,12 @@ export class NewProviderComponent {
     error: "מס לא חוקי"
   };
 
-  inputIncomeTaxFileModel: InputData = {
-    id: 'incomeTaxFile',
+  inputdeductFileModel: InputData = {
+    id: 'deductFile',
     label: 'תיק מס הכנסה',
     value: '',
     type: 'text',
-    name: "incomeTaxFile",
+    name: "deductFile",
     error: "לא חוקי",
     maxlength: '9'
   };
@@ -247,19 +262,20 @@ export class NewProviderComponent {
   ngOnInit() {
 
     this.setMaromOwnerList();
-   
+
     this.myForm = this.fb.group({
-      supplierId: [this.supplierId.value, Validators.required],
+      taxFileNum: [this.taxFileNum.value, Validators.required],
       inputNameModel: [this.inputNameModel.value, Validators.required],
       inputBankNumberModel: [this.inputBankNumberModel.value, Validators.required],
       branchNumber: [this.branchNumber.value, Validators.required],
       inputAccountNumberModel: [this.inputAccountNumberModel.value, Validators.required],
       inputAddressModel: [this.inputAddressModel.value, Validators.required],
+      inputCityModel: [this.inputCityModel.value, Validators.required],
       inputPhoneModel: [this.inputPhoneModel.value, [Validators.required, Validators.pattern('[0-9]{10}')]],
       inputEmailModel: [this.inputEmailModel.value, [Validators.required, Validators.email]],
       inputWithDateHoldingTaxEffectModel: [this.inputWithDateHoldingTaxEffectModel.value, Validators.required],
       inputDeductionPercentageModel: [this.inputDeductionPercentageModel.value, Validators.required],
-      inputIncomeTaxFileModel: [this.inputIncomeTaxFileModel.value, Validators.required],
+      inputdeductFileModel: [this.inputdeductFileModel.value, Validators.required],
       inputProjectNameModel: [this.inputProjectNameModel.value, Validators.required],
       inputBagTypeModel: [this.inputBagTypeModel.value, Validators.required],
       inputOccupationModel: [this.inputOccupationModel.value, Validators.required],
@@ -270,10 +286,10 @@ export class NewProviderComponent {
       agree: [true, Validators.requiredTrue]
     });
 
-    
+
 
     if (!this.isEditMode) {
-      this.supplierId.readonly = 'true';
+      this.taxFileNum.readonly = 'true';
       this.branchNumber.readonly = 'true';
     } else {
       const supplierData = this.supplierService.getSupplier();
@@ -283,22 +299,23 @@ export class NewProviderComponent {
         this.loadSupplierFromFirestore();
       }
     }
-  }  
+  }
 
   fillForm(supplierData: any) {
     console.log("!!!!!", supplierData);
     this.myForm.patchValue({
-      supplierId: supplierData.supplierId,
+      taxFileNum: supplierData.taxFileNum,
       inputNameModel: supplierData.name,
       inputBankNumberModel: supplierData.bankNumber,
       branchNumber: supplierData.branchNumber,
       inputAccountNumberModel: supplierData.accountNumber,
       inputAddressModel: supplierData.address,
+      inputCityModel: supplierData.city,
       inputPhoneModel: supplierData.phone,
       inputEmailModel: supplierData.email,
       inputWithDateHoldingTaxEffectModel: supplierData.DateHoldingTaxEffect,
       inputDeductionPercentageModel: supplierData.DeductionPercentage,
-      inputIncomeTaxFileModel: supplierData.incomeTaxFile,
+      inputdeductFileModel: supplierData.deductFile,
       inputProjectNameModel: supplierData.ProjectName,
       inputBagTypeModel: supplierData.BagType,
       inputOccupationModel: supplierData.Occupation,
@@ -309,9 +326,9 @@ export class NewProviderComponent {
     });
   }
 
-  async setMaromOwnerList(){
+  async setMaromOwnerList() {
     const ownersData = await this.firestoreService.getDocuments('/coordinators');
-    this.fromMaromList  = ownersData.map((doc: any) => ({
+    this.fromMaromList = ownersData.map((doc: any) => ({
       id: doc.coordinatorId,
       name: doc.name,
       email: doc.email
@@ -320,17 +337,18 @@ export class NewProviderComponent {
   }
 
   onOwnerChange(event: any) {
-    const selectedValue = event.target.value;    
+    const selectedValue = event.target.value;
     const selectedOwner = this.fromMaromList.find(owner => owner.id === selectedValue);
     this.inputMailFromMaromModel.value = selectedOwner.email ? selectedOwner.email : '';
-    this.myForm.patchValue({ inputMailFromMaromModel: selectedOwner.email ? selectedOwner.email : '',
+    this.myForm.patchValue({
+      inputMailFromMaromModel: selectedOwner.email ? selectedOwner.email : '',
     });
   }
-  
+
 
   async loadSupplierFromFirestore() {
     try {
-      const supplierData = await this.firestoreService.getDocumentByParameter('providers', "supplierId", this.supplierId.value);
+      const supplierData = await this.firestoreService.getDocumentByParameter('providers', "taxFileNum", this.taxFileNum.value);
       if (supplierData) {
         this.myForm.patchValue(supplierData);
       }
@@ -344,20 +362,23 @@ export class NewProviderComponent {
   }
 
   onSubmit() {
-   
+
     this.showErrorForm = false;
     this.provider = {
-      supplierId: this.myForm.get('supplierId')?.value,
-      name: this.myForm.get('inputNameModel')?.value,
+      accountKey: "",
+      sortGroup: "89",
+      taxFileNum: this.myForm.get('taxFileNum')?.value,
+      fullName: this.myForm.get('inputNameModel')?.value,
       bankNumber: this.myForm.get('inputBankNumberModel')?.value,
       branchNumber: this.myForm.get('branchNumber')?.value,
       accountNumber: this.myForm.get('inputAccountNumberModel')?.value,
       address: this.myForm.get('inputAddressModel')?.value,
+      city: this.myForm.get('inputCityModel')?.value,
       phone: this.myForm.get('inputPhoneModel')?.value,
       email: this.myForm.get('inputEmailModel')?.value,
       DateHoldingTaxEffect: this.myForm.get('inputWithDateHoldingTaxEffectModel')?.value,
       DeductionPercentage: this.myForm.get('inputDeductionPercentageModel')?.value,
-      incomeTaxFile: this.myForm.get('inputIncomeTaxFileModel')?.value,
+      deductFile: this.myForm.get('inputdeductFileModel')?.value,
       ProjectName: this.myForm.get('inputProjectNameModel')?.value,
       BagType: this.myForm.get('inputBagTypeModel')?.value,
       Occupation: this.myForm.get('inputOccupationModel')?.value,
@@ -383,25 +404,51 @@ export class NewProviderComponent {
     }
   }
 
-  async addSupplier() {
-    try {
-      const supplierId = await this.firestoreService.addSupplier('providers', this.provider);
-      console.log('Supplier added with ID:', supplierId,this.provider );
-      this.supplierService.setSupplier(this.provider);
+ async addSupplier() {
+  try {
+    const taxFileNum = await this.firestoreService.addSupplierWithAutoAccountKey('providers', this.provider);
+    console.log('Supplier added with ID:', taxFileNum, this.provider);
+    this.supplierService.setSupplier(this.provider);
+    this.addSupplierToHashavshevet(this.provider);
 
-      setTimeout(() => {
-        this.router.navigate(['/addDocuments']);
-      }, 3000);
-      
+    setTimeout(() => {
+      this.router.navigate(['/addDocuments']);
+    }, 3000);
 
-    } catch (error) {
-      console.error('Error adding supplier:', error);
-    }
+  } catch (error) {
+    console.error('Error adding supplier:', error);
+  }
+}
+
+
+  addSupplierToHashavshevet(provider: ProvidersDetails) {
+    const fields = [
+  { key: "sortGroup", value: provider.sortGroup },
+  { key: "accountKey", value: provider.accountKey },
+  { key: "taxFileNum", value: provider.taxFileNum },
+  { key: "fullName", value: provider.fullName },
+  { key: "bankCode", value: provider.bankNumber },
+  { key: "branchCode", value: provider.branchNumber },
+  { key: "bankAccount", value: provider.accountNumber },
+  { key: "Address", value: provider.address },
+  { key: "City", value: provider.city },
+  { key: "Phon", value: provider.phone },
+  { key: "Email", value: provider.email },
+  // { key: "deductionValid", value: new Date(provider.DateHoldingTaxEffect) },
+  { key: "deductionPrc", value: parseFloat(provider.DeductionPercentage).toFixed(2) },
+  { key: "deductFile", value: provider.deductFile }
+];
+
+ const pluginData = [buildPluginData(fields)];
+        this.wizground.sendData(pluginData, "heshin").subscribe(
+      (res) => console.log('Response:', res),
+      (err) => console.error('Error:', err));
+
   }
 
   async updateSupplier() {
     try {
-      await this.firestoreService.updateDocumentBySupplierId('providers', this.provider.supplierId, this.provider);
+      await this.firestoreService.updateDocumentByTaxFileNum('providers', this.provider.taxFileNum, this.provider);
       console.log('Supplier updated:', this.provider);
     } catch (error) {
       console.error('Error updating supplier:', error);
@@ -420,15 +467,16 @@ export class NewProviderComponent {
     this.inputNameModel.value = '';
     this.inputBankNumberModel.value = '';
     this.branchNumber.value = '';
-    this.supplierId.value = '';
+    this.taxFileNum.value = '';
     this.inputAccountNumberModel.value = '';
     this.inputAddressModel.value = '';
+    this.inputCityModel.value = '';
     this.inputPhoneModel.value = '';
     this.inputEmailModel.value = '';
   }
 
   isOptionSelected(option: number): boolean {
     return this.myForm.get('inputBagTypeModel')?.value === option.toString;
-}
+  }
 
 }

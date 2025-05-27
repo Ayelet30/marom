@@ -16,7 +16,7 @@ export class CustomInputComponent {
   @Input() control!: FormControl; 
   @Input() isEditMode: boolean = false;
 
-  @ViewChild('inputRef') inputRef!: NgModel;  // ייקח את האלמנט מה-Template
+  @ViewChild('inputRef') inputRef!: NgModel;  
 
 
   get isControlReady(): boolean {

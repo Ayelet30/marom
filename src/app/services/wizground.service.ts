@@ -5,9 +5,15 @@ import { Injectable } from '@angular/core';
   providedIn: 'root'
 })
 export class WizgroundService {
+
+   private apiUrl = 'http://localhost:3000/api/send-wizground';
+
   constructor(private http: HttpClient) {}
 
-  sendData() {
-    return this.http.post('http://localhost:3000/api/send-wizground', {});
+  sendData(moduleData: any[], plugin: string) {
+    return this.http.post(this.apiUrl, {
+      moduleData,
+      plugin
+    });
   }
 }

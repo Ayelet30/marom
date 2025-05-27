@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 import { FirestoreService } from '../services/firestore.service';
 import { ProvidersDetails } from '../models/providers-details.model';
 import { FormsModule } from '@angular/forms';
-import { HashavshevetService } from '../services/hashavshevet.service';
 import { WizgroundService } from '../services/wizground.service';
 
 @Component({
@@ -26,23 +25,21 @@ export class ProviderTableComponent implements OnInit {
   editingSupplier: ProvidersDetails | undefined;
   isEditing: boolean = false;
 
+  
   constructor(private firestoreService: FirestoreService,
-              private hashavshevetService: HashavshevetService,
-              private wizground: WizgroundService
+    private wizground: WizgroundService
   ) {
   }
-
+  
   ngOnInit() {
     this.loadData();
   }
-
+  
   async loadData() {
 
-    // this.hashavshevetService.getCustomers().subscribe({
-    //   next: data => console.log('לקוחות:', data),
-    //   error: err => console.error('שגיאה:', err)
-    // });
-    this.wizground.sendData().subscribe(
+    const data = [{"ItemKey": "A2000"}];
+    
+    this.wizground.sendData(data, "itemin").subscribe(
       (res) => console.log('Response:', res),
       (err) => console.error('Error:', err)
     );
@@ -57,17 +54,20 @@ export class ProviderTableComponent implements OnInit {
       this.data = providers.map((docSnap) => {
         const data = docSnap;
         return {
+          sortGroup: data['sortGroup'],
+          accountKey: data['accountKey'],
           name: data!['name'],
-          supplierId: data!['supplierId'],
+          taxFileNum: data!['taxFileNum'],
           email: data!['email'],
           phone: data!['phone'],
           address: data!['address'],
+          city: data['city'],
           bankNumber: data!['bankNumber'],
           branchNumber: data!['branchNumber'],
           accountNumber: data!['accountNumber'],
           DateHoldingTaxEffect: data!['DateHoldingTaxEffect'],
           DeductionPercentage: data!['DeductionPercentage'],
-          incomeTaxFile: data!['incomeTaxFile'],
+          deductFile: data!['deductFile'],
           ProjectName: data!['ProjectName'],
           BagType: data!['BagType'],
           Occupation: data!['Occupation'],
@@ -111,7 +111,7 @@ export class ProviderTableComponent implements OnInit {
   filterData(event: Event) {
     const query = (event.target as HTMLInputElement).value.toLowerCase();
     this.filteredData = this.data.filter(item =>
-      item.name.toLowerCase().includes(query) ||
+      item.fullName.toLowerCase().includes(query) ||
       item.email.toLowerCase().includes(query)
     );
     this.currentPage = 1;  // Reset to first page after filter
@@ -136,7 +136,7 @@ export class ProviderTableComponent implements OnInit {
 
   async updateSupplier(supplier: ProvidersDetails){
     console.log(supplier);
-    await this.firestoreService.updateDocumentBySupplierId('providers', supplier.supplierId, supplier);
+    await this.firestoreService.updateDocumentByTaxFileNum('providers', supplier.taxFileNum, supplier);
     this.loadData();
   }
 }

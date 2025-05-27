@@ -58,8 +58,8 @@ export class ExistProviderComponent {
       this.providerData = history.state.providerData;
     }
     console.log("Provider Data:", this.providerData);
-    this.name = this.providerData!['name'];
-    this.id = this.providerData!['supplierId'];
+    this.name = this.providerData!['fullName'];
+    this.id = this.providerData!['taxFileNum'];
   }
   
 

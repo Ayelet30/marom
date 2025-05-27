@@ -4,19 +4,25 @@
     <div *ngIf="currentStep === 1">
       <h3> פרטי ספק</h3>
       <div class="row">
-        <app-custom-input class="child" [data]="supplierId" [control]="getFormControl('supplierId')"></app-custom-input>
+        <app-custom-input class="child" [data]="taxFileNum" [control]="getFormControl('taxFileNum')"></app-custom-input>
         <app-custom-input class="child" [data]="inputNameModel"
           [control]="getFormControl('inputNameModel')"></app-custom-input>
       </div>
       <h3>פרטי עסק</h3>
       <div class="row">
+        <app-custom-input class="child" [data]="inputCityModel"
+          [control]="getFormControl('inputCityModel')"></app-custom-input>
+        <app-custom-input class="child" [data]="inputAddressModel"
+          [control]="getFormControl('inputAddressModel')"></app-custom-input>
+      </div>
+      
+      <div class="row">
         <app-custom-input class="child" [data]="inputEmailModel"
           [control]="getFormControl('inputEmailModel')"></app-custom-input>
         <app-custom-input class="child" [data]="inputPhoneModel"
           [control]="getFormControl('inputPhoneModel')"></app-custom-input>
-        <app-custom-input class="child" [data]="inputAddressModel"
-          [control]="getFormControl('inputAddressModel')"></app-custom-input>
       </div>
+      
 
       <h3>פרטי בנק</h3>
       <div class="row">
@@ -48,8 +54,8 @@
           [control]="getFormControl('inputWithDateHoldingTaxEffectModel')"></app-custom-input>
         <app-custom-input [data]="inputDeductionPercentageModel"
           [control]="getFormControl('inputDeductionPercentageModel')"></app-custom-input>
-        <app-custom-input [data]="inputIncomeTaxFileModel"
-          [control]="getFormControl('inputIncomeTaxFileModel')"></app-custom-input>
+        <app-custom-input [data]="inputdeductFileModel"
+          [control]="getFormControl('inputdeductFileModel')"></app-custom-input>
       </div>
       <div class="button-container">
         <button type="button" class="next" (click)="nextStep()">המשך</button>

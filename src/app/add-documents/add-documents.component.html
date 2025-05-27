@@ -3,31 +3,24 @@
 
   <div class="form-grid">
 
-    <div
-  class="file"
-  [class.drag-over]="dragOverIndex === doc.type"
-  *ngFor="let doc of documents"
-  (dragover)="onDragOver($event, doc.type)"
-  (dragleave)="onDragLeave($event)"
-  (drop)="onDrop($event, doc.type)"
->
- <label class="uploadIcon" [attr.for]="'upload-' + doc.type">
-    <img
-      src="https://cdn.menoramivt.co.il/public/images/cw54ewhsk3sqkri4-upload-ic.svg"
-      alt="העלאת {{ doc.label }}"
-    />
-  </label>
-  <input
-    id="upload-{{ doc.type }}"
-    type="file"
-    (change)="onFileSelected($event, doc.type)"
-    accept=".pdf,.jpg,.png"
-  />
+    <div class="file" [class.drag-over]="dragOverIndex === doc.type" *ngFor="let doc of documents"
+      (dragover)="onDragOver($event, doc.type)" (dragleave)="onDragLeave($event)" (drop)="onDrop($event, doc.type)">
+      <label class="uploadIcon" [attr.for]="'upload-' + doc.type">
+        <img src="https://cdn.menoramivt.co.il/public/images/cw54ewhsk3sqkri4-upload-ic.svg"
+          alt="העלאת {{ doc.label }}" />
+      </label>
+      <input id="upload-{{ doc.type }}" type="file" (change)="onFileSelected($event, doc.type)"
+        accept=".pdf,.jpg,.png" />
 
-  <p class="fileText">{{ doc.label }}</p>
-  <i class="fa fa-paperclip"></i>
-  {{ selectedFiles[doc.type] || 'לא נבחר קובץ' }}
-</div>
+      <p class="fileText">{{ doc.label }}</p>
+      <i class="fa fa-paperclip"></i>
+      {{ selectedFiles[doc.type] || 'לא נבחר קובץ' }}
+
+      <div *ngIf="doc.link" class="file-link">
+        <a [href]="doc.link" target="_blank" rel="noopener noreferrer">לצפייה במסמך</a>
+      </div>
+
+    </div>
   </div>
 
   <button type="submit" class="btn-submit">שלח</button>

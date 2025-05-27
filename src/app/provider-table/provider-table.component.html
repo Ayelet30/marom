@@ -10,13 +10,23 @@
     </div>
       <div *ngIf="selectedSupplier">
         <p>
+          <strong>קוד מיון:   </strong>
+          <span *ngIf="!isEditing">{{ selectedSupplier.sortGroup }}</span>
+          <input *ngIf="isEditing" [(ngModel)]="editingSupplier!.sortGroup">
+        </p>
+        <p>
+          <strong>מפתח חשבון:  </strong>
+          <span *ngIf="!isEditing">{{ selectedSupplier.accountKey }}</span>
+          <input *ngIf="isEditing" [(ngModel)]="editingSupplier!.accountKey">
+        </p>
+        <p>
           <strong>שם ספק:   </strong>
-          <span *ngIf="!isEditing">{{ selectedSupplier.name }}</span>
-          <input *ngIf="isEditing" [(ngModel)]="editingSupplier!.name">
+          <span *ngIf="!isEditing">{{ selectedSupplier.fullName }}</span>
+          <input *ngIf="isEditing" [(ngModel)]="editingSupplier!.fullName">
         </p>
         <p>
           <strong>מספר עוסק מורשה:   </strong>
-          <span>{{ selectedSupplier.supplierId }}</span>
+          <span>{{ selectedSupplier.taxFileNum }}</span>
         </p>
         <p>
           <strong>מספר בנק:   </strong>
@@ -39,6 +49,11 @@
           <input *ngIf="isEditing" [(ngModel)]="editingSupplier!.address">
         </p>
         <p>
+          <strong>עיר:   </strong>
+          <span *ngIf="!isEditing">{{ selectedSupplier.city }}</span>
+          <input *ngIf="isEditing" [(ngModel)]="editingSupplier!.city">
+        </p>
+        <p>
           <strong>פלאפון:   </strong>
           <span *ngIf="!isEditing">{{ selectedSupplier.phone }}</span>
           <input *ngIf="isEditing" [(ngModel)]="editingSupplier!.phone">
@@ -58,8 +73,8 @@
            <input *ngIf="isEditing" [(ngModel)]="editingSupplier!.DeductionPercentage">
           </p>
         <p><strong>תיק במס הכנסה:   </strong>
-          <span *ngIf="!isEditing">{{ selectedSupplier.incomeTaxFile }}</span>
-           <input *ngIf="isEditing" [(ngModel)]="editingSupplier!.incomeTaxFile">
+          <span *ngIf="!isEditing">{{ selectedSupplier.deductFile }}</span>
+           <input *ngIf="isEditing" [(ngModel)]="editingSupplier!.deductFile">
           </p>
         <p><strong>שם הפרויקט:   </strong>
           <span *ngIf="!isEditing">{{ selectedSupplier.ProjectName }}</span>
@@ -96,7 +111,7 @@
     <div class="input-container">
       <div class="floating-label-container">
         <input class="styled-input" type="text" placeholder=" " (input)="filterData($event)">
-        <label for="supplierId" class="floating-label"> הכנס טקסט לחיפוש</label>
+        <label for="taxFileNum" class="floating-label"> הכנס טקסט לחיפוש</label>
       </div>
     </div>
     <table>
@@ -109,17 +124,19 @@
           <th>עיסוק</th>
           <th>מספר עוסק מורשה</th>
           <th>שם ספק</th>
+          <th>מפתח חשבון</th>
         </tr>
       </thead>
       <tbody>
         <tr *ngFor="let item of currentPageData; let i = index" (click)="selectSupplier(item)">
+          <td>{{ item.accountKey }}</td>
           <td>{{ item.NameFromCompany }}</td>
           <td>{{ item.email }}</td>
           <td>{{ item.phone }}</td>
           <td>{{ item.address }}</td>
           <td>{{ item.Occupation }}</td>
-          <td>{{ item.supplierId }}</td>
-          <td>{{ item.name }}</td>
+          <td>{{ item.taxFileNum }}</td>
+          <td>{{ item.fullName }}</td>
         </tr>
       </tbody>
     </table>
