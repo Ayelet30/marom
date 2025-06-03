@@ -14,6 +14,8 @@ export const routes: Routes = [
   { path: 'WelcomeComponent', component: WelcomeComponent },
   { path: 'addDocuments', component: AddDocumentComponent },
   { path: 'existProvider', component: ExistProviderComponent},
-  { path: '', redirectTo: '/MailSenderComponent', pathMatch: 'full' }
+  { path: '', redirectTo: '/MailSenderComponent', pathMatch: 'full' },
+
+
 ];
 

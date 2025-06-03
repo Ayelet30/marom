@@ -15,7 +15,7 @@ import { InputData } from '../models/input-data.model';
   styleUrls: ['./exist-provider.component.css']
 })
 export class ExistProviderComponent {
-
+  public static lastProviderData: DocumentData | undefined = undefined;
   constructor(private firestoreService: FirestoreService,
     private router: Router,
     private authService: AuthService,
@@ -48,19 +48,30 @@ export class ExistProviderComponent {
 
   showAddNewForm:boolean = false;
 
-  ngOnInit(): void {
-    // ניסיון ראשון לקבלת state מהניווט הנוכחי
-    const navigation = this.router.getCurrentNavigation();
-    if (navigation?.extras.state) {
-      this.providerData = navigation.extras.state['providerData'];
-    } else {
-      // אם לא נמצא state מהניווט (למשל בדף רענן) – לקבל את state מה-history
-      this.providerData = history.state.providerData;
-    }
-    console.log("Provider Data:", this.providerData);
-    this.name = this.providerData!['fullName'];
-    this.id = this.providerData!['taxFileNum'];
+ ngOnInit(): void {
+  const navigation = this.router.getCurrentNavigation();
+
+  if (navigation?.extras.state?.['providerData']) {
+    this.providerData = navigation.extras.state['providerData'];
+  } else if (history.state?.['providerData']) {
+    this.providerData = history.state['providerData'];
+  } else if (ExistProviderComponent.lastProviderData) {
+    this.providerData = ExistProviderComponent.lastProviderData;
+  } else {
+    console.warn("לא התקבלו נתוני ספק — נשאר בדף ריק");
+    return;
   }
+
+  // שמירה לזיכרון סטטי
+  ExistProviderComponent.lastProviderData = this.providerData;
+
+  // ✅ תנאי לפני גישה למידע כדי למנוע שגיאת 'possibly undefined'
+  if (this.providerData) {
+    this.name = this.providerData['fullName'];
+    this.id = this.providerData['taxFileNum'];
+  }
+}
+
   
 
     addDocumentsForProvider() {

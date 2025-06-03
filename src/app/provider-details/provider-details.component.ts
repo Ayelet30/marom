@@ -14,6 +14,7 @@ import { buildPluginData } from '../shared/utils';
 import { WizgroundService } from '../services/wizground.service';
 
 
+
 @Component({
   selector: 'app-provider-details',
   standalone: true,
@@ -39,6 +40,15 @@ export class NewProviderComponent {
     private supplierService: SupplierService,
     private router: Router,
     private wizground: WizgroundService ) { }
+    
+   goBack() {
+    console.log("לחיצה על כפתור חזור!");
+this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
+  this.router.navigate(['/existProvider']);
+});
+}
+
+
 
   provider: ProvidersDetails = {
     accountKey: "",
@@ -302,29 +312,56 @@ export class NewProviderComponent {
   }
 
   fillForm(supplierData: any) {
-    console.log("!!!!!", supplierData);
-    this.myForm.patchValue({
-      taxFileNum: supplierData.taxFileNum,
-      inputNameModel: supplierData.fullName,
-      inputBankNumberModel: supplierData.bankNumber,
-      branchNumber: supplierData.branchNumber,
-      inputAccountNumberModel: supplierData.accountNumber,
-      inputAddressModel: supplierData.address,
-      inputCityModel: supplierData.city,
-      inputPhoneModel: supplierData.phone,
-      inputEmailModel: supplierData.email,
-      inputWithDateHoldingTaxEffectModel: supplierData.DateHoldingTaxEffect,
-      inputDeductionPercentageModel: supplierData.DeductionPercentage,
-      inputdeductFileModel: supplierData.deductFile,
-      inputProjectNameModel: supplierData.ProjectName,
-      inputBagTypeModel: supplierData.BagType,
-      inputOccupationModel: supplierData.Occupation,
-      inputNameFromCompanyModel: supplierData.NameFromCompany,
-      inputMailFromCompanyModel: supplierData.mailFromCompany,
-      inputNameFromMaromModel: supplierData.NameFromMarom,
-      inputMailFromMaromModel: supplierData.mailFromMarom,
-    });
-  }
+  console.log("!!!!!", supplierData);
+
+  // עדכון ה־value של כל אובייקט InputData, כדי שיוצג בשדות
+  this.inputNameModel.value = supplierData.fullName;
+  console.log('שם הספק:', supplierData.fullName);
+  console.log("שם לאחר העדכון:", this.inputNameModel.value);
+
+
+  this.inputBankNumberModel.value = supplierData.bankNumber;
+  this.branchNumber.value = supplierData.branchNumber;
+  this.taxFileNum.value = supplierData.taxFileNum;
+  this.inputAccountNumberModel.value = supplierData.accountNumber;
+  this.inputAddressModel.value = supplierData.address;
+  this.inputCityModel.value = supplierData.city;
+  this.inputPhoneModel.value = supplierData.phone;
+  this.inputEmailModel.value = supplierData.email;
+  this.inputWithDateHoldingTaxEffectModel.value = supplierData.DateHoldingTaxEffect;
+  this.inputDeductionPercentageModel.value = supplierData.DeductionPercentage;
+  this.inputdeductFileModel.value = supplierData.deductFile;
+  this.inputProjectNameModel.value = supplierData.ProjectName;
+  this.inputBagTypeModel.value = supplierData.BagType;
+  this.inputOccupationModel.value = supplierData.Occupation;
+  this.inputNameFromCompanyModel.value = supplierData.NameFromCompany;
+  this.inputMailFromCompanyModel.value = supplierData.mailFromCompany;
+  this.inputNameFromMaromModel.value = supplierData.NameFromMarom;
+  this.inputMailFromMaromModel.value = supplierData.mailFromMarom;
+
+  // עדכון גם של ה־FormGroup
+  this.myForm.patchValue({
+    taxFileNum: supplierData.taxFileNum,
+    inputNameModel: supplierData.name,
+    inputBankNumberModel: supplierData.bankNumber,
+    branchNumber: supplierData.branchNumber,
+    inputAccountNumberModel: supplierData.accountNumber,
+    inputAddressModel: supplierData.address,
+    inputCityModel: supplierData.city,
+    inputPhoneModel: supplierData.phone,
+    inputEmailModel: supplierData.email,
+    inputWithDateHoldingTaxEffectModel: supplierData.DateHoldingTaxEffect,
+    inputDeductionPercentageModel: supplierData.DeductionPercentage,
+    inputdeductFileModel: supplierData.deductFile,
+    inputProjectNameModel: supplierData.ProjectName,
+    inputBagTypeModel: supplierData.BagType,
+    inputOccupationModel: supplierData.Occupation,
+    inputNameFromCompanyModel: supplierData.NameFromCompany,
+    inputMailFromCompanyModel: supplierData.mailFromCompany,
+    inputNameFromMaromModel: supplierData.NameFromMarom,
+    inputMailFromMaromModel: supplierData.mailFromMarom,
+  });
+}
 
   async setMaromOwnerList() {
     const ownersData = await this.firestoreService.getDocuments('/coordinators');
