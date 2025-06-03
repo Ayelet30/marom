@@ -1,13 +1,17 @@
-// upload.service.ts
-import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
-import { storage } from '../models/firebase.config';
+import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
 
-export const uploadFileToFirebase = async (file: File, path: string): Promise<string> => {
-  const storageRef = ref(storage, path);
-  console.log("11111111", storageRef);
-  await uploadBytes(storageRef, file);
-  console.log("22222222");
-  const downloadUrl = await getDownloadURL(storageRef);
-  console.log('✅ File uploaded. URL:', downloadUrl);
-  return downloadUrl;
-};
+@Injectable({
+  providedIn: 'root'
+})
+export class FileUploadService {
+  constructor(private http: HttpClient) {}
+
+  uploadFile(file: File) {
+    const formData = new FormData();
+    formData.append('file', file);
+
+    // שליחת הבקשה לשרת (שמריץ את index.js)
+    return this.http.post<{ url: string }>('http://localhost:3500/upload', formData);
+  }
+}

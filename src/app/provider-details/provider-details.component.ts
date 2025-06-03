@@ -305,7 +305,7 @@ export class NewProviderComponent {
     console.log("!!!!!", supplierData);
     this.myForm.patchValue({
       taxFileNum: supplierData.taxFileNum,
-      inputNameModel: supplierData.name,
+      inputNameModel: supplierData.fullName,
       inputBankNumberModel: supplierData.bankNumber,
       branchNumber: supplierData.branchNumber,
       inputAccountNumberModel: supplierData.accountNumber,
