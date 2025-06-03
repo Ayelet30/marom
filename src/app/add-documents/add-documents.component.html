@@ -13,6 +13,19 @@
         accept=".pdf,.jpg,.png" />
 
       <p class="fileText">{{ doc.label }}</p>
+
+      <div *ngIf="uploadedFilesStatus[doc.type]">
+  <div [ngClass]="{'success': uploadedFilesStatus[doc.type].status === 'success', 'error': uploadedFilesStatus[doc.type].status === 'error'}">
+    <span *ngIf="uploadedFilesStatus[doc.type].status === 'success'">
+      ✔️ {{ uploadedFilesStatus[doc.type].fileName }} הועלה בהצלחה!
+      <a [href]="uploadedFilesStatus[doc.type].url" target="_blank">לצפייה</a>
+    </span>
+    <span *ngIf="uploadedFilesStatus[doc.type].status === 'error'">
+      ❌ {{ uploadedFilesStatus[doc.type].fileName }} - שגיאה: {{ uploadedFilesStatus[doc.type].errorMessage }}
+    </span>
+  </div>
+</div>
+ 
       <i class="fa fa-paperclip"></i>
       {{ selectedFiles[doc.type] || 'לא נבחר קובץ' }}
 

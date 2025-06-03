@@ -9,7 +9,8 @@ import { EmailService } from '../services/email-service.service';
 import { buildPluginData } from '../../app/shared/utils';
 import { WizgroundService } from '../services/wizground.service';
 import { initializeApp } from 'firebase/app';
-import { uploadFileToFirebase } from '../services/upload.service';
+import { FileUploadService } from '../services/upload.service';
+import { firstValueFrom } from 'rxjs';
 
 @Component({
   selector: 'app-add-documents',
@@ -26,6 +27,17 @@ export class AddDocumentComponent {
 
   uploadSuccess = false;
   uploading = false;
+
+  uploadedFilesStatus: {
+  [type: string]: {
+    status: 'success' | 'error';
+    fileName: string;
+    url?: string;
+    errorMessage?: string;
+  };
+} = {};
+
+
 
   fields = [
     { key: "accountKey", value: "12345" },
@@ -56,7 +68,8 @@ export class AddDocumentComponent {
   constructor(private storage: Storage, private firestoreService: FirestoreService,
     private supplierService: SupplierService,
     private emailService: EmailService,
-    private wizground: WizgroundService) { }
+    private wizground: WizgroundService,
+    private fileUploadService: FileUploadService) { }
 
 
   onDragOver(event: DragEvent, type: string) {
@@ -91,92 +104,104 @@ export class AddDocumentComponent {
   }
 
   async uploadFiles() {
-    console.log("מתחיל העלאה...");
+  console.log("מתחיל העלאה...");
 
-    this.uploading = true;
+  this.uploading = true;
 
-    try {
-      const supplierData = this.supplierService.getSupplier();
-      console.log("נתוני ספק:", supplierData);
+  try {
+    const supplierData = this.supplierService.getSupplier();
+    console.log("נתוני ספק:", supplierData);
 
-      if (!supplierData) {
-        console.error("שגיאה בלקיחת נתוני ספק");
-        this.uploading = false;
-        return;
-      }
-
-      const uploadPromises = [];
-
-      for (const type in this.files) {
-        const file = this.files[type];
-        if (!file) continue;
-
-        const timestamp = new Date().getTime();
-        const filePath = `documents/${type}_${timestamp}_${file.name}`;
-
-        // : שמירת הקובץ בפועל - צריך להוסיף כאן קריאה ל firestoreService / storage
-        this.uploadFilesToCloud();
-
-        // לכל קובץ בנפרד
-        const task = {
-          owner: supplierData.NameFromMarom,
-          mailFromMarom: supplierData.mailFromMarom,
-          description: `יש לאשר לספק ${supplierData.name} את הקובץ ${file.name}`,
-          status: 1,
-          title: "אישור קובץ",
-          linkOfDoument: "link", // כאן צריך להכניס את הלינק האמיתי אחרי העלאה
-          createdAt: new Date()
-        };
-
-         this.firestoreService.addTask('tasks', task);
-
-        // TODO: שליחת מייל אחרי שמירת משימה
-        // this.sendEmail(task.mailFromMarom, task.description );
-      }
-
-      //await Promise.all(uploadPromises);
-
-      this.uploadSuccess = true;
-      console.log("העלאה הושלמה בהצלחה!");
-
-    } catch (error) {
-      console.error("שגיאה בהעלאה:", error);
-    } finally {
+    if (!supplierData) {
+      console.error("שגיאה בלקיחת נתוני ספק");
       this.uploading = false;
+      return;
     }
+
+    const uploadPromises: Promise<void>[] = [];
+
+    for (const type in this.files) {
+      const file = this.files[type];
+      if (!file) continue;
+
+      const timestamp = new Date().getTime();
+
+      // שמירת הקובץ בענן עם קבלת ה־URL האמיתי
+     const uploadPromise = (async () => {
+  try {
+  const url = await this.uploadFileToCloud(file);
+
+  this.uploadedFilesStatus[type] = {
+    fileName: file.name,
+    url: url,
+    status: 'success'
+  };
+
+    // פתיחת משימה לרכז
+    const task = {
+      owner: supplierData.NameFromMarom,
+      mailFromMarom: supplierData.mailFromMarom,
+      description: `יש לאשר לספק ${supplierData.name} את הקובץ ${file.name}`,
+      status: 1,
+      title: "אישור קובץ",
+      linkOfDoument: url,
+      createdAt: new Date()
+    };
+
+    await this.firestoreService.addTask('tasks', task);
+
+  } catch (err) {
+    console.error("❌ שגיאה בהעלאת קובץ:", err);
+
+    // עדכון הלוג עם שגיאה
+    this.uploadedFilesStatus[type] = {
+    fileName: file.name,
+    status: 'error',
+    errorMessage: (typeof err === 'object' && err !== null && 'message' in err) 
+      ? (err as { message: string }).message 
+      : 'שגיאה לא ידועה'
+  };
   }
+})();
+
+
+      uploadPromises.push(uploadPromise);
+    }
+
+    // מחכה שכל ההעלאות יסתיימו
+    await Promise.all(uploadPromises);
+
+    this.uploadSuccess = true;
+    console.log("✅ העלאה הושלמה בהצלחה!");
+
+  } catch (error) {
+    console.error("❌ שגיאה בהעלאה:", error);
+  } finally {
+    this.uploading = false;
+  }
+}
+
 
   // sendEmail(Email: string, description: String) {
   //   this.emailService.sendEmail('ayelethury@gmail.com', 'בדיקה', 'שלום עולם').subscribe();
   // }
 
-  saveFileData(type: string, url: string) {
-    console.log("&&&&&&&&&", type, url);
-    //   this.firestoreService.saveDocuments()
-    //   this.firestore.collection('supplierDocuments').add({
-    //     type,
-    //     url,
-    //     timestamp: new Date()
-    //   });
-  }
 
-  async uploadFilesToCloud(){
-    const uploadedUrls: { [key: string]: string } = {};
-
-    for (const type in this.files) {
-      console.log("!!!!!!!!", this.files[type]);
-      const file = this.files[type];
-      if (file) {
-        uploadFileToFirebase(file, `uploads/${file.name}`).then((url) => {
-          console.log('File uploaded! URL:', url);
-        }).catch(err => {
-          console.error('Upload failed:', err);
-        });
-      }
-
-      // כאן תוכלי לשמור את ה-URLs במסד נתונים (Firestore למשל)
-      //console.log('הקבצים הועלו:', uploadedUrls);
+async uploadFileToCloud(file: File): Promise<string> {
+  if (file) {
+    try {
+      const res = await firstValueFrom(
+        this.fileUploadService.uploadFile(file)
+      );
+      console.log('✅ File uploaded', res);
+      return res.url;
+    } catch (err) {
+      console.error('❌ Upload error', err);
+      throw err;
     }
-
+  } else {
+    throw new Error('No file provided');
   }
 }
+}
+

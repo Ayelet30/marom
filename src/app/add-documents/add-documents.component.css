@@ -136,3 +136,15 @@ input[type="file"] {
   font-size: 0.9em;
 }
 
+.success {
+  color: green;
+  font-size: 0.9em;
+}
+
+.error {
+  color: red;
+  font-size: 0.9em;
+}
+
+
+
