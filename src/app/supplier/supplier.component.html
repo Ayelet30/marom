@@ -1,4 +1,4 @@
-<ng-container *ngIf="!showAddNewForm; else newForm">
+<div>
   <form [formGroup]="supplierForm" (ngSubmit)="checkSupplier()">
     <div class="id-container">
       <div class="input-container">
@@ -21,22 +21,21 @@
       </div>
     </div>
   </form>
-</ng-container>
+</div>
 
-<ng-container *ngIf="showMessage">
+<div *ngIf="showMessage">
   <div class="message-container">
     <p>לפי הנתונים שבידינו אינך רשום במערכת</p>
     <p>הינך מועבר לרישום למערכת</p>
     <p>בהצלחה!</p>
   </div>
-</ng-container>
+</div>
 
-<ng-template #newForm>
+
+<!-- <ng-template #newForm>
   <app-provider-details
     [taxFileNum]="inputIDModel"
     [branchNumber]="inputBranchNumberModel"
-    [isEditMode]="false"
-    [isStandalone]="true"
-    (backClicked)="onBackFromEdit()">
+    [isEditMode]="false">
   </app-provider-details>
-</ng-template>
+</ng-template> -->

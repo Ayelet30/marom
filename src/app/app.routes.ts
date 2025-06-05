@@ -5,6 +5,7 @@ import { CoordinatorComponent } from './coordinator/coordinator.component';
 import { ManagerComponent } from './manager/manager.component';
 import { AddDocumentComponent } from './add-documents/add-documents.component'
 import { ExistProviderComponent } from './exist-provider/exist-provider.component'
+import { ProviderDetailsComponent } from './provider-details/provider-details.component';
 
 export const routes: Routes = [
   { path: '', component: WelcomeComponent },
@@ -15,6 +16,9 @@ export const routes: Routes = [
   { path: 'addDocuments', component: AddDocumentComponent },
   { path: 'existProvider', component: ExistProviderComponent},
   { path: '', redirectTo: '/MailSenderComponent', pathMatch: 'full' },
+  { path: 'provider-details/:mode/:taxFileNum/:branchNumber', component: ProviderDetailsComponent },
+
+
 
 
 
