@@ -37,12 +37,12 @@ export class ProviderTableComponent implements OnInit {
   
   async loadData() {
 
-    const data = [{"ItemKey": "A2000"}];
+    // const data = [{"ItemKey": "A2000"}];
     
-    this.wizground.sendData(data, "itemin").subscribe(
-      (res) => console.log('Response:', res),
-      (err) => console.error('Error:', err)
-    );
+    // this.wizground.sendData(data, "itemin").subscribe(
+    //   (res) => console.log('Response:', res),
+    //   (err) => console.error('Error:', err)
+    // );
     
 
     
@@ -56,7 +56,7 @@ export class ProviderTableComponent implements OnInit {
         return {
           sortGroup: data['sortGroup'],
           accountKey: data['accountKey'],
-          name: data!['name'],
+          fullName: data!['fullName'],
           taxFileNum: data!['taxFileNum'],
           email: data!['email'],
           phone: data!['phone'],
@@ -92,6 +92,7 @@ export class ProviderTableComponent implements OnInit {
     const start = (this.currentPage - 1) * this.itemsPerPage;
     const end = this.currentPage * this.itemsPerPage;
     this.currentPageData = this.filteredData.slice(start, end);
+    console.log("@@@@@@@", this.currentPageData);
   }
 
   previousPage() {
@@ -121,6 +122,7 @@ export class ProviderTableComponent implements OnInit {
 
   selectSupplier(supplier: ProvidersDetails) {
     this.selectedSupplier = supplier;
+    console.log("!!!!!!!!", this.selectedSupplier);
   }
 
   toggleEditMode() {
