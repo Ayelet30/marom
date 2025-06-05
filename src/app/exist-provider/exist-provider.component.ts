@@ -11,7 +11,7 @@ import { SupplierService } from '../services/supplier.service';
 @Component({
   selector: 'app-exist-provider',
   standalone: true,
-  imports: [CommonModule, ProviderDetailsComponent , RouterModule],
+  imports: [CommonModule , RouterModule],
   templateUrl: './exist-provider.component.html',
   styleUrls: ['./exist-provider.component.css']
 })
@@ -86,8 +86,14 @@ export class ExistProviderComponent {
 
   editProvider() {
     this.inputId!.value = this.id;
-    this.showAddNewForm = true;
+   this.navigateToProviderDetails();
   }
 
-
+ navigateToProviderDetails() {
+    this.router.navigate([
+      '/provider-details/edit',
+      this.inputId.value,
+      this.branchNumber.value
+    ]);
+  }
 }

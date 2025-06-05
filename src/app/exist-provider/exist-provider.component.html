@@ -1,24 +1,23 @@
-<ng-container *ngIf="!showAddNewForm; else editForm">
+<div>
   <div class="header" *ngIf="providerData; else noData">
-    
-    <h2 class="name-text">שלום {{ name }}   |   עוסק מורשה: {{ id }}</h2>
 
-    <div class="text">  ?מה ברצונך לבצע</div>
+    <h2 class="name-text">שלום {{ name }} | עוסק מורשה: {{ id }}</h2>
+
+    <div class="text"> ?מה ברצונך לבצע</div>
     <div class="buttons">
       <button class="styled-button styled-button-big" (click)="editProvider()">ערוך נתונים</button>
       <button class="styled-button styled-button-big" (click)="addDocumentsForProvider()">צרף קבצים</button>
     </div>
   </div>
-<ng-template #noData>
-  <p>לא נמצאו נתונים</p>
-</ng-template>
-</ng-container>
-<ng-template #editForm>
+  <ng-template #noData>
+    <p>לא נמצאו נתונים</p>
+  </ng-template>
+</div>
+
+<!-- <ng-template #editForm>
   <app-provider-details
     [taxFileNum]="inputId"
     [branchNumber]="branchNumber"
-    [isEditMode]="true"
-    [isStandalone]="false"
-    (backClicked)="onBackFromEdit()">
+    [isEditMode]="true">
   </app-provider-details>
-</ng-template>
+</ng-template> -->

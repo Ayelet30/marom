@@ -6,7 +6,7 @@ import { CustomInputComponent } from "../custom-input/custom-input.component";
 import { InputData } from '../models/input-data.model';
 import { FirestoreService } from '../services/firestore.service';
 import { ReactiveFormsModule } from '@angular/forms';
-import { Router, RouterModule } from '@angular/router';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { SupplierService } from '../services/supplier.service';
 import { SpinnerComponent } from "../spinner/spinner.component";
 import { ProvidersDetails } from '../models/providers-details.model';
@@ -14,7 +14,6 @@ import { buildPluginData } from '../shared/utils';
 import { WizgroundService } from '../services/wizground.service';
 import { Output, EventEmitter } from '@angular/core';
 import { Location } from '@angular/common';
-
 
 
 
@@ -28,7 +27,7 @@ import { Location } from '@angular/common';
 
 })
 
-export class ProviderDetailsComponent  {
+export class ProviderDetailsComponent {
 
   myForm!: FormGroup;
   currentStep: number = 1;
@@ -38,11 +37,9 @@ export class ProviderDetailsComponent  {
   @Input() isEditMode: boolean = true; // הוספת משתנה למצב עריכה
   @Input() taxFileNum!: InputData;
   @Input() branchNumber!: InputData;
-  @Output() backClicked = new EventEmitter<void>();
-  @Input() isStandalone: boolean = false; //דגל לבדיקה מאיפה מגיעים לprovider-details
 
 
-  
+
 
   supplierData: any;
 
@@ -50,26 +47,24 @@ export class ProviderDetailsComponent  {
     private fb: FormBuilder,
     private supplierService: SupplierService,
     private router: Router,
+    private route: ActivatedRoute,
     private wizground: WizgroundService,
     private location: Location
-   )  {
-  this.supplierData = this.supplierService.getSupplier();
-}
-
-    
-   goBack() {
-  console.log('🔙 לחיצה על כפתור חזור');
-          console.log(this.isStandalone);
-
-
-  if (this.isStandalone) {
-//this.router.navigate(['/supplier']); //לא עובד 
-   window.location.href = '/supplier'; //פתרון מוזר לא מרוצה ממנו 
-  // this.location.back(); // חזרה רגילה אם נכנסנו דרך ראוט
-  } else {
-    this.backClicked.emit(); // חזרה לתוך קומפוננטת האב
+  ) {
+    this.supplierData = this.supplierService.getSupplier();
   }
-}
+
+
+  goBack() {
+    if (this.isEditMode) {
+      this.router.navigate(['/existProvider']);
+    }
+    else {
+      this.router.navigate(['/supplier']);
+
+    }
+
+  }
 
   provider: ProvidersDetails = {
     accountKey: "",
@@ -291,7 +286,32 @@ export class ProviderDetailsComponent  {
 
 
   ngOnInit() {
+    this.route.paramMap.subscribe(params => {
+      const taxValue = params.get('taxFileNum') || '';
+      const branchValue = params.get('branchNumber') || '';
+      this.isEditMode = (params.get('mode') || '') === 'edit';
 
+      this.taxFileNum = {
+        id: 'licenseNumber',
+        label: 'מספר עוסק מורשה',
+        value: taxValue,
+        type: 'number',
+        name: 'licenseNumber',
+        error: 'יש להכניס 9 ספרות',
+        maxlength: '9'
+      };
+
+      this.branchNumber = {
+        id: 'branchNumber',
+        label: 'מספר סניף בנק',
+        value: branchValue,
+        type: 'number',
+        name: 'branchNumber',
+        error: 'יש להכניס 3 ספרות',
+        maxlength: '3'
+      };
+    });
+    console.log(this.isEditMode, this.taxFileNum.value, this.branchNumber.value);
     this.setMaromOwnerList();
 
     this.myForm = this.fb.group({
@@ -333,56 +353,56 @@ export class ProviderDetailsComponent  {
   }
 
   fillForm(supplierData: any) {
-  console.log("!!!!!", supplierData);
+    console.log("!!!!!", supplierData);
 
-  // עדכון ה־value של כל אובייקט InputData, כדי שיוצג בשדות
-  this.inputNameModel.value = supplierData.fullName;
-  console.log('שם הספק:', supplierData.fullName);
-  console.log("שם לאחר העדכון:", this.inputNameModel.value);
+    // עדכון ה־value של כל אובייקט InputData, כדי שיוצג בשדות
+    this.inputNameModel.value = supplierData.fullName;
+    console.log('שם הספק:', supplierData.fullName);
+    console.log("שם לאחר העדכון:", this.inputNameModel.value);
 
 
-  this.inputBankNumberModel.value = supplierData.bankNumber;
-  this.branchNumber.value = supplierData.branchNumber;
-  this.taxFileNum.value = supplierData.taxFileNum;
-  this.inputAccountNumberModel.value = supplierData.accountNumber;
-  this.inputAddressModel.value = supplierData.address;
-  this.inputCityModel.value = supplierData.city;
-  this.inputPhoneModel.value = supplierData.phone;
-  this.inputEmailModel.value = supplierData.email;
-  this.inputWithDateHoldingTaxEffectModel.value = supplierData.DateHoldingTaxEffect;
-  this.inputDeductionPercentageModel.value = supplierData.DeductionPercentage;
-  this.inputdeductFileModel.value = supplierData.deductFile;
-  this.inputProjectNameModel.value = supplierData.ProjectName;
-  this.inputBagTypeModel.value = supplierData.BagType;
-  this.inputOccupationModel.value = supplierData.Occupation;
-  this.inputNameFromCompanyModel.value = supplierData.NameFromCompany;
-  this.inputMailFromCompanyModel.value = supplierData.mailFromCompany;
-  this.inputNameFromMaromModel.value = supplierData.NameFromMarom;
-  this.inputMailFromMaromModel.value = supplierData.mailFromMarom;
+    this.inputBankNumberModel.value = supplierData.bankNumber;
+    this.branchNumber.value = supplierData.branchNumber;
+    this.taxFileNum.value = supplierData.taxFileNum;
+    this.inputAccountNumberModel.value = supplierData.accountNumber;
+    this.inputAddressModel.value = supplierData.address;
+    this.inputCityModel.value = supplierData.city;
+    this.inputPhoneModel.value = supplierData.phone;
+    this.inputEmailModel.value = supplierData.email;
+    this.inputWithDateHoldingTaxEffectModel.value = supplierData.DateHoldingTaxEffect;
+    this.inputDeductionPercentageModel.value = supplierData.DeductionPercentage;
+    this.inputdeductFileModel.value = supplierData.deductFile;
+    this.inputProjectNameModel.value = supplierData.ProjectName;
+    this.inputBagTypeModel.value = supplierData.BagType;
+    this.inputOccupationModel.value = supplierData.Occupation;
+    this.inputNameFromCompanyModel.value = supplierData.NameFromCompany;
+    this.inputMailFromCompanyModel.value = supplierData.mailFromCompany;
+    this.inputNameFromMaromModel.value = supplierData.NameFromMarom;
+    this.inputMailFromMaromModel.value = supplierData.mailFromMarom;
 
-  // עדכון גם של ה־FormGroup
-  this.myForm.patchValue({
-    taxFileNum: supplierData.taxFileNum,
-    inputNameModel: supplierData.fullName,
-    inputBankNumberModel: supplierData.bankNumber,
-    branchNumber: supplierData.branchNumber,
-    inputAccountNumberModel: supplierData.accountNumber,
-    inputAddressModel: supplierData.address,
-    inputCityModel: supplierData.city,
-    inputPhoneModel: supplierData.phone,
-    inputEmailModel: supplierData.email,
-    inputWithDateHoldingTaxEffectModel: supplierData.DateHoldingTaxEffect,
-    inputDeductionPercentageModel: supplierData.DeductionPercentage,
-    inputdeductFileModel: supplierData.deductFile,
-    inputProjectNameModel: supplierData.ProjectName,
-    inputBagTypeModel: supplierData.BagType,
-    inputOccupationModel: supplierData.Occupation,
-    inputNameFromCompanyModel: supplierData.NameFromCompany,
-    inputMailFromCompanyModel: supplierData.mailFromCompany,
-    inputNameFromMaromModel: supplierData.NameFromMarom,
-    inputMailFromMaromModel: supplierData.mailFromMarom,
-  });
-}
+    // עדכון גם של ה־FormGroup
+    this.myForm.patchValue({
+      taxFileNum: supplierData.taxFileNum,
+      inputNameModel: supplierData.fullName,
+      inputBankNumberModel: supplierData.bankNumber,
+      branchNumber: supplierData.branchNumber,
+      inputAccountNumberModel: supplierData.accountNumber,
+      inputAddressModel: supplierData.address,
+      inputCityModel: supplierData.city,
+      inputPhoneModel: supplierData.phone,
+      inputEmailModel: supplierData.email,
+      inputWithDateHoldingTaxEffectModel: supplierData.DateHoldingTaxEffect,
+      inputDeductionPercentageModel: supplierData.DeductionPercentage,
+      inputdeductFileModel: supplierData.deductFile,
+      inputProjectNameModel: supplierData.ProjectName,
+      inputBagTypeModel: supplierData.BagType,
+      inputOccupationModel: supplierData.Occupation,
+      inputNameFromCompanyModel: supplierData.NameFromCompany,
+      inputMailFromCompanyModel: supplierData.mailFromCompany,
+      inputNameFromMaromModel: supplierData.NameFromMarom,
+      inputMailFromMaromModel: supplierData.mailFromMarom,
+    });
+  }
 
   async setMaromOwnerList() {
     const ownersData = await this.firestoreService.getDocuments('/coordinators');
@@ -462,43 +482,43 @@ export class ProviderDetailsComponent  {
     }
   }
 
- async addSupplier() {
-  try {
-    const taxFileNum = await this.firestoreService.addSupplierWithAutoAccountKey('providers', this.provider);
-    console.log('Supplier added with ID:', taxFileNum, this.provider);
-    this.supplierService.setSupplier(this.provider);
-    this.addSupplierToHashavshevet(this.provider);
+  async addSupplier() {
+    try {
+      const taxFileNum = await this.firestoreService.addSupplierWithAutoAccountKey('providers', this.provider);
+      console.log('Supplier added with ID:', taxFileNum, this.provider);
+      this.supplierService.setSupplier(this.provider);
+      this.addSupplierToHashavshevet(this.provider);
 
-    setTimeout(() => {
-      this.router.navigate(['/addDocuments']);
-    }, 3000);
+      setTimeout(() => {
+        this.router.navigate(['/addDocuments']);
+      }, 3000);
 
-  } catch (error) {
-    console.error('Error adding supplier:', error);
+    } catch (error) {
+      console.error('Error adding supplier:', error);
+    }
   }
-}
 
 
   addSupplierToHashavshevet(provider: ProvidersDetails) {
     const fields = [
-  { key: "sortGroup", value: provider.sortGroup },
-  { key: "accountKey", value: provider.accountKey },
-  { key: "taxFileNum", value: provider.taxFileNum },
-  { key: "fullName", value: provider.fullName },
-  { key: "bankCode", value: provider.bankNumber },
-  { key: "branchCode", value: provider.branchNumber },
-  { key: "bankAccount", value: provider.accountNumber },
-  { key: "Address", value: provider.address },
-  { key: "City", value: provider.city },
-  { key: "Phon", value: provider.phone },
-  { key: "Email", value: provider.email },
-  // { key: "deductionValid", value: new Date(provider.DateHoldingTaxEffect) },
-  { key: "deductionPrc", value: parseFloat(provider.DeductionPercentage).toFixed(2) },
-  { key: "deductFile", value: provider.deductFile }
-];
+      { key: "sortGroup", value: provider.sortGroup },
+      { key: "accountKey", value: provider.accountKey },
+      { key: "taxFileNum", value: provider.taxFileNum },
+      { key: "fullName", value: provider.fullName },
+      { key: "bankCode", value: provider.bankNumber },
+      { key: "branchCode", value: provider.branchNumber },
+      { key: "bankAccount", value: provider.accountNumber },
+      { key: "Address", value: provider.address },
+      { key: "City", value: provider.city },
+      { key: "Phon", value: provider.phone },
+      { key: "Email", value: provider.email },
+      // { key: "deductionValid", value: new Date(provider.DateHoldingTaxEffect) },
+      { key: "deductionPrc", value: parseFloat(provider.DeductionPercentage).toFixed(2) },
+      { key: "deductFile", value: provider.deductFile }
+    ];
 
- const pluginData = [buildPluginData(fields)];
-        this.wizground.sendData(pluginData, "heshin").subscribe(
+    const pluginData = [buildPluginData(fields)];
+    this.wizground.sendData(pluginData, "heshin").subscribe(
       (res) => console.log('Response:', res),
       (err) => console.error('Error:', err));
 

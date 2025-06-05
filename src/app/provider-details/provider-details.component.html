@@ -1,15 +1,13 @@
 
-
-
+<div class="back-button-fixed">
+   <button class="back-button" type="button" (click)="goBack()" aria-label="חזור לעמוד הקודם">
+     <svg xmlns="http://www.w3.org/2000/svg" height="50" viewBox="0 0 24 24" width="50" fill="#85649B">
+       <path d="M0 0h24v24H0V0z" fill="none"/>
+       <path d="M10 17l5-5-5-5v10z"/>
+     </svg>
+   </button>
+ </div>
 <div class="provider-details-form" *ngIf="myForm">
-  <div class="back-button-fixed">
-  <button class="back-button" type="button" (click)="goBack()" aria-label="חזור לעמוד הקודם">
-    <svg xmlns="http://www.w3.org/2000/svg" height="50" viewBox="0 0 24 24" width="50" fill="#85649B">
-      <path d="M0 0h24v24H0V0z" fill="none"/>
-      <path d="M10 17l5-5-5-5v10z"/>
-    </svg>
-  </button>
-</div>
   <form [formGroup]="myForm" (ngSubmit)="onSubmit()">
     <div *ngIf="currentStep === 1">
       <h3> פרטי ספק</h3>
