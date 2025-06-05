@@ -32,6 +32,11 @@
 </ng-container>
 
 <ng-template #newForm>
-  <app-provider-details [taxFileNum]="inputIDModel" [isEditMode]="false"
-    [branchNumber]="inputBranchNumberModel"></app-provider-details>
+  <app-provider-details
+    [taxFileNum]="inputIDModel"
+    [branchNumber]="inputBranchNumberModel"
+    [isEditMode]="false"
+    [isStandalone]="true"
+    (backClicked)="onBackFromEdit()">
+  </app-provider-details>
 </ng-template>

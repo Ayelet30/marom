@@ -145,6 +145,23 @@ input[type="file"] {
   color: red;
   font-size: 0.9em;
 }
+.back-button-fixed {
+  position: absolute;
+  top: 120px;
+  right: 30px;
+  z-index: 1000;
+}
+
+.back-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+}
+
+.back-button svg:hover {
+  transform: scale(1.1);
+}
 
 
 
