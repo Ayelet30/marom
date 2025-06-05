@@ -12,6 +12,10 @@ import { SpinnerComponent } from "../spinner/spinner.component";
 import { ProvidersDetails } from '../models/providers-details.model';
 import { buildPluginData } from '../shared/utils';
 import { WizgroundService } from '../services/wizground.service';
+import { Output, EventEmitter } from '@angular/core';
+import { Location } from '@angular/common';
+
+
 
 
 
@@ -24,31 +28,48 @@ import { WizgroundService } from '../services/wizground.service';
 
 })
 
-export class NewProviderComponent {
+export class ProviderDetailsComponent  {
 
   myForm!: FormGroup;
   currentStep: number = 1;
   showErrorForm: boolean = false;
   showSuccsesForm: boolean = false;
 
-  @Input() isEditMode: boolean = false; // הוספת משתנה למצב עריכה
+  @Input() isEditMode: boolean = true; // הוספת משתנה למצב עריכה
   @Input() taxFileNum!: InputData;
   @Input() branchNumber!: InputData;
+  @Output() backClicked = new EventEmitter<void>();
+  @Input() isStandalone: boolean = false; //דגל לבדיקה מאיפה מגיעים לprovider-details
+
+
+  
+
+  supplierData: any;
 
   constructor(private firestoreService: FirestoreService,
     private fb: FormBuilder,
     private supplierService: SupplierService,
     private router: Router,
-    private wizground: WizgroundService ) { }
-    
-   goBack() {
-    console.log("לחיצה על כפתור חזור!");
-this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
-  this.router.navigate(['/existProvider']);
-});
+    private wizground: WizgroundService,
+    private location: Location
+   )  {
+  this.supplierData = this.supplierService.getSupplier();
 }
 
+    
+   goBack() {
+  console.log('🔙 לחיצה על כפתור חזור');
+          console.log(this.isStandalone);
 
+
+  if (this.isStandalone) {
+//this.router.navigate(['/supplier']); //לא עובד 
+   window.location.href = '/supplier'; //פתרון מוזר לא מרוצה ממנו 
+  // this.location.back(); // חזרה רגילה אם נכנסנו דרך ראוט
+  } else {
+    this.backClicked.emit(); // חזרה לתוך קומפוננטת האב
+  }
+}
 
   provider: ProvidersDetails = {
     accountKey: "",
@@ -342,7 +363,7 @@ this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
   // עדכון גם של ה־FormGroup
   this.myForm.patchValue({
     taxFileNum: supplierData.taxFileNum,
-    inputNameModel: supplierData.name,
+    inputNameModel: supplierData.fullName,
     inputBankNumberModel: supplierData.bankNumber,
     branchNumber: supplierData.branchNumber,
     inputAccountNumberModel: supplierData.accountNumber,

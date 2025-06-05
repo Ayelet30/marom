@@ -11,6 +11,8 @@ import { WizgroundService } from '../services/wizground.service';
 import { initializeApp } from 'firebase/app';
 import { FileUploadService } from '../services/upload.service';
 import { firstValueFrom } from 'rxjs';
+import { Router } from '@angular/router';
+
 
 @Component({
   selector: 'app-add-documents',
@@ -65,11 +67,23 @@ export class AddDocumentComponent {
   ];
 
 
-  constructor(private storage: Storage, private firestoreService: FirestoreService,
-    private supplierService: SupplierService,
-    private emailService: EmailService,
-    private wizground: WizgroundService,
-    private fileUploadService: FileUploadService) { }
+  supplierData: any;
+
+constructor(
+  private storage: Storage,
+  private firestoreService: FirestoreService,
+  private supplierService: SupplierService,
+  private emailService: EmailService,
+  private wizground: WizgroundService,
+  private fileUploadService: FileUploadService,
+  private router: Router
+) {
+  this.supplierData = this.supplierService.getSupplier();
+}
+
+goBack() {
+  this.router.navigate(['/existProvider']);
+}
 
 
   onDragOver(event: DragEvent, type: string) {
