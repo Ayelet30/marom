@@ -109,15 +109,23 @@ export class ProviderTableComponent implements OnInit {
   }
 
   filterData(event: Event) {
-    const query = (event.target as HTMLInputElement).value.toLowerCase();
-    this.filteredData = this.data.filter(item =>
-      item.fullName.toLowerCase().includes(query) ||
-      item.email.toLowerCase().includes(query)
-    );
-    this.currentPage = 1;  // Reset to first page after filter
-    this.totalPages = Math.ceil(this.filteredData.length / this.itemsPerPage);
-    this.updateCurrentPageData();
-  }
+  const query = (event.target as HTMLInputElement).value.toLowerCase();
+
+  this.filteredData = this.data.filter(item =>
+    (item.fullName || '').toLowerCase().includes(query) ||
+    (item.email || '').toLowerCase().includes(query) ||
+    (item.taxFileNum || '').toLowerCase().includes(query) ||
+    (item.accountKey || '').toLowerCase().includes(query) ||
+    (item.phone || '').toLowerCase().includes(query) ||
+    (item.address || '').toLowerCase().includes(query) ||
+    (item.Occupation || '').toLowerCase().includes(query) ||
+    (item.NameFromCompany || '').toLowerCase().includes(query)
+  );
+
+  this.currentPage = 1;
+  this.totalPages = Math.ceil(this.filteredData.length / this.itemsPerPage);
+  this.updateCurrentPageData();
+}
 
   selectSupplier(supplier: ProvidersDetails) {
     this.selectedSupplier = supplier;
@@ -139,4 +147,9 @@ export class ProviderTableComponent implements OnInit {
     await this.firestoreService.updateDocumentByTaxFileNum('providers', supplier.taxFileNum, supplier);
     this.loadData();
   }
+
+  
+
+
+
 }
