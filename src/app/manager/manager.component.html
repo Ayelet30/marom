@@ -1,17 +1,24 @@
 <div class="body">
-<div *ngIf="!isAdmin" class="id-container">
-    <button class="btn-submit" (click)="checkId()">
-        <svg class="ok-btn" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+  <form *ngIf="!isAdmin" class="id-container" (ngSubmit)="checkId()">
+    <div class="id-input">
+      <label for="adminId" class="label">הכנס קוד מנהל</label>
+      <input
+        class="styled-input"
+        id="adminId"
+        name="adminId"
+        [(ngModel)]="id"
+        required />
+      <div class="error" *ngIf="isError">{{ error }}</div>
+    </div>
+
+    <button class="btn-submit" type="submit">
+      <svg class="ok-btn" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
         <path
-        d="M20.285 2.715a1.0001 1.0001 0 0 1 .121 1.41l-11 13a1.0001 1.0001 0 0 1-1.471.09l-7-6.999a1.0001 1.0001 0 1 1 1.414-1.414l6.293 6.293 10.293-12.292a1.0001 1.0001 0 0 1 1.41-.122z" />
-    </svg>
-</button>
-<div class="id-input">
-  <label for="adminId" class="label">הכנס קוד מנהל</label>
-  <input class="styled-input" id="adminId" [(ngModel)]="id" />
-  <div class="error" *ngIf="isError">{{error}}</div>
-</div>
-</div>
+          d="M20.285 2.715a1.0001 1.0001 0 0 1 .121 1.41l-11 13a1.0001 1.0001 0 0 1-1.471.09l-7-6.999a1.0001 1.0001 0 1 1 1.414-1.414l6.293 6.293 10.293-12.292a1.0001 1.0001 0 0 1 1.41-.122z" />
+      </svg>
+    </button>
+  </form>
+
 
 <!-- ממשק מנהל -->
 <div *ngIf="isAdmin" class="admin-layout">

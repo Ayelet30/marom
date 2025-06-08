@@ -1,69 +1,77 @@
 .task-container {
-  max-width: 600px;
+  max-width: 800px;
   margin: 40px auto;
-  padding: 20px;
-  background-color: #f8f4fc; /* סגול בהיר */
-  border-radius: 12px;
-  box-shadow: 0 4px 8px rgba(128, 0, 128, 0.2);
-  text-align: center;
+  padding: 30px;
+  background-color: #f9f7fb;
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(133, 100, 155, 0.2);
   direction: rtl;
   font-family: 'Varela Round', sans-serif;
+  text-align: center;
 }
 
 .task-container input {
-  width: 80%;
-  padding: 10px;
+  width: 60%;
+  padding: 10px 14px;
   margin-bottom: 20px;
-  border: 2px solid #a64ca6; /* סגול בינוני */
-  border-radius: 8px;
+  border: 2px solid #85649b;
+  border-radius: 12px;
   font-size: 16px;
+  color: #4b004b;
   outline: none;
+  transition: border-color 0.3s ease;
 }
 
 .task-container input::placeholder {
-  color: #b280b2;
+  color: #b39bbd;
 }
 
 .task-container button {
   background-color: white;
-  color: #a64ca6;
-  border: 2px solid #a64ca6;
-  padding: 10px 20px;
-  border-radius: 8px;
+  color: #85649b;
+  border: 2px solid #85649b;
+  padding: 10px 18px;
+  border-radius: 12px;
   font-size: 16px;
   cursor: pointer;
-  transition: 0.3s;
-  margin-bottom: 20px;
+  transition: all 0.3s ease;
+  margin-bottom: 25px;
 }
 
 .task-container button:hover {
-  background-color: #a64ca6;
+  background-color: #85649b;
   color: white;
+  box-shadow: 0 0 10px #d2c2e0;
+  transform: scale(1.03);
 }
 
 .task-container table {
   width: 100%;
   border-collapse: collapse;
-  margin-top: 20px;
+  margin-top: 25px;
+  font-size: 15px;
 }
 
-.task-container th, .task-container td {
-  padding: 12px;
-  border-bottom: 1px solid #d3b3d3;
+.task-container th,
+.task-container td {
+  padding: 12px 10px;
+  border-bottom: 1px solid #d8c6e5;
   text-align: center;
 }
 
 .task-container th {
-  background-color: #d3b3d3; /* סגול בהיר יותר */
+  background-color: #ece2f4;
   color: #4b004b;
+  font-weight: bold;
 }
 
 .task-container tbody tr:hover {
-  background-color: #f2e6f2;
+  background-color: #f3ebf8;
 }
 
-.task-container div {
-  margin-top: 10px;
-  color: #800080;
-  font-size: 18px;
+.task-container .loading,
+.task-container .no-tasks {
+  margin-top: 15px;
+  font-size: 16px;
+  color: #85649b;
 }

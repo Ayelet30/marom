@@ -1,19 +1,19 @@
-<div class="main-layout">
-    <div class="content-container">
-      <div *ngIf="isEmailSenderVisible">
-          <app-mail-sender></app-mail-sender>
-      </div>
-      <div *ngIf="isShowOpenTasksTable">
-          <app-open-tasks></app-open-tasks>
-      </div>
-      <div *ngIf="isShowOpenViewprovider">
-          <app-provider-table [managerMode]=false></app-provider-table>
-      </div>
+<div class="admin-layout">
+  <div class="content">
+    <div *ngIf="isEmailSenderVisible">
+      <app-mail-sender></app-mail-sender>
+    </div>
+    <div *ngIf="isShowOpenTasksTable">
+      <app-open-tasks></app-open-tasks>
+    </div>
+    <div *ngIf="isShowOpenViewprovider">
+      <app-provider-table [managerMode]="false"></app-provider-table>
+    </div>
   </div>
 
-  <div class="button-container">
-      <button class="styled-button-small styled-button " (click)="SendMail()">שליחת מייל מרוכז</button>
-      <button class="styled-button-small styled-button" (click)="arrangeOpenTasks()">ריכוז משימות פתוחות</button>
-      <button class="styled-button-small styled-button" (click)="viewAllprovider()">הצגת כל הספקים</button>
+  <div class="sidebar">
+    <button (click)="SendMail()">שליחת מייל מרוכז</button>
+    <button (click)="arrangeOpenTasks()">ריכוז משימות פתוחות</button>
+    <button (click)="viewAllprovider()">הצגת כל הספקים</button>
   </div>
 </div>
