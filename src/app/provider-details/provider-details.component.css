@@ -92,9 +92,8 @@ h3{
 }
 .back-button-fixed {
   position: absolute;
-  top: 130px;       /* מזיז את הכפתור מתחת ל-header */
+  top: 130px;      
   right: 20px;
-  z-index: 9999;
 }
 
 

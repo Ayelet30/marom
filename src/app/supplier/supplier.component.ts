@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule, FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
-import { Router, RouterModule } from '@angular/router';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { FirestoreService } from '../services/firestore.service';
-import { ProviderDetailsComponent  } from "../provider-details/provider-details.component";
+import { ProviderDetailsComponent } from "../provider-details/provider-details.component";
 import { CustomInputComponent } from "../custom-input/custom-input.component";
 import { InputData } from '../models/input-data.model';
 import { AuthService } from '../services/auth.service';
@@ -14,7 +14,7 @@ import { SupplierService } from '../services/supplier.service';
 @Component({
   selector: 'app-supplier',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, ProviderDetailsComponent , CustomInputComponent, RouterModule],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, CustomInputComponent, RouterModule],
   templateUrl: './supplier.component.html',
   styleUrls: ['./supplier.component.css']
 })
@@ -50,6 +50,7 @@ export class SupplierComponent implements OnInit {
 
   constructor(
     private router: Router,
+    private route: ActivatedRoute,
     private firestoreService: FirestoreService,
     private fb: FormBuilder,
     private authService: AuthService,
@@ -105,25 +106,34 @@ export class SupplierComponent implements OnInit {
     if (this.supplierData && this.supplierData.branchNumber === branchNumber) {
       this.showAddNewForm = false; // הספק נמצא
       this.supplierService.setSupplier(this.supplierData);
-      this.navigateToExistProvider(this.supplierData);
+      this.navigateToExistProvider();
     } else {
       this.supplierService.setSupplier(undefined);
       this.showMessage = true; // הצגת הודעה
       setTimeout(() => {
         this.showMessage = false;
-        this.showAddNewForm = true; // הצגת הטופס לאחר 3 שניות
+        this.showAddNewForm = true;
+        this.navigateToProviderDetails();  // הצגת הטופס לאחר 3 שניות
       }, 5000);
     }
   }
 
 
-  navigateToExistProvider(providerData: DocumentData) {
+  navigateToExistProvider() {
     this.router.navigate(['/existProvider']);
   }
 
-onBackFromEdit() {
-  this.showAddNewForm = false;
-}
+  navigateToProviderDetails() {
+    this.router.navigate([
+      '/provider-details/new',
+      this.inputIDModel.value,
+      this.inputBranchNumberModel.value
+    ]);
+  }
+
+  onBackFromEdit() {
+    this.showAddNewForm = false;
+  }
 
 
 
