@@ -26,7 +26,8 @@ export class OpenTasksComponent {
      if (data) {
       // ממיר את הנתונים לפורמט מתאים
       this.tasks = data.map((doc: any) => doc.data()); // כאן אני מניח שברצונך להחזיר את הנתונים של כל מסמך
-      console.log("111", this.tasks)
+      
+     console.log("111", this.tasks)
     } else {
       console.log('No tasks found for this coordinator');
     }
