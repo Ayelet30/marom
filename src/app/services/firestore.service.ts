@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Auth } from '@angular/fire/auth';
-import { Firestore, collection, addDoc, getDocs, query, where, doc, setDoc, runTransaction, CollectionReference, DocumentData } from '@angular/fire/firestore';
+import { Firestore, collection, addDoc, getDocs, query, where, doc, setDoc, runTransaction, CollectionReference, DocumentData, updateDoc } from '@angular/fire/firestore';
 import { inject } from '@angular/core';
 import { ProvidersDetails } from '../models/providers-details.model';
 
@@ -94,8 +94,11 @@ export class FirestoreService {
       const q = query(collRef, where(parameter, '==', value));
       const querySnapshot = await getDocs(q);
 
-      return querySnapshot.empty ? null : querySnapshot.docs.map(doc => doc.data());
-    } catch (e) {
+return querySnapshot.empty
+  ? null
+  : querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+
+} catch (e) {
       console.error("Error getting documents by parameter: ", e);
       throw new Error("Error getting documents by parameter");
     }
@@ -133,5 +136,13 @@ export class FirestoreService {
       console.error("Error getting documents: ", e);
       throw new Error("Error getting documents");
     }
+  }
+  async updateDocument(collectionName: string, docId: string, data: any): Promise<void> {
+    if (!docId) {
+      throw new Error('docId is required');
+    }
+
+    const docRef = doc(this.firestore, collectionName, docId);
+    return updateDoc(docRef, data);
   }
 }
