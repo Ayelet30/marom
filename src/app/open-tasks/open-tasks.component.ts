@@ -14,6 +14,7 @@ export class OpenTasksComponent {
   coordinatorId = '';
   tasks: any[] = [];
   loading = false;
+   previewFile: any = null;
 
   constructor(private firestoreService: FirestoreService) {}
 
@@ -25,13 +26,47 @@ export class OpenTasksComponent {
      const data = await this.firestoreService.getDocumentsByParameter('tasks', 'owner', this.coordinatorId);
      if (data) {
       // ממיר את הנתונים לפורמט מתאים
-      this.tasks = data.map((doc: any) => doc.data()); // כאן אני מניח שברצונך להחזיר את הנתונים של כל מסמך
-      
-     console.log("111", this.tasks)
+
+      this.tasks  = data;
     } else {
       console.log('No tasks found for this coordinator');
     }
        this.loading = false;
   }
 
+  toDate(timestamp: any): Date {
+  return timestamp?.toDate ? timestamp.toDate() : timestamp;
+}
+
+  openPreview(file: any) {
+    this.previewFile = file;
+  }
+
+  closePreview() {
+    this.previewFile = null;
+  }
+
+  approve(file: any) {
+    console.log('מאושר:', file);
+    this.closePreview();
+    // פה תוכל לשלוח עדכון לשרת
+  }
+
+  reject(file: any) {
+    console.log('לא מאושר:', file);
+    this.closePreview();
+    // פה תוכל לשלוח עדכון לשרת
+  }
+
+  isImage(url: string): boolean {
+    return /\.(jpg|jpeg|png|gif|bmp|webp)$/i.test(url);
+  }
+
+  isPdf(url: string): boolean {
+    return /\.pdf$/i.test(url);
+  }
+
+  isWordOrOther(url: string): boolean {
+    return /\.(doc|docx|xls|xlsx|ppt|pptx)$/i.test(url);
+  }
 }
