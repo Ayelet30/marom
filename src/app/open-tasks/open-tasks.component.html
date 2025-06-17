@@ -1,5 +1,6 @@
 <div class="task-container">
-  <input [(ngModel)]="coordinatorId" placeholder="הכנס מזהה רכז" />
+  <input [(ngModel)]="coordinatorId" placeholder="הכנס מזהה רכז" 
+    (keydown.enter)="loadTasks()"/>
 
   <button (click)="loadTasks()">טען משימות פתוחות</button>
 
@@ -37,21 +38,12 @@
 <!-- תצוגה מוגדלת -->
 <div class="overlay" *ngIf="previewFile" (click)="closePreview()">
   <div class="preview-box" (click)="$event.stopPropagation()">
-
-    <!-- הצגת תמונה -->
     <img *ngIf="isImage(previewFile.fileUrl)" [src]="previewFile.fileUrl" alt="תמונה" />
-
-    <!-- הצגת PDF -->
-    <iframe *ngIf="isPdf(previewFile.fileUrl)" [src]="previewFile.fileUrl" width="500" height="600"
-      frameborder="0"></iframe>
-
-    <!-- הצגת קובץ Word/אחר -->
+    <iframe *ngIf="isPdf(previewFile.fileUrl)" [src]="previewFile.fileUrl" width="500" height="600" frameborder="0"></iframe>
     <div *ngIf="isWordOrOther(previewFile.fileUrl)">
       <p>לא ניתן להציג את הקובץ כאן</p>
       <a [href]="previewFile.fileUrl" target="_blank">📥 הורד קובץ</a>
     </div>
-
-    <!-- כפתורים -->
     <div class="buttons">
       <button (click)="approve(previewFile)">✅ מאשר</button>
       <button (click)="reject(previewFile)">❌ לא מאשר</button>
