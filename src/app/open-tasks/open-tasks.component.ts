@@ -14,47 +14,50 @@ export class OpenTasksComponent {
   coordinatorId = '';
   tasks: any[] = [];
   loading = false;
-   previewFile: any = null;
+  previewFile: any = null;
 
-  constructor(private firestoreService: FirestoreService) {}
+  constructor(private firestoreService: FirestoreService) { }
 
   async loadTasks() {
-     if (!this.coordinatorId) return;
+    if (!this.coordinatorId) return;
 
-     this.loading = true;
-     const coordinatorData = await this.firestoreService.getDocumentByParameter('coordinators', 'coordinatorId' ,this.coordinatorId);
-     const data = await this.firestoreService.getDocumentsByParameter('tasks', 'owner', this.coordinatorId);
-     if (data) {
+    this.loading = true;
+    const coordinatorData = await this.firestoreService.getDocumentByParameter('coordinators', 'coordinatorId', this.coordinatorId);
+    const data = await this.firestoreService.getDocumentsByParameter('tasks', 'owner', this.coordinatorId);
+    if (data) {
       // ממיר את הנתונים לפורמט מתאים
-      this.tasks  = data;
+      this.tasks = data;
     } else {
       console.log('No tasks found for this coordinator');
     }
-       this.loading = false;
+    this.loading = false;
   }
 
   toDate(timestamp: any): Date {
-  return timestamp?.toDate ? timestamp.toDate() : timestamp;
-}
+    return timestamp?.toDate ? timestamp.toDate() : timestamp;
+  }
 
   openPreview(file: any) {
     this.previewFile = file;
+    console.log('the id is :', file?.id);
+
   }
 
   closePreview() {
     this.previewFile = null;
   }
 
-  approve(file: any) {
+  async approve(file: any) {
     console.log('מאושר:', file);
+    await this.firestoreService.updateDocument('tasks', file.id, { status: 3 });
     this.closePreview();
-    // פה תוכל לשלוח עדכון לשרת
   }
 
-  reject(file: any) {
+
+  async reject(file: any) {
     console.log('לא מאושר:', file);
+    await this.firestoreService.updateDocument('tasks', file.id, { status: 2 });
     this.closePreview();
-    // פה תוכל לשלוח עדכון לDB
   }
 
   isImage(url: string): boolean {
