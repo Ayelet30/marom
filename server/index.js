@@ -15,9 +15,6 @@ app.post('/api/send-wizground', async (req, res) => {
     const secretKey = process.env.SECRET_KEY;
     const plugin = req.body.plugin;
 
-    console.log("11111111111", moduleData);
-    console.log("22222222222", plugin);
-
     if (!moduleData || !Array.isArray(moduleData)) {
         return res.status(400).json({ error: 'Missing or invalid moduleData' });
     }
@@ -39,7 +36,6 @@ app.post('/api/send-wizground', async (req, res) => {
         "signature": signature
     };
 
-    console.log("&&&&&&&&&&&&&&&&&&&&&&&&&&", body);
 
     try {
         const response = await axios.post('https://ws.wizground.com/api', body, {

@@ -54,7 +54,7 @@ export class OpenTasksComponent {
   reject(file: any) {
     console.log('לא מאושר:', file);
     this.closePreview();
-    // פה תוכל לשלוח עדכון לשרת
+    // פה תוכל לשלוח עדכון לDB
   }
 
   isImage(url: string): boolean {
