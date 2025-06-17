@@ -1,17 +1,45 @@
-.main-layout {
+.admin-layout {
   display: flex;
-  height: 100vh; /* גובה מלא */
+  height: 100vh;
 }
 
-.button-container {
-  width: 20%;
-  background-color: #f1f1f1; /* רקע אופציונלי */
-  padding: 10px;
-  box-sizing: border-box;
-}
-
-.content-container {
+.content {
   width: 80%;
   box-sizing: border-box;
   overflow-y: auto;
+}
+
+.sidebar {
+  width: 20%;
+  background-color: #f1f1f1;
+  padding: 10px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: stretch;
+}
+
+.sidebar button {
+  background-color: white;
+  border: 2px solid #85649b;
+  color: #85649b;
+  padding: 0.5rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border-radius: 8px;
+  max-height: 50px;
+  width: auto;
+  font-size: 16px;
+}
+
+.sidebar button:hover {
+  background-color: #85649b;
+  color: white;
+  transform: scale(1.05);
+  box-shadow: 0 0 10px #d2c2e0;
+}
+
+.sidebar button:active {
+  transform: scale(0.97);
 }
