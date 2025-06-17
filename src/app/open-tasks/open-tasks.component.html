@@ -1,5 +1,6 @@
 <div class="task-container">
-  <input [(ngModel)]="coordinatorId" placeholder="הכנס מזהה רכז" />
+  <input [(ngModel)]="coordinatorId" placeholder="הכנס מזהה רכז" 
+    (keydown.enter)="loadTasks()"/>
 
   <button (click)="loadTasks()">טען משימות פתוחות</button>
 
