@@ -1,28 +1,60 @@
 <div class="task-container">
-    <input [(ngModel)]="coordinatorId" placeholder="הכנס מזהה רכז" 
-    (keydown.enter)="loadTasks()" />
+  <input [(ngModel)]="coordinatorId" placeholder="הכנס מזהה רכז" />
 
-    <button (click)="loadTasks()">טען משימות פתוחות</button>
-  
-    <div *ngIf="loading">טוען...</div>
-  
-    <table *ngIf="tasks.length > 0">
-      <thead>
-        <tr>
-          <th>תאריך יעד</th>
-          <th>תיאור</th>
-          <th>כותרת</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let task of tasks">
-          <td>{{ task.dueDate | date }}</td>
-          <td>{{ task.description }}</td>
-          <td>{{ task.title }}</td>
-        </tr>
-      </tbody>
-    </table>
-  
-    <div *ngIf="!loading && tasks.length === 0">אין משימות פתוחות</div>
+  <button (click)="loadTasks()">טען משימות פתוחות</button>
+
+  <div *ngIf="loading">טוען...</div>
+
+  <table *ngIf="tasks.length > 0">
+    <thead>
+      <tr>
+        <th>כותרת</th>
+        <th>תיאור</th>
+        <th>קובץ</th>
+        <th>תאריך יעד</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let task of tasks">
+        <td>{{ task.title }}</td>
+        <td>{{ task.description }}</td>
+        <td>
+          <ng-container *ngIf="isImage(task.linkOfDoument); else otherFile">
+            <img [src]="task.linkOfDoument" class="thumbnail" (click)="openPreview(task)" alt="תמונה" />
+          </ng-container>
+          <ng-template #otherFile>
+            <button (click)="openPreview(task)">📄 תצוגת קובץ</button>
+          </ng-template>
+        </td>
+        <td>{{ toDate(task.createdAt) | date: 'dd/MM/yyyy HH:mm' }}</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div *ngIf="!loading && tasks.length === 0">אין משימות פתוחות</div>
+</div>
+
+<!-- תצוגה מוגדלת -->
+<div class="overlay" *ngIf="previewFile" (click)="closePreview()">
+  <div class="preview-box" (click)="$event.stopPropagation()">
+
+    <!-- הצגת תמונה -->
+    <img *ngIf="isImage(previewFile.fileUrl)" [src]="previewFile.fileUrl" alt="תמונה" />
+
+    <!-- הצגת PDF -->
+    <iframe *ngIf="isPdf(previewFile.fileUrl)" [src]="previewFile.fileUrl" width="500" height="600"
+      frameborder="0"></iframe>
+
+    <!-- הצגת קובץ Word/אחר -->
+    <div *ngIf="isWordOrOther(previewFile.fileUrl)">
+      <p>לא ניתן להציג את הקובץ כאן</p>
+      <a [href]="previewFile.fileUrl" target="_blank">📥 הורד קובץ</a>
+    </div>
+
+    <!-- כפתורים -->
+    <div class="buttons">
+      <button (click)="approve(previewFile)">✅ מאשר</button>
+      <button (click)="reject(previewFile)">❌ לא מאשר</button>
+    </div>
   </div>
-  
+</div>

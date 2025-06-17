@@ -129,7 +129,6 @@
       </thead>
       <tbody>
         <tr *ngFor="let item of currentPageData; let i = index" (click)="selectSupplier(item)">
-          <td>{{ item.accountKey }}</td>
           <td>{{ item.NameFromCompany }}</td>
           <td>{{ item.email }}</td>
           <td>{{ item.phone }}</td>
@@ -137,6 +136,7 @@
           <td>{{ item.Occupation }}</td>
           <td>{{ item.taxFileNum }}</td>
           <td>{{ item.fullName }}</td>
+          <td>{{ item.accountKey }}</td>
         </tr>
       </tbody>
     </table>

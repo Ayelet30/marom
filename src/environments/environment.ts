@@ -16,7 +16,9 @@
       stationId: 'a8361de2-9f06-4c35-9dd7-45d292eacad1',
       company: 'demo',
       username: '1'
-    }
+    },
+
+    apiUrl: 'http://localhost:3500'
 
   };
 
