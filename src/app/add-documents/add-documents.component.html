@@ -1,5 +1,3 @@
-<form (ngSubmit)="uploadFiles()" #form="ngForm" class="upload-container">
-  <h2>העלאת מסמכים</h2>
 <div class="back-button-fixed">
   <button class="back-button" type="button" (click)="goBack()" aria-label="חזור לעמוד הקודם">
     <svg xmlns="http://www.w3.org/2000/svg" height="50" viewBox="0 0 24 24" width="50" fill="#85649B">
@@ -8,6 +6,10 @@
     </svg>
   </button>
 </div>
+
+<form (ngSubmit)="uploadFiles()" #form="ngForm" class="upload-container">
+  <h2>העלאת מסמכים</h2>
+
 
   <div class="form-grid">
 
@@ -43,6 +45,9 @@
 
     </div>
   </div>
+
+ 
+
 
   <button type="submit" class="btn-submit">שלח</button>
 </form>

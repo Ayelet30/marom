@@ -145,23 +145,27 @@ input[type="file"] {
   color: red;
   font-size: 0.9em;
 }
+button:hover {
+  background-color: #b7a0c7;
+}
+
 .back-button-fixed {
   position: absolute;
-  top: 120px;
-  right: 30px;
+  top: 130px;
+  right: 20px;
   z-index: 1000;
 }
 
 .back-button {
-  background: none;
+  background-color: transparent;
   border: none;
+    border-radius: 0.3em;
+
   cursor: pointer;
   padding: 0;
 }
 
-.back-button svg:hover {
-  transform: scale(1.1);
-}
+
 
 
 
