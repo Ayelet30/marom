@@ -71,4 +71,16 @@ export class OpenTasksComponent {
   isWordOrOther(url: string): boolean {
     return /\.(doc|docx|xls|xlsx|ppt|pptx)$/i.test(url);
   }
+  sortDirection: 'asc' | 'desc' = 'asc';
+
+sortByDate() {
+  this.tasks.sort((a, b) => {
+    const dateA = (a.createdAt?.toDate?.() || new Date()).getTime();
+    const dateB = (b.createdAt?.toDate?.() || new Date()).getTime();
+    return this.sortDirection === 'asc' ? dateA - dateB : dateB - dateA;
+  });
+  this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
+}
+
+
 }

@@ -12,8 +12,12 @@
         <th>כותרת</th>
         <th>תיאור</th>
         <th>קובץ</th>
-        <th>תאריך יעד</th>
-      </tr>
+<th (click)="sortByDate()" style="cursor: pointer;">
+  תאריך יעד 
+  <span *ngIf="sortDirection === 'asc'">⬆️</span>
+  <span *ngIf="sortDirection === 'desc'">⬇️</span>
+</th>
+       </tr>
     </thead>
     <tbody>
       <tr *ngFor="let task of tasks">
