@@ -17,20 +17,32 @@ export class OpenTasksComponent {
   previewFile: any = null;
 
   constructor(private firestoreService: FirestoreService) { }
+  hasLoadedOnce = false;
 
   async loadTasks() {
     if (!this.coordinatorId) return;
 
     this.loading = true;
-    const coordinatorData = await this.firestoreService.getDocumentByParameter('coordinators', 'coordinatorId', this.coordinatorId);
-    const data = await this.firestoreService.getDocumentsByParameter('tasks', 'owner', this.coordinatorId);
-    if (data) {
-      // ממיר את הנתונים לפורמט מתאים
-      this.tasks = data;
-    } else {
-      console.log('No tasks found for this coordinator');
+    this.hasLoadedOnce = false; // מוודא שזה יוסתר בכל התחלה של טעינה
+    try {
+      const coordinatorData = await this.firestoreService.getDocumentByParameter('coordinators', 'coordinatorId', this.coordinatorId);
+      const data = await this.firestoreService.getDocumentsByParameter('tasks', 'owner', this.coordinatorId);
+      if (data) {
+        // ממיר את הנתונים לפורמט מתאים
+        this.tasks = data;
+      } else {
+        this.tasks = []; // מבטיח שהמשתנה יהיה ריק כדי שהתנאי בתבנית יעבוד
+
+        console.log('No tasks found for this coordinator');
+      }
     }
-    this.loading = false;
+    catch (error) {
+      console.error("שגיאה בטעינת משימות:", error);
+      this.tasks = []; // כדי שלא תיתקע במקרה של שגיאה
+    } finally {
+      this.loading = false;
+      this.hasLoadedOnce = true; // מציין שסיימנו נסיון טעינה
+    }
   }
 
   toDate(timestamp: any): Date {
@@ -73,14 +85,14 @@ export class OpenTasksComponent {
   }
   sortDirection: 'asc' | 'desc' = 'asc';
 
-sortByDate() {
-  this.tasks.sort((a, b) => {
-    const dateA = (a.createdAt?.toDate?.() || new Date()).getTime();
-    const dateB = (b.createdAt?.toDate?.() || new Date()).getTime();
-    return this.sortDirection === 'asc' ? dateA - dateB : dateB - dateA;
-  });
-  this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
-}
+  sortByDate() {
+    this.tasks.sort((a, b) => {
+      const dateA = (a.createdAt?.toDate?.() || new Date()).getTime();
+      const dateB = (b.createdAt?.toDate?.() || new Date()).getTime();
+      return this.sortDirection === 'asc' ? dateA - dateB : dateB - dateA;
+    });
+    this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
+  }
 
 
 }
