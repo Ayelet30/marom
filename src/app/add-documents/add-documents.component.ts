@@ -31,13 +31,13 @@ export class AddDocumentComponent {
   uploading = false;
 
   uploadedFilesStatus: {
-  [type: string]: {
-    status: 'success' | 'error';
-    fileName: string;
-    url?: string;
-    errorMessage?: string;
-  };
-} = {};
+    [type: string]: {
+      status: 'success' | 'error';
+      fileName: string;
+      url?: string;
+      errorMessage?: string;
+    };
+  } = {};
 
 
 
@@ -63,27 +63,29 @@ export class AddDocumentComponent {
     { type: 'bankApproval', label: 'אישור בנק/צילום שיק' },
     { type: 'bookkeepingApproval', label: 'אישור ניהול ספרים' },
     { type: 'taxApproval', label: 'אישור ניכוי מס במקור' },
-    { type: 'contract', label: 'סכום ההתקשרות (חוזה חתום)', link: 'https://na4.documents.adobe.com/public/esignWidget?wid=CBFCIBAA3AAABLblqZhAHjojnUA_kA-MxKj1aOWdmrZKmhfJ3OhawZArvHuFfHMG3lBY5ZX3-WNkwbVQJKnc*' }
+    { type: 'contract', label: 'סכום ההתקשרות (חוזה חתום)', link: 'https://na4.documents.adobe.com/public/esignWidget?wid=CBFCIBAA3AAABLblqZhAHjojnUA_kA-MxKj1aOWdmrZKmhfJ3OhawZArvHuFfHMG3lBY5ZX3-WNkwbVQJKnc*' },
+    { type: 'declaration', label: 'הצהרה', link: 'https://na4.documents.adobe.com/public/esignWidget?wid=CBFCIBAA3AAABLblqZhDFGFGHjhjfjsdgsdfGZrXv5wT3O0hL6kdA-B1' } // ← כאן קישור אמיתי להצגת ההצהרה
+
   ];
 
 
   supplierData: any;
 
-constructor(
-  private storage: Storage,
-  private firestoreService: FirestoreService,
-  private supplierService: SupplierService,
-  private emailService: EmailService,
-  private wizground: WizgroundService,
-  private fileUploadService: FileUploadService,
-  private router: Router
-) {
-  this.supplierData = this.supplierService.getSupplier();
-}
+  constructor(
+    private storage: Storage,
+    private firestoreService: FirestoreService,
+    private supplierService: SupplierService,
+    private emailService: EmailService,
+    private wizground: WizgroundService,
+    private fileUploadService: FileUploadService,
+    private router: Router
+  ) {
+    this.supplierData = this.supplierService.getSupplier();
+  }
 
-goBack() {
-  this.router.navigate(['/existProvider']);
-}
+  goBack() {
+    this.router.navigate(['/existProvider']);
+  }
 
 
   onDragOver(event: DragEvent, type: string) {
@@ -118,82 +120,83 @@ goBack() {
   }
 
   async uploadFiles() {
-  console.log("מתחיל העלאה...");
+    console.log("מתחיל העלאה...");
 
-  this.uploading = true;
+    this.uploading = true;
 
-  try {
-    const supplierData = this.supplierService.getSupplier();
-    console.log("נתוני ספק:", supplierData);
+    try {
+      const supplierData = this.supplierService.getSupplier();
+      console.log("נתוני ספק:", supplierData);
 
-    if (!supplierData) {
-      console.error("שגיאה בלקיחת נתוני ספק");
+      if (!supplierData) {
+        console.error("שגיאה בלקיחת נתוני ספק");
+        this.uploading = false;
+        return;
+      }
+
+      const uploadPromises: Promise<void>[] = [];
+
+      for (const type in this.files) {
+        const file = this.files[type];
+        if (!file) continue;
+
+        const timestamp = new Date().getTime();
+
+        // שמירת הקובץ בענן עם קבלת ה־URL האמיתי
+        const uploadPromise = (async () => {
+          try {
+            const url = await this.uploadFileToCloud(file);
+
+            this.uploadedFilesStatus[type] = {
+              fileName: file.name,
+              url: url,
+              status: 'success'
+            };
+
+            // פתיחת משימה לרכז
+
+            const task = {
+              owner: supplierData.NameFromMarom,
+              mailFromMarom: supplierData.mailFromMarom,
+              description: `יש לאשר לספק ${supplierData.fullName} את הקובץ ${file.name}`,
+              status: 1,
+              title: "אישור קובץ",
+              linkOfDoument: url,
+              createdAt: new Date()
+            };
+
+            await this.firestoreService.addTask('tasks', task);
+
+          } catch (err) {
+            console.error("❌ שגיאה בהעלאת קובץ:", err);
+
+            // עדכון הלוג עם שגיאה
+            this.uploadedFilesStatus[type] = {
+              fileName: file.name,
+              status: 'error',
+              errorMessage: (typeof err === 'object' && err !== null && 'message' in err)
+                ? (err as { message: string }).message
+                : 'שגיאה לא ידועה'
+            };
+          }
+        })();
+
+
+        uploadPromises.push(uploadPromise);
+      }
+
+      // מחכה שכל ההעלאות יסתיימו
+      await Promise.all(uploadPromises);
+
+      this.uploadSuccess = true;
+      console.log("✅ העלאה הושלמה בהצלחה!");
+
+    } catch (error) {
+      console.error("❌ שגיאה בהעלאה:", error);
+    } finally {
       this.uploading = false;
-      return;
     }
-
-    const uploadPromises: Promise<void>[] = [];
-
-    for (const type in this.files) {
-      const file = this.files[type];
-      if (!file) continue;
-
-      const timestamp = new Date().getTime();
-
-      // שמירת הקובץ בענן עם קבלת ה־URL האמיתי
-     const uploadPromise = (async () => {
-  try {
-  const url = await this.uploadFileToCloud(file);
-
-  this.uploadedFilesStatus[type] = {
-    fileName: file.name,
-    url: url,
-    status: 'success'
-  };
-
-    // פתיחת משימה לרכז
-    const task = {
-      owner: supplierData.NameFromMarom,
-      mailFromMarom: supplierData.mailFromMarom,
-      description: `יש לאשר לספק ${supplierData.fullname} את הקובץ ${file.name}`,
-      status: 1,
-      title: "אישור קובץ",
-      linkOfDoument: url,
-      createdAt: new Date()
-    };
-
-    await this.firestoreService.addTask('tasks', task);
-
-  } catch (err) {
-    console.error("❌ שגיאה בהעלאת קובץ:", err);
-
-    // עדכון הלוג עם שגיאה
-    this.uploadedFilesStatus[type] = {
-    fileName: file.name,
-    status: 'error',
-    errorMessage: (typeof err === 'object' && err !== null && 'message' in err) 
-      ? (err as { message: string }).message 
-      : 'שגיאה לא ידועה'
-  };
   }
-})();
-
-
-      uploadPromises.push(uploadPromise);
-    }
-
-    // מחכה שכל ההעלאות יסתיימו
-    await Promise.all(uploadPromises);
-
-    this.uploadSuccess = true;
-    console.log("✅ העלאה הושלמה בהצלחה!");
-
-  } catch (error) {
-    console.error("❌ שגיאה בהעלאה:", error);
-  } finally {
-    this.uploading = false;
-  }
-}
 
 
   // sendEmail(Email: string, description: String) {
@@ -201,21 +204,21 @@ goBack() {
   // }
 
 
-async uploadFileToCloud(file: File): Promise<string> {
-  if (file) {
-    try {
-      const res = await firstValueFrom(
-        this.fileUploadService.uploadFile(file)
-      );
-      console.log('✅ File uploaded', res);
-      return res.url;
-    } catch (err) {
-      console.error('❌ Upload error', err);
-      throw err;
+  async uploadFileToCloud(file: File): Promise<string> {
+    if (file) {
+      try {
+        const res = await firstValueFrom(
+          this.fileUploadService.uploadFile(file)
+        );
+        console.log('✅ File uploaded', res);
+        return res.url;
+      } catch (err) {
+        console.error('❌ Upload error', err);
+        throw err;
+      }
+    } else {
+      throw new Error('No file provided');
     }
-  } else {
-    throw new Error('No file provided');
   }
-}
 }
 
