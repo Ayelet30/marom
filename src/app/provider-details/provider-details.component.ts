@@ -33,6 +33,8 @@ export class ProviderDetailsComponent {
   currentStep: number = 1;
   showErrorForm: boolean = false;
   showSuccsesForm: boolean = false;
+  mode: string = '';
+
 
   @Input() isEditMode: boolean = true; // הוספת משתנה למצב עריכה
   @Input() taxFileNum!: InputData;
@@ -289,6 +291,7 @@ export class ProviderDetailsComponent {
     this.route.paramMap.subscribe(params => {
       const taxValue = params.get('taxFileNum') || '';
       const branchValue = params.get('branchNumber') || '';
+      this.mode = params.get('mode') || '';
       this.isEditMode = (params.get('mode') || '') === 'edit';
 
       this.taxFileNum = {

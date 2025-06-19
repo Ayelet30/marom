@@ -93,7 +93,9 @@
   </form>
 </div>
 <div class="error" *ngIf="showErrorForm"> אחד מהנתונים שהוכנסו חסר או שגוי - המידע לא נשמר!</div>
-<div class="succses" *ngIf="showSuccsesForm"> נתוניך נקלטו בהצלחה</div>
+<div class="succses" *ngIf="showSuccsesForm">
+  {{ mode === 'edit' ? 'נתוניך נקלטו בהצלחה' : 'נתוניך נקלטו בהצלחה, הנך מועבר להעלאת מסמכים' }}
+</div>
 <div *ngIf="!myForm" class="loading-spinner">
   <app-spinner></app-spinner>
 </div>
