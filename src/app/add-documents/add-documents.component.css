@@ -147,6 +147,21 @@ input[type="file"] {
   text-decoration: underline;
   font-size: 0.9em;
 }
+.error-message {
+  color: red;
+  font-weight: bold;
+  margin-top: 8px;
+  text-align: center;
+  font-size: 14px;
+}
+
+.success-message {
+  color: green;
+  font-weight: bold;
+  margin-top: 8px;
+  text-align: center;
+  font-size: 14px;
+}
 
 .success {
   color: green;
