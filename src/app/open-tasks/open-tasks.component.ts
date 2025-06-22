@@ -20,30 +20,40 @@ export class OpenTasksComponent {
   hasLoadedOnce = false;
 
   async loadTasks() {
-    if (!this.coordinatorId) return;
+  if (!this.coordinatorId) return;
 
-    this.loading = true;
-    this.hasLoadedOnce = false; // מוודא שזה יוסתר בכל התחלה של טעינה
-    try {
-      const coordinatorData = await this.firestoreService.getDocumentByParameter('coordinators', 'coordinatorId', this.coordinatorId);
-      const data = await this.firestoreService.getDocumentsByParameter('tasks', 'owner', this.coordinatorId);
-      if (data) {
-        // ממיר את הנתונים לפורמט מתאים
-        this.tasks = data;
-      } else {
-        this.tasks = []; // מבטיח שהמשתנה יהיה ריק כדי שהתנאי בתבנית יעבוד
+  this.loading = true;
+  this.hasLoadedOnce = false;
 
-        console.log('No tasks found for this coordinator');
-      }
+  try {
+    const coordinatorData = await this.firestoreService.getDocumentByParameter('coordinators', 'coordinatorId', this.coordinatorId);
+    const data = await this.firestoreService.getDocumentsByParameter('tasks', 'owner', this.coordinatorId);
+
+    if (data) {
+      // סינון משימות לפי סטטוס 1 או 2 בלבד
+      this.tasks = data
+        .filter(task => task.status === 1 || task.status === 2)
+        .map(task => {
+          if (task.status === 2) {
+            return {
+              ...task,
+              title: 'לא מאושר' // שינוי הכותרת במצב של סטטוס 2
+            };
+          }
+          return task;
+        });
+    } else {
+      this.tasks = [];
+      console.log('No tasks found for this coordinator');
     }
-    catch (error) {
-      console.error("שגיאה בטעינת משימות:", error);
-      this.tasks = []; // כדי שלא תיתקע במקרה של שגיאה
-    } finally {
-      this.loading = false;
-      this.hasLoadedOnce = true; // מציין שסיימנו נסיון טעינה
-    }
+  } catch (error) {
+    console.error("שגיאה בטעינת משימות:", error);
+    this.tasks = [];
+  } finally {
+    this.loading = false;
+    this.hasLoadedOnce = true;
   }
+}
 
   toDate(timestamp: any): Date {
     return timestamp?.toDate ? timestamp.toDate() : timestamp;
@@ -59,18 +69,36 @@ export class OpenTasksComponent {
     this.previewFile = null;
   }
 
-  async approve(file: any) {
-    console.log('מאושר:', file);
-    await this.firestoreService.updateDocument('tasks', file.id, { status: 3 });
-    this.closePreview();
+  async approve(task: any) {
+  const confirmed = window.confirm("האם אתה בטוח שברצונך לאשר קובץ זה?\n במידה ותאשר, המשימה תוסר מהרשימה");
+  if (!confirmed) return;
+
+  try {
+    await this.firestoreService.updateDocument('tasks', task.id, { status: 3 });
+
+    // הסרה מהרשימה בצד הקליינט
+    this.tasks = this.tasks.filter(t => t.id !== task.id);
+
+    this.closePreview(); // סגירת התצוגה המוגדלת
+  } catch (error) {
+    console.error("שגיאה באישור המשימה:", error);
   }
+}
 
 
-  async reject(file: any) {
-    console.log('לא מאושר:', file);
-    await this.firestoreService.updateDocument('tasks', file.id, { status: 2 });
+
+ async reject(task: any) {
+  try {
+    await this.firestoreService.updateDocument('tasks', task.id, { status: 2 });
+
+    // טוען מחדש כדי שהכותרת תשתנה ל"לא מאושר"
+    await this.loadTasks();
+
     this.closePreview();
+  } catch (error) {
+    console.error("שגיאה בדחיית המשימה:", error);
   }
+}
 
   isImage(url: string): boolean {
     return /\.(jpg|jpeg|png|gif|bmp|webp)$/i.test(url);
