@@ -12,10 +12,21 @@
     <div *ngIf="currentStep === 1">
       <h3> פרטי ספק</h3>
       <div class="row">
-        <app-custom-input class="child" [data]="taxFileNum" [control]="getFormControl('taxFileNum')"></app-custom-input>
-        <app-custom-input class="child" [data]="inputNameModel"
-          [control]="getFormControl('inputNameModel')"></app-custom-input>
-      </div>
+  <app-custom-input
+    class="child"
+    [class.invalid]="getFormControl('taxFileNum').invalid && getFormControl('taxFileNum').touched"
+    [data]="taxFileNum"
+    [control]="getFormControl('taxFileNum')">
+  </app-custom-input>
+
+  <app-custom-input
+    class="child"
+    [class.invalid]="getFormControl('inputNameModel').invalid && getFormControl('inputNameModel').touched"
+    [data]="inputNameModel"
+    [control]="getFormControl('inputNameModel')">
+  </app-custom-input>
+</div>
+
       <h3>פרטי עסק</h3>
       <div class="row">
         <app-custom-input class="child" [data]="inputCityModel"
@@ -41,7 +52,13 @@
         <app-custom-input class="child" [data]="inputAccountNumberModel"
           [control]="getFormControl('inputAccountNumberModel')"></app-custom-input>
       </div>
-      <button type="button" class="next" (click)="nextStep()">המשך</button>
+<div class="button-error-row">
+  <button type="button" class="next" (click)="nextStep()">המשך</button>
+
+  <div class="inline-error" *ngIf="showErrorForm">
+    ⚠️ יש למלא את כל השדות החובה ולתקן שדות שגויים לפני המשך
+  </div>
+</div>
     </div>
 
     <div *ngIf="currentStep === 2">
@@ -65,10 +82,18 @@
         <app-custom-input [data]="inputdeductFileModel"
           [control]="getFormControl('inputdeductFileModel')"></app-custom-input>
       </div>
-      <div class="button-container">
-        <button type="button" class="next" (click)="nextStep()">המשך</button>
-        <button type="button" class="prev" (click)="prevStep()">חזור</button>
-      </div>
+      <div class="button-error-container">
+  <button type="button" class="prev" (click)="prevStep()">חזור</button>
+
+  <div class="error-wrapper">
+    <div class="inline-error" *ngIf="showErrorForm">
+      ⚠️ יש למלא את כל השדות החובה ולתקן שדות שגויים לפני המשך
+    </div>
+  </div>
+
+  <button type="button" class="next" (click)="nextStep()">המשך</button>
+</div>
+
     </div>
  <!-- *ngIf="getFormControl('inputBagTypeModel').value ==='עוסק מורשה'" -->
     <div *ngIf="currentStep === 3">
@@ -85,14 +110,23 @@
         <app-custom-input [data]="inputNameFromMaromModel" (change)="onOwnerChange($event)"
         [options]="fromMaromList" [control]="getFormControl('inputNameFromMaromModel')"></app-custom-input>
       </div>
-      <div class="button-container">
-        <button type="submit">{{ isEditMode ? 'עדכן ספק' : 'שמור ספק ועבור להכנסת טפסים' }}</button>
-        <button type="button" class="prev" (click)="prevStep()">חזור</button>
-      </div>
+      <div class="button-error-container">
+  <button type="button" class="prev" (click)="prevStep()">חזור</button>
+
+  <div class="error-wrapper">
+    <div class="inline-error" *ngIf="showErrorForm">
+      ⚠️ יש למלא את כל השדות החובה ולתקן שדות שגויים לפני המשך
+    </div>
+  </div>
+
+  <button type="submit">
+    {{ isEditMode ? 'עדכן ספק' : 'שמור ספק ועבור להכנסת טפסים' }}
+  </button>
+</div>
+
     </div>
   </form>
 </div>
-<div class="error" *ngIf="showErrorForm"> אחד מהנתונים שהוכנסו חסר או שגוי - המידע לא נשמר!</div>
 <div class="succses" *ngIf="showSuccsesForm">
   {{ mode === 'edit' ? 'נתוניך נקלטו בהצלחה' : 'נתוניך נקלטו בהצלחה, הנך מועבר להעלאת מסמכים' }}
 </div>

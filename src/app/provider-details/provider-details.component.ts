@@ -537,11 +537,84 @@ export class ProviderDetailsComponent {
   }
 
   prevStep() {
+    this.showErrorForm = false;
     this.currentStep--;
   }
   nextStep() {
-    this.currentStep++;
+  this.markStepFieldsAsTouched(this.currentStep); // ✅ רק לשלב הרלוונטי
+  // בצע בדיקת תוקף לפי השלב הנוכחי
+  if (this.currentStep === 1) {
+    if (
+      this.getFormControl('taxFileNum').invalid ||
+      this.getFormControl('inputNameModel').invalid ||
+      this.getFormControl('inputCityModel').invalid ||
+      this.getFormControl('inputAddressModel').invalid ||
+      this.getFormControl('inputEmailModel').invalid ||
+      this.getFormControl('inputPhoneModel').invalid ||
+      this.getFormControl('inputBankNumberModel').invalid ||
+      this.getFormControl('branchNumber').invalid ||
+      this.getFormControl('inputAccountNumberModel').invalid
+    ) {
+      this.showErrorForm = true;
+      return;
+    }
   }
+
+  if (this.currentStep === 2) {
+    if (
+      this.getFormControl('inputOccupationModel').invalid ||
+      this.getFormControl('inputBagTypeModel').invalid ||
+      this.getFormControl('inputProjectNameModel').invalid ||
+      this.getFormControl('inputWithDateHoldingTaxEffectModel').invalid ||
+      this.getFormControl('inputDeductionPercentageModel').invalid ||
+      this.getFormControl('inputdeductFileModel').invalid
+    ) {
+      this.showErrorForm = true;
+      return;
+    }
+  }
+
+  // אם הכל תקין – עבור לשלב הבא
+  this.showErrorForm = false;
+  this.currentStep++;
+}
+markStepFieldsAsTouched(step: number) {
+  const fieldsByStep: { [key: number]: string[] } = {
+    1: [
+      'taxFileNum',
+      'inputNameModel',
+      'inputCityModel',
+      'inputAddressModel',
+      'inputEmailModel',
+      'inputPhoneModel',
+      'inputBankNumberModel',
+      'branchNumber',
+      'inputAccountNumberModel'
+    ],
+    2: [
+      'inputOccupationModel',
+      'inputBagTypeModel',
+      'inputProjectNameModel',
+      'inputWithDateHoldingTaxEffectModel',
+      'inputDeductionPercentageModel',
+      'inputdeductFileModel'
+    ],
+    3: [
+      'inputMailFromCompanyModel',
+      'inputNameFromCompanyModel',
+      'inputNameFromMaromModel',
+      'inputMailFromMaromModel'
+    ]
+  };
+
+  fieldsByStep[step]?.forEach(field => {
+    const control = this.myForm.get(field);
+    if (control) {
+      control.markAsTouched();
+    }
+  });
+}
+
 
   cleanForm() {
 
