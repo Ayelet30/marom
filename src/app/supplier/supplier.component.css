@@ -37,3 +37,24 @@
     width: 80%;
     margin: 20px auto;
 }
+
+/* כפתור כשהטופס לא תקין */
+.btn-disabled .ok-btn {
+  background-color: #e0e0e0; /* אפור בהיר */
+  border: 2px solid #bbb;
+  cursor: not-allowed;
+  fill: #999;
+}
+
+/* כפתור כשהטופס תקין */
+.btn-active .ok-btn {
+  background-color: #d2bde0; /* רקע סגלגל תואם לגווני האתר */
+  border: 2px solid #85649B;
+  cursor: pointer;
+  fill: #85649B;
+}
+
+.btn-active .ok-btn:hover {
+  background-color: #c8a9db;
+}
+
