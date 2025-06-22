@@ -158,7 +158,7 @@ export class AddDocumentComponent {
             const task = {
               owner: supplierData.NameFromMarom,
               mailFromMarom: supplierData.mailFromMarom,
-              description: `יש לאשר לספק ${supplierData.fullName} את הקובץ ${file.name}`,
+              description: `יש לאשר לספק ${supplierData.fullname} את הקובץ ${file.name}`,
               status: 1,
               title: "אישור קובץ",
               linkOfDoument: url,

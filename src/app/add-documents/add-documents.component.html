@@ -13,37 +13,40 @@
 
   <div class="form-grid">
 
-    <div class="file" [class.drag-over]="dragOverIndex === doc.type" *ngFor="let doc of documents"
-      (dragover)="onDragOver($event, doc.type)" (dragleave)="onDragLeave($event)" (drop)="onDrop($event, doc.type)">
-      <label class="uploadIcon" [attr.for]="'upload-' + doc.type">
-        <img src="https://cdn.menoramivt.co.il/public/images/cw54ewhsk3sqkri4-upload-ic.svg"
-          alt="העלאת {{ doc.label }}" />
-      </label>
-      <input id="upload-{{ doc.type }}" type="file" (change)="onFileSelected($event, doc.type)"
-        accept=".pdf,.jpg,.png" />
+   <div class="file" [class.drag-over]="dragOverIndex === doc.type" *ngFor="let doc of documents"
+    (dragover)="onDragOver($event, doc.type)" (dragleave)="onDragLeave($event)" (drop)="onDrop($event, doc.type)">
 
-      <p class="fileText">{{ doc.label }}</p>
+  <label class="uploadIcon" [attr.for]="'upload-' + doc.type">
+    <img src="https://cdn.menoramivt.co.il/public/images/cw54ewhsk3sqkri4-upload-ic.svg"
+      alt="העלאת {{ doc.label }}" />
+  </label>
 
-      <div *ngIf="uploadedFilesStatus[doc.type]">
-  <div [ngClass]="{'success': uploadedFilesStatus[doc.type].status === 'success', 'error': uploadedFilesStatus[doc.type].status === 'error'}">
-    <span *ngIf="uploadedFilesStatus[doc.type].status === 'success'">
-      ✔️ {{ uploadedFilesStatus[doc.type].fileName }} הועלה בהצלחה!
-      <a [href]="uploadedFilesStatus[doc.type].url" target="_blank">לצפייה</a>
-    </span>
-    <span *ngIf="uploadedFilesStatus[doc.type].status === 'error'">
-      ❌ {{ uploadedFilesStatus[doc.type].fileName }} - שגיאה: {{ uploadedFilesStatus[doc.type].errorMessage }}
-    </span>
+  <input id="upload-{{ doc.type }}" type="file" (change)="onFileSelected($event, doc.type)"
+    accept=".pdf,.jpg,.png" />
+
+  <p class="fileText">{{ doc.label }}</p>
+
+  <div class="file-name" [attr.title]="selectedFiles[doc.type]">
+    {{ selectedFiles[doc.type] || 'לא נבחר קובץ' }}
   </div>
+
+  <!-- ✅ כאן תוצג הודעת שגיאה בתוך הכרטיסיה -->
+  <div *ngIf="uploadedFilesStatus[doc.type]?.status === 'error'" class="error-message">
+    שגיאה בהעלאת הקובץ
+  </div>
+
+  <!-- הצלחה -->
+  <div *ngIf="uploadedFilesStatus[doc.type]?.status === 'success'" class="success-message">
+    ✔️ {{ uploadedFilesStatus[doc.type].fileName }} הועלה בהצלחה!
+    <a [href]="uploadedFilesStatus[doc.type].url" target="_blank">לצפייה</a>
+  </div>
+
+  <div *ngIf="doc.link" class="file-link">
+    <a [href]="doc.link" target="_blank" rel="noopener noreferrer">לצפייה במסמך</a>
+  </div>
+
 </div>
- 
-      <i class="fa fa-paperclip"></i>
-      {{ selectedFiles[doc.type] || 'לא נבחר קובץ' }}
 
-      <div *ngIf="doc.link" class="file-link">
-        <a [href]="doc.link" target="_blank" rel="noopener noreferrer">לצפייה במסמך</a>
-      </div>
-
-    </div>
   </div>
 
  

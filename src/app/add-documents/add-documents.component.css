@@ -129,11 +129,38 @@ input[type="file"] {
 .file-link {
   margin-top: 5px;
 }
+.file-name {
+  font-size: 12px;
+  color: #000;
+  margin-top: 5px;
+  direction: ltr;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+
 
 .file-link a {
   color: #007bff;
   text-decoration: underline;
   font-size: 0.9em;
+}
+.error-message {
+  color: red;
+  font-weight: bold;
+  margin-top: 8px;
+  text-align: center;
+  font-size: 14px;
+}
+
+.success-message {
+  color: green;
+  font-weight: bold;
+  margin-top: 8px;
+  text-align: center;
+  font-size: 14px;
 }
 
 .success {
