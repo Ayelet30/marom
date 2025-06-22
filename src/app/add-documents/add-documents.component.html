@@ -36,8 +36,11 @@
   </div>
 </div>
  
-      <i class="fa fa-paperclip"></i>
-      {{ selectedFiles[doc.type] || 'לא נבחר קובץ' }}
+     <i class="fa fa-paperclip"></i>
+<div class="file-name" [attr.title]="selectedFiles[doc.type]">
+  {{ selectedFiles[doc.type] || 'לא נבחר קובץ' }}
+</div>
+
 
       <div *ngIf="doc.link" class="file-link">
         <a [href]="doc.link" target="_blank" rel="noopener noreferrer">לצפייה במסמך</a>
