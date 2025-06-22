@@ -117,4 +117,42 @@ h3{
   white-space: nowrap;
   direction: ltr;
 }
+.button-error-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 20px;
+  flex-direction: row-reverse; /* היפוך כיוון */
+  gap: 10px;
+}
+
+.button-error-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 20px;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.inline-error {
+  background-color: #fff3cd;
+  color: #856404;
+  border: 1px solid #ffeeba;
+  padding: 8px 12px;
+  border-radius: 5px;
+  font-size: 14px;
+  direction: rtl;
+  min-width: 250px;
+  text-align: center;
+}
+
+.error-wrapper {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+}
+
+
+
 
