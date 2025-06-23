@@ -11,6 +11,7 @@
   <form [formGroup]="myForm" (ngSubmit)="onSubmit()">
     <div *ngIf="currentStep === 1">
       <h3> פרטי ספק</h3>
+       <div class="input-group-with-line">
       <div class="row">
   <app-custom-input
     class="child"
@@ -19,6 +20,7 @@
     [control]="getFormControl('taxFileNum')">
   </app-custom-input>
 
+
   <app-custom-input
     class="child"
     [class.invalid]="getFormControl('inputNameModel').invalid && getFormControl('inputNameModel').touched"
@@ -26,22 +28,26 @@
     [control]="getFormControl('inputNameModel')">
   </app-custom-input>
 </div>
+</div>
+
 
       <h3>פרטי עסק</h3>
+      <div class="input-group-with-line">
       <div class="row">
         <app-custom-input class="child" [data]="inputCityModel"
           [control]="getFormControl('inputCityModel')"></app-custom-input>
         <app-custom-input class="child" [data]="inputAddressModel"
           [control]="getFormControl('inputAddressModel')"></app-custom-input>
       </div>
-      
+
       <div class="row">
         <app-custom-input class="child" [data]="inputEmailModel"
           [control]="getFormControl('inputEmailModel')"></app-custom-input>
         <app-custom-input class="child" [data]="inputPhoneModel"
           [control]="getFormControl('inputPhoneModel')"></app-custom-input>
       </div>
-      
+            </div>
+
 
       <h3>פרטי בנק</h3>
       <div class="row">
