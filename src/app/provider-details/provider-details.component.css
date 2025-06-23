@@ -10,7 +10,7 @@
 .row {
   display: flex;
   justify-content: space-between;
-  margin-bottom: 1em;
+  margin-bottom: 5px;
 }
 
 .floating-label-container {
@@ -52,6 +52,12 @@ button:hover {
 
 h3{
   color: #85649B;
+ color: #85649B;
+  text-align: right; /* יישור לימין */
+  padding-bottom: 5px;
+  margin-top: 5px; /* ריווח בין הכותרות */
+  margin-bottom: 1px;  /* היה ברירת מחדל גבוהה - צמצמנו */
+
 }
 
 .error{
@@ -154,5 +160,10 @@ h3{
 }
 
 
+.input-group-with-line {
+  border-bottom: 1.5px solid #85649B;
+  padding-bottom: 10px;
+  margin-bottom: 15px;
+}
 
 
