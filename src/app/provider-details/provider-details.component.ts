@@ -325,7 +325,7 @@ export class ProviderDetailsComponent {
       inputBankNumberModel: [this.inputBankNumberModel.value, Validators.required],
       branchNumber: [this.branchNumber.value, Validators.required],
       inputAccountNumberModel: [this.inputAccountNumberModel.value, Validators.required],
-      inputAddressModel: [this.inputAddressModel.value, Validators.required,Validators.maxLength(15)],
+      inputAddressModel: [this.inputAddressModel.value, [Validators.required, Validators.maxLength(15)]],
       inputCityModel: [this.inputCityModel.value, Validators.required],
       inputPhoneModel: [this.inputPhoneModel.value, [Validators.required, Validators.pattern(/^05[0-9]{8}$/)]],
       inputEmailModel: [this.inputEmailModel.value, [Validators.required, Validators.email]],
