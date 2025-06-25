@@ -40,7 +40,8 @@
 </div>
 
 <!-- תצוגה מוגדלת -->
-<div class="overlay" *ngIf="previewFile" (click)="closePreview()">
+<div class="overlay" *ngIf="previewFile && !showConfirm" (click)="closePreview()">
+
   <div class="preview-box" (click)="$event.stopPropagation()">
     <img *ngIf="isImage(previewFile.fileUrl)" [src]="previewFile.fileUrl" alt="תמונה" />
     <iframe *ngIf="isPdf(previewFile.fileUrl)" [src]="previewFile.fileUrl" width="500" height="600" frameborder="0"></iframe>
@@ -53,4 +54,13 @@
       <button (click)="reject(previewFile)">❌ לא מאשר</button>
     </div>
   </div>
+  
 </div>
+
+<app-confirm-dialog
+  [visible]="showConfirm"
+  [title]="'אישור משימה'"
+  [message]="'האם אתה בטוח שברצונך לאשר קובץ זה? במידה ותאשר, המשימה תוסר מהרשימה.'"
+  (confirm)="onConfirmApprove()"
+  (cancel)="onCancelApprove()"
+></app-confirm-dialog>
