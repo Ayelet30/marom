@@ -2,11 +2,13 @@ import { Component } from '@angular/core';
 import { FirestoreService } from '../services/firestore.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.component';
+
 
 @Component({
   selector: 'app-open-tasks',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule,ConfirmDialogComponent],
   templateUrl: './open-tasks.component.html',
   styleUrls: ['./open-tasks.component.css']
 })
@@ -15,6 +17,8 @@ export class OpenTasksComponent {
   tasks: any[] = [];
   loading = false;
   previewFile: any = null;
+  showConfirm = false;
+  taskToApprove: any;
 
   constructor(private firestoreService: FirestoreService) { }
   hasLoadedOnce = false;
@@ -61,7 +65,6 @@ export class OpenTasksComponent {
 
   openPreview(file: any) {
     this.previewFile = file;
-    console.log('the id is :', file?.id);
 
   }
 
@@ -69,22 +72,31 @@ export class OpenTasksComponent {
     this.previewFile = null;
   }
 
-  async approve(task: any) {
-  const confirmed = window.confirm("האם אתה בטוח שברצונך לאשר קובץ זה?\n במידה ותאשר, המשימה תוסר מהרשימה");
-  if (!confirmed) return;
-
-  try {
-    await this.firestoreService.updateDocument('tasks', task.id, { status: 3 });
-
-    // הסרה מהרשימה בצד הקליינט
-    this.tasks = this.tasks.filter(t => t.id !== task.id);
-
-    this.closePreview(); // סגירת התצוגה המוגדלת
-  } catch (error) {
-    console.error("שגיאה באישור המשימה:", error);
+   approve(task: any) {
+    this.taskToApprove = task;
+    this.showConfirm = true;
   }
-}
+ async onConfirmApprove() {
+        this.closePreview(); // 👈 תוספת חשובה כדי להעלים את תצוגת הקובץ
+    const task = this.taskToApprove;
+    this.showConfirm = false;
 
+    try {
+      await this.firestoreService.updateDocument('tasks', task.id, { status: 3 });
+      this.tasks = this.tasks.filter(t => t.id !== task.id);
+      this.closePreview();
+    } catch (error) {
+      console.error("שגיאה באישור המשימה:", error);
+    }
+
+  }
+
+  onCancelApprove() {
+    this.showConfirm = false;
+    this.taskToApprove = null;
+      this.closePreview(); // 👈 תוספת חשובה כדי להעלים את תצוגת הקובץ
+
+  }
 
 
  async reject(task: any) {

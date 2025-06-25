@@ -1,5 +1,5 @@
 
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormControl, FormGroup, FormsModule, Validators } from '@angular/forms';
 import { CustomInputComponent } from "../custom-input/custom-input.component";
@@ -14,6 +14,7 @@ import { buildPluginData } from '../shared/utils';
 import { WizgroundService } from '../services/wizground.service';
 import { Output, EventEmitter } from '@angular/core';
 import { Location } from '@angular/common';
+import { CityService } from '../services/city.service';
 
 
 
@@ -27,7 +28,8 @@ import { Location } from '@angular/common';
 
 })
 
-export class ProviderDetailsComponent {
+export class ProviderDetailsComponent implements OnInit {
+  cities: { id: string; name: string }[] = [];
 
   myForm!: FormGroup;
   currentStep: number = 1;
@@ -51,7 +53,8 @@ export class ProviderDetailsComponent {
     private router: Router,
     private route: ActivatedRoute,
     private wizground: WizgroundService,
-    private location: Location
+    private location: Location,
+    private cityService: CityService
   ) {
     this.supplierData = this.supplierService.getSupplier();
   }
@@ -127,14 +130,16 @@ export class ProviderDetailsComponent {
     value: '',
     type: 'text',
     name: "address",
-    error: "יש להכניס כתובת"
+    error: "יש להכניס כתובת (עד 15 תווים)",
+    maxlength: '15'
+
   };
 
   inputCityModel: InputData = {
     id: 'city',
     label: ' עיר',
     value: '',
-    type: 'text',
+    type: 'select',
     name: "city",
     error: "יש להכניס עיר"
   };
@@ -288,6 +293,20 @@ export class ProviderDetailsComponent {
 
 
   ngOnInit() {
+    this.cityService.getCities().subscribe({
+      next: (cities) => {
+        this.cities = cities;
+
+        console.log("!!!!", this.cities);
+      },
+      error: (err) => {
+        console.error("שגיאה בשליפת ערים:", err);
+      }
+
+
+    });
+
+
     this.route.paramMap.subscribe(params => {
       const taxValue = params.get('taxFileNum') || '';
       const branchValue = params.get('branchNumber') || '';
@@ -323,9 +342,9 @@ export class ProviderDetailsComponent {
       inputBankNumberModel: [this.inputBankNumberModel.value, Validators.required],
       branchNumber: [this.branchNumber.value, Validators.required],
       inputAccountNumberModel: [this.inputAccountNumberModel.value, Validators.required],
-      inputAddressModel: [this.inputAddressModel.value, Validators.required],
+      inputAddressModel: [this.inputAddressModel.value, [Validators.required, Validators.maxLength(15)]],
       inputCityModel: [this.inputCityModel.value, Validators.required],
-      inputPhoneModel: [this.inputPhoneModel.value, [Validators.required, Validators.pattern('[0-9]{10}')]],
+      inputPhoneModel: [this.inputPhoneModel.value, [Validators.required, Validators.pattern(/^05[0-9]{8}$/)]],
       inputEmailModel: [this.inputEmailModel.value, [Validators.required, Validators.email]],
       inputWithDateHoldingTaxEffectModel: [this.inputWithDateHoldingTaxEffectModel.value, Validators.required],
       inputDeductionPercentageModel: [this.inputDeductionPercentageModel.value, Validators.required],
@@ -541,79 +560,79 @@ export class ProviderDetailsComponent {
     this.currentStep--;
   }
   nextStep() {
-  this.markStepFieldsAsTouched(this.currentStep); // ✅ רק לשלב הרלוונטי
-  // בצע בדיקת תוקף לפי השלב הנוכחי
-  if (this.currentStep === 1) {
-    if (
-      this.getFormControl('taxFileNum').invalid ||
-      this.getFormControl('inputNameModel').invalid ||
-      this.getFormControl('inputCityModel').invalid ||
-      this.getFormControl('inputAddressModel').invalid ||
-      this.getFormControl('inputEmailModel').invalid ||
-      this.getFormControl('inputPhoneModel').invalid ||
-      this.getFormControl('inputBankNumberModel').invalid ||
-      this.getFormControl('branchNumber').invalid ||
-      this.getFormControl('inputAccountNumberModel').invalid
-    ) {
-      this.showErrorForm = true;
-      return;
+    this.markStepFieldsAsTouched(this.currentStep); // ✅ רק לשלב הרלוונטי
+    // בצע בדיקת תוקף לפי השלב הנוכחי
+    if (this.currentStep === 1) {
+      if (
+        this.getFormControl('taxFileNum').invalid ||
+        this.getFormControl('inputNameModel').invalid ||
+        this.getFormControl('inputCityModel').invalid ||
+        this.getFormControl('inputAddressModel').invalid ||
+        this.getFormControl('inputEmailModel').invalid ||
+        this.getFormControl('inputPhoneModel').invalid ||
+        this.getFormControl('inputBankNumberModel').invalid ||
+        this.getFormControl('branchNumber').invalid ||
+        this.getFormControl('inputAccountNumberModel').invalid
+      ) {
+        this.showErrorForm = true;
+        return;
+      }
     }
+
+    if (this.currentStep === 2) {
+      if (
+        this.getFormControl('inputOccupationModel').invalid ||
+        this.getFormControl('inputBagTypeModel').invalid ||
+        this.getFormControl('inputProjectNameModel').invalid ||
+        this.getFormControl('inputWithDateHoldingTaxEffectModel').invalid ||
+        this.getFormControl('inputDeductionPercentageModel').invalid ||
+        this.getFormControl('inputdeductFileModel').invalid
+      ) {
+        this.showErrorForm = true;
+        return;
+      }
+    }
+
+    // אם הכל תקין – עבור לשלב הבא
+    this.showErrorForm = false;
+    this.currentStep++;
   }
+  markStepFieldsAsTouched(step: number) {
+    const fieldsByStep: { [key: number]: string[] } = {
+      1: [
+        'taxFileNum',
+        'inputNameModel',
+        'inputCityModel',
+        'inputAddressModel',
+        'inputEmailModel',
+        'inputPhoneModel',
+        'inputBankNumberModel',
+        'branchNumber',
+        'inputAccountNumberModel'
+      ],
+      2: [
+        'inputOccupationModel',
+        'inputBagTypeModel',
+        'inputProjectNameModel',
+        'inputWithDateHoldingTaxEffectModel',
+        'inputDeductionPercentageModel',
+        'inputdeductFileModel'
+      ],
+      3: [
+        'inputMailFromCompanyModel',
+        'inputNameFromCompanyModel',
+        'inputNameFromMaromModel',
+        'inputMailFromMaromModel'
+      ]
+    };
 
-  if (this.currentStep === 2) {
-    if (
-      this.getFormControl('inputOccupationModel').invalid ||
-      this.getFormControl('inputBagTypeModel').invalid ||
-      this.getFormControl('inputProjectNameModel').invalid ||
-      this.getFormControl('inputWithDateHoldingTaxEffectModel').invalid ||
-      this.getFormControl('inputDeductionPercentageModel').invalid ||
-      this.getFormControl('inputdeductFileModel').invalid
-    ) {
-      this.showErrorForm = true;
-      return;
-    }
+    fieldsByStep[step]?.forEach(field => {
+      const control = this.myForm.get(field);
+      if (control) {
+        control.markAsTouched();
+      }
+    });
   }
-
-  // אם הכל תקין – עבור לשלב הבא
-  this.showErrorForm = false;
-  this.currentStep++;
-}
-markStepFieldsAsTouched(step: number) {
-  const fieldsByStep: { [key: number]: string[] } = {
-    1: [
-      'taxFileNum',
-      'inputNameModel',
-      'inputCityModel',
-      'inputAddressModel',
-      'inputEmailModel',
-      'inputPhoneModel',
-      'inputBankNumberModel',
-      'branchNumber',
-      'inputAccountNumberModel'
-    ],
-    2: [
-      'inputOccupationModel',
-      'inputBagTypeModel',
-      'inputProjectNameModel',
-      'inputWithDateHoldingTaxEffectModel',
-      'inputDeductionPercentageModel',
-      'inputdeductFileModel'
-    ],
-    3: [
-      'inputMailFromCompanyModel',
-      'inputNameFromCompanyModel',
-      'inputNameFromMaromModel',
-      'inputMailFromMaromModel'
-    ]
-  };
-
-  fieldsByStep[step]?.forEach(field => {
-    const control = this.myForm.get(field);
-    if (control) {
-      control.markAsTouched();
-    }
-  });
-}
 
 
   cleanForm() {
