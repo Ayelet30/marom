@@ -108,7 +108,7 @@ export class ProviderDetailsComponent implements OnInit {
 
   inputBankNumberModel: InputData = {
     id: 'bankNumber',
-    label: ' מס בנק',
+    label: ' בנק',
     value: '',
     type: 'select',
     name: "bankNumber",
