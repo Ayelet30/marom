@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 
-import { ExcelServiceService } from './excel-service.service';
+import { ExcelService } from './excel-service.service';
 
 describe('ExcelServiceService', () => {
-  let service: ExcelServiceService;
+  let service: ExcelService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    service = TestBed.inject(ExcelServiceService);
+    service = TestBed.inject(ExcelService);
   });
 
   it('should be created', () => {
