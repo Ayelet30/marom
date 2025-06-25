@@ -1,5 +1,5 @@
 
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormControl, FormGroup, FormsModule, Validators } from '@angular/forms';
 import { CustomInputComponent } from "../custom-input/custom-input.component";
@@ -14,6 +14,7 @@ import { buildPluginData } from '../shared/utils';
 import { WizgroundService } from '../services/wizground.service';
 import { Output, EventEmitter } from '@angular/core';
 import { Location } from '@angular/common';
+import { CityService } from '../services/city.service';
 
 
 
@@ -27,7 +28,8 @@ import { Location } from '@angular/common';
 
 })
 
-export class ProviderDetailsComponent {
+export class ProviderDetailsComponent implements OnInit {
+  cities: { id: string; name: string }[] = [];
 
   myForm!: FormGroup;
   currentStep: number = 1;
@@ -51,7 +53,8 @@ export class ProviderDetailsComponent {
     private router: Router,
     private route: ActivatedRoute,
     private wizground: WizgroundService,
-    private location: Location
+    private location: Location,
+    private cityService: CityService
   ) {
     this.supplierData = this.supplierService.getSupplier();
   }
@@ -136,7 +139,7 @@ export class ProviderDetailsComponent {
     id: 'city',
     label: ' עיר',
     value: '',
-    type: 'text',
+    type: 'select',
     name: "city",
     error: "יש להכניס עיר"
   };
@@ -290,6 +293,20 @@ export class ProviderDetailsComponent {
 
 
   ngOnInit() {
+    this.cityService.getCities().subscribe({
+      next: (cities) => {
+        this.cities = cities;
+
+        console.log("!!!!", this.cities);
+      },
+      error: (err) => {
+        console.error("שגיאה בשליפת ערים:", err);
+      }
+
+
+    });
+
+
     this.route.paramMap.subscribe(params => {
       const taxValue = params.get('taxFileNum') || '';
       const branchValue = params.get('branchNumber') || '';
