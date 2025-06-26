@@ -23,6 +23,8 @@ export class SupplierComponent implements OnInit {
   supplierData: any = null;
   showAddNewForm: boolean = false;
   showMessage: boolean = false;
+  showModal: boolean = false;  // להציג/להסתיר את המודאל
+
 
   inputIDModel: InputData = {
     id: 'licenseNumber',
@@ -109,12 +111,12 @@ export class SupplierComponent implements OnInit {
       this.navigateToExistProvider();
     } else {
       this.supplierService.setSupplier(undefined);
-      this.showMessage = true; // הצגת הודעה
-      setTimeout(() => {
-        this.showMessage = false;
-        this.showAddNewForm = true;
-        this.navigateToProviderDetails();  // הצגת הטופס לאחר 3 שניות
-      }, 5000);
+    this.showModal = true;  // פותח את המודאל
+      // setTimeout(() => {
+      //   this.showMessage = false;
+      //   this.showAddNewForm = true;
+      //   this.navigateToProviderDetails();  // הצגת הטופס לאחר 3 שניות
+      // }, 5000);
     }
   }
 
@@ -134,7 +136,18 @@ export class SupplierComponent implements OnInit {
   onBackFromEdit() {
     this.showAddNewForm = false;
   }
+onConfirmCreateNew() {
+  this.showModal = false;
+  this.navigateToProviderDetails();
+}
 
+onCancelCreateNew() {
+  this.showModal = false;
+this.supplierForm.reset({
+    inputIDModel: '',
+    inputBranchNumberModel: '',
+    agree: true  // חשוב! אחרת הכפתור נשאר מושבת
+  });}
 
 
 }
