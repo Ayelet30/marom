@@ -379,7 +379,7 @@ export class ProviderDetailsComponent implements OnInit {
       inputAddressModel: [this.inputAddressModel.value, [Validators.required, Validators.maxLength(15)]],
       inputCityModel: [this.inputCityModel.value, Validators.required],
       inputPhoneModel: [this.inputPhoneModel.value, [Validators.required, Validators.pattern(/^05[0-9]{8}$/)]],
-      inputEmailModel: [this.inputEmailModel.value, [Validators.required, Validators.email]],
+      inputEmailModel: [this.inputEmailModel.value, [Validators.required, Validators.email, Validators.pattern(/^[^\s@]+@[^\s@]+\.(com|org|net|co\.il|gov\.il|edu\.il)$/)]],
       inputWithDateHoldingTaxEffectModel: [this.inputWithDateHoldingTaxEffectModel.value, Validators.required],
       inputDeductionPercentageModel: [this.inputDeductionPercentageModel.value, Validators.required],
       inputdeductFileModel: [this.inputdeductFileModel.value, Validators.required],
