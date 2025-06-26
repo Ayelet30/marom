@@ -25,8 +25,20 @@
         </ng-template>
         <label [for]="data.id" class="floating-label">{{ data.label }}</label>
 
-        <div *ngIf="control?.invalid && control?.touched" class="error">
-            {{ data.error }}
-        </div>
+        <div *ngIf="control?.touched  && control?.errors" class="error">
+  <div *ngIf="control.errors?.['required']">
+    {{ data.requiredError || (data.label + ' הוא שדה חובה') }}
+  </div>
+  <div *ngIf="control.errors?.['email'] && !control.errors?.['required']">
+    {{ data.error }}
+  </div>
+  <div *ngIf="control.errors?.['pattern'] && !control.errors?.['required']">
+    {{ data.error }}
+  </div>
+  <div *ngIf="control.errors?.['maxlength'] && !control.errors?.['required']">
+    {{ data.error }}
+  </div>
+</div>
+
     </div>
 </div>
