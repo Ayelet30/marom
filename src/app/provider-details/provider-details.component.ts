@@ -103,16 +103,20 @@ export class ProviderDetailsComponent implements OnInit {
     value: '',
     type: 'text',
     name: "name",
-    error: "יש להכניס שם ספק"
+    error: "יש להכניס שם ספק",
+    requiredError: "נדרש להכניס שם ספק"
+
   };
 
   inputBankNumberModel: InputData = {
     id: 'bankNumber',
-    label: ' מס בנק',
+    label: ' בנק',
     value: '',
     type: 'select',
     name: "bankNumber",
-    error: "יש להכניס בנק מהרשימה בלבד"
+    error: "יש להכניס בנק מהרשימה בלבד",
+    requiredError: "נדרש לבחור בנק"
+
   };
 
   inputAccountNumberModel: InputData = {
@@ -121,7 +125,9 @@ export class ProviderDetailsComponent implements OnInit {
     value: '',
     type: 'number',
     name: "accountNumber",
-    error: "יש להכניס מס חשבון"
+    error: "יש להכניס מס חשבון",
+    requiredError: "נדרש להכניס מס חשבון"
+
   };
 
   inputAddressModel: InputData = {
@@ -131,7 +137,9 @@ export class ProviderDetailsComponent implements OnInit {
     type: 'text',
     name: "address",
     error: "יש להכניס כתובת (עד 15 תווים)",
-    maxlength: '15'
+    maxlength: '15',
+    requiredError: "נדרש להכניס כתובת",
+
 
   };
 
@@ -141,7 +149,9 @@ export class ProviderDetailsComponent implements OnInit {
     value: '',
     type: 'select',
     name: "city",
-    error: "יש להכניס עיר"
+    error: "יש לבחור עיר מהרשימה בלבד",
+    requiredError: "נדרש לבחור עיר"
+
   };
 
   inputPhoneModel: InputData = {
@@ -150,7 +160,9 @@ export class ProviderDetailsComponent implements OnInit {
     value: '',
     type: 'tel',
     name: "phone",
-    error: "מס פלאפון לא חוקי"
+    error: "מס פלאפון לא חוקי",
+    requiredError: "נדרש להכניס מספר פלאפון"
+
   };
 
   inputEmailModel: InputData = {
@@ -159,7 +171,9 @@ export class ProviderDetailsComponent implements OnInit {
     value: '',
     type: 'email',
     name: "email",
-    error: "מייל לא חוקי"
+    error: "מייל לא חוקי",
+    requiredError: "נדרש להכניס מייל"
+
   };
 
   inputWithDateHoldingTaxEffectModel: InputData = {
@@ -168,7 +182,9 @@ export class ProviderDetailsComponent implements OnInit {
     value: '',
     type: 'date',
     name: "dateHoldingTax",
-    error: "תאריך לא חוקי"
+    error: "תאריך לא חוקי",
+    requiredError: "נדרש להכניס תאריך"
+
   };
 
   inputDeductionPercentageModel: InputData = {
@@ -177,7 +193,9 @@ export class ProviderDetailsComponent implements OnInit {
     value: '',
     type: 'number',
     name: "deductionPercentage",
-    error: "מס לא חוקי"
+    error: "מס לא חוקי",
+    requiredError: "נדרש להכניס אחוז ניכוי"
+
   };
 
   inputdeductFileModel: InputData = {
@@ -187,7 +205,9 @@ export class ProviderDetailsComponent implements OnInit {
     type: 'text',
     name: "deductFile",
     error: "לא חוקי",
-    maxlength: '9'
+    maxlength: '9',
+    requiredError: "נדרש להכניס מספר תיק",
+
   };
 
   inputProjectNameModel: InputData = {
@@ -196,7 +216,9 @@ export class ProviderDetailsComponent implements OnInit {
     value: '',
     type: 'text',
     name: "ProjectName",
-    error: "לא חוקי"
+    error: "לא חוקי",
+    requiredError: "נדרש להכניס שם פרויקט"
+
   };
 
   inputBagTypeModel: InputData = {
@@ -205,7 +227,9 @@ export class ProviderDetailsComponent implements OnInit {
     value: '',
     type: 'select',
     name: "BagType",
-    error: "יש לבחור סוג מהרשימה"
+    error: "יש לבחור סוג מהרשימה",
+    requiredError: "נדרש לבחור סוג תיק"
+
   };
 
   inputOccupationModel: InputData = {
@@ -214,7 +238,9 @@ export class ProviderDetailsComponent implements OnInit {
     value: '',
     type: 'text',
     name: "Occupation",
-    error: "יש להכניס עיסוק"
+    error: "יש להכניס עיסוק",
+    requiredError: "נדרש להכניס עיסוק"
+
   };
 
   inputNameFromCompanyModel: InputData = {
@@ -223,7 +249,9 @@ export class ProviderDetailsComponent implements OnInit {
     value: '',
     type: 'text',
     name: "NameFromCompany",
-    error: "שדה חובה"
+    error: "שדה חובה",
+    requiredError: "נדרש להכניס שם איש קשר מטעם הספק"
+
   };
 
   inputMailFromCompanyModel: InputData = {
@@ -232,7 +260,9 @@ export class ProviderDetailsComponent implements OnInit {
     value: '',
     type: 'email',
     name: "MailFromCompany",
-    error: "מייל לא חוקי"
+    error: "מייל לא חוקי",
+    requiredError: "נדרש להכניס מייל של איש הקשר"
+
   };
 
   inputNameFromMaromModel: InputData = {
@@ -241,7 +271,9 @@ export class ProviderDetailsComponent implements OnInit {
     value: '',
     type: 'select',
     name: "NameFromMarom",
-    error: "יש לבחור מרשימה"
+    error: "יש לבחור מרשימה",
+    requiredError: "נדרש לבחור שם איש קשר מטעם מרום"
+
   };
 
   inputMailFromMaromModel: InputData = {
@@ -251,7 +283,9 @@ export class ProviderDetailsComponent implements OnInit {
     type: 'email',
     name: "MailFromMarom",
     error: "מייל לא חוקי",
-    readonly: 'true'
+    readonly: 'true',
+    requiredError: "נדרש להכניס מייל של איש הקשר ממרום",
+
   };
 
 
@@ -345,7 +379,7 @@ export class ProviderDetailsComponent implements OnInit {
       inputAddressModel: [this.inputAddressModel.value, [Validators.required, Validators.maxLength(15)]],
       inputCityModel: [this.inputCityModel.value, Validators.required],
       inputPhoneModel: [this.inputPhoneModel.value, [Validators.required, Validators.pattern(/^05[0-9]{8}$/)]],
-      inputEmailModel: [this.inputEmailModel.value, [Validators.required, Validators.email]],
+      inputEmailModel: [this.inputEmailModel.value, [Validators.required, Validators.email, Validators.pattern(/^[^\s@]+@[^\s@]+\.(com|org|net|co\.il|gov\.il|edu\.il)$/)]],
       inputWithDateHoldingTaxEffectModel: [this.inputWithDateHoldingTaxEffectModel.value, Validators.required],
       inputDeductionPercentageModel: [this.inputDeductionPercentageModel.value, Validators.required],
       inputdeductFileModel: [this.inputdeductFileModel.value, Validators.required],
