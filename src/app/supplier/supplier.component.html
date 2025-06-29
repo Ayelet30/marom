@@ -2,7 +2,7 @@
   <form [formGroup]="supplierForm" (ngSubmit)="checkSupplier()">
     <div class="id-container">
       <div class="input-container">
-        <button class="btn-submit"
+        <button class="btn-submit" [tabindex]="3"
         type="submit"
         [disabled]="supplierForm.invalid"
         [ngClass]="{ 'btn-disabled': supplierForm.invalid, 'btn-active': supplierForm.valid }">
@@ -15,10 +15,10 @@
 
         <div class="row">
 
-          <app-custom-input [data]="inputBranchNumberModel"
+          <app-custom-input [data]="inputBranchNumberModel" [tabindex]="2"
             [control]="getFormControl('inputBranchNumberModel')"></app-custom-input>
-
-            <app-custom-input [data]="inputIDModel"
+ 
+            <app-custom-input [data]="inputIDModel" [tabindex]="1"
             [control]="getFormControl('inputIDModel')"></app-custom-input>
     
         </div>

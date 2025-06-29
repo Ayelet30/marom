@@ -18,7 +18,8 @@
                    [id]="data.id" 
                    [formControl]="control" 
                    [name]="data.name" 
-                   placeholder=" " 
+                   placeholder=" "
+                   [tabindex]="tabindex" 
                    [type]="data.type" 
                    maxlength="{{data.maxlength}}"
                    [readonly]="!isEditMode && data.readonly">

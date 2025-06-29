@@ -1,4 +1,4 @@
-import { Component, Input, ViewChild } from '@angular/core';
+import { Component, input, Input, ViewChild } from '@angular/core';
 import { FormControl, FormsModule, ReactiveFormsModule, NgModel } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { InputData } from '../models/input-data.model';
@@ -15,6 +15,8 @@ export class CustomInputComponent {
   @Input() options: { id: string; name: string }[] = [];
   @Input() control!: FormControl; 
   @Input() isEditMode: boolean = false;
+  @Input() tabindex: number = 1;
+
 
   @ViewChild('inputRef') inputRef!: NgModel;  
 
