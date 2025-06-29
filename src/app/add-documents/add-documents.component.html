@@ -50,7 +50,26 @@
   </div>
 
  
+<div class="form-actions">
+  <!-- קודם הרכז כדי שיהיה מימין -->
+  <div class="coordinator-select">
+    <select id="selectedCoordinator"
+            [(ngModel)]="selectedCoordinator"
+            name="selectedCoordinator"
+            required>
+      <option [ngValue]="null" disabled selected hidden>בחר רכז</option>
+      <option *ngFor="let coordinator of coordinators" [ngValue]="coordinator">
+        {{ coordinator.name }} {{ coordinator.family }}
+      </option>
+    </select>
+  </div>
 
-
+  <!-- אחר כך הכפתור, כדי שיהיה משמאל -->
   <button type="submit" class="btn-submit">שלח</button>
+</div>
+
+<div *ngIf="!selectedCoordinator && form.submitted" class="error-message">
+  חובה לבחור רכז לפני שליחה
+</div>
+
 </form>
