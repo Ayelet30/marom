@@ -103,15 +103,19 @@ input[type="file"] {
 }
 
 .btn-submit {
-  margin-top: 20px;
   background-color: white;
   color: #85649B;
   border: 2px solid #85649B;
-  padding: 10px 20px;
+  padding: 8px 20px;
   border-radius: 8px;
   font-size: 16px;
   cursor: pointer;
   transition: 0.3s;
+
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .btn-submit:hover {
@@ -125,6 +129,7 @@ input[type="file"] {
   border-color: #b280b2;
   cursor: not-allowed;
 }
+
 
 .file-link {
   margin-top: 5px;
@@ -192,6 +197,49 @@ button:hover {
   padding: 0;
 }
 
+.form-actions {
+  display: inline-flex;
+  align-items: flex-end; /* יישור לפי תחתית האלמנט */
+  justify-content: center;
+  gap: 20px;
+  margin: 30px auto 0;
+  direction: rtl;
+  flex-wrap: wrap;
+}
+
+
+
+.coordinator-select {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  font-size: 14px;
+  color: #85649B;
+}
+
+.coordinator-select label {
+  margin-bottom: 4px;
+}
+
+.coordinator-select select {
+  height: 40px;
+  padding: 0 12px;
+  border: 2px solid #85649B;
+  border-radius: 8px;
+  font-family: 'Varela Round', sans-serif;
+  font-size: 14px;
+  color: #333;
+  background-color: white;
+  cursor: pointer;
+  min-width: 180px;
+}
+
+
+.coordinator-select select:focus {
+  outline: none;
+  border-color: #5e2b8c;
+  box-shadow: 0 0 5px rgba(134, 81, 172, 0.5);
+}
 
 
 

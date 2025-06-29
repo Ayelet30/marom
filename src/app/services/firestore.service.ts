@@ -145,4 +145,22 @@ return querySnapshot.empty
     const docRef = doc(this.firestore, collectionName, docId);
     return updateDoc(docRef, data);
   }
+
+  //שליפת רכזים 
+  async getAllCoordinators(): Promise<any[]> {
+  try {
+    const collRef = collection(this.firestore, 'coordinators');
+    const q = query(collRef, where('role', '==', 'רכז'));
+    const querySnapshot = await getDocs(q);
+
+    return querySnapshot.docs.map(doc => ({
+      id: doc.id,
+      ...doc.data()
+    }));
+  } catch (e) {
+    console.error("Error getting coordinators: ", e);
+    throw new Error("Error getting coordinators");
+  }
+}
+
 }

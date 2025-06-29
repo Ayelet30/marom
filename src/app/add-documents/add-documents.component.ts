@@ -12,6 +12,8 @@ import { initializeApp } from 'firebase/app';
 import { FileUploadService } from '../services/upload.service';
 import { firstValueFrom } from 'rxjs';
 import { Router } from '@angular/router';
+import { OnInit } from '@angular/core';
+
 
 
 @Component({
@@ -21,11 +23,13 @@ import { Router } from '@angular/router';
   templateUrl: './add-documents.component.html',
   styleUrls: ['./add-documents.component.css']
 })
-export class AddDocumentComponent {
+export class AddDocumentComponent implements OnInit {
   files: { [key: string]: File } = {};
   selectedFiles: { [type: string]: string } = {};
   tasks: TaskDetails[] | undefined;
   dragOverIndex: string | null = null;
+  coordinators: any[] = [];
+  selectedCoordinator: any = null;
 
   uploadSuccess = false;
   uploading = false;
@@ -82,6 +86,13 @@ export class AddDocumentComponent {
   ) {
     this.supplierData = this.supplierService.getSupplier();
   }
+  async ngOnInit() {
+    try {
+      this.coordinators = await this.firestoreService.getAllCoordinators();
+    } catch (error) {
+      console.error("שגיאה בטעינת רשימת הרכזים:", error);
+    }
+  }
 
   goBack() {
     this.router.navigate(['/existProvider']);
@@ -121,6 +132,11 @@ export class AddDocumentComponent {
 
   async uploadFiles() {
     console.log("מתחיל העלאה...");
+    if (!this.selectedCoordinator) {
+      alert("יש לבחור רכז לפני שליחת הקבצים.");
+      return;
+    }
+
 
     this.uploading = true;
 
@@ -162,7 +178,12 @@ export class AddDocumentComponent {
               status: 1,
               title: "אישור קובץ",
               linkOfDoument: url,
-              createdAt: new Date()
+              createdAt: new Date(),
+              assignedCoordinator: {
+                id: this.selectedCoordinator.id,
+                name: this.selectedCoordinator.name,
+                email: this.selectedCoordinator.email
+              }
             };
 
             await this.firestoreService.addTask('tasks', task);
