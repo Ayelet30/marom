@@ -7,16 +7,19 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class CityService {
-  private apiUrl = 'https://data.gov.il/api/3/action/datastore_search';
-  private resourceId = '8f3c913e-8c85-4df8-9110-220d5c06e55c';
 
   constructor(private http: HttpClient) {}
 
  getCities(): Observable<{ id: string; name: string }[]> {
-  return this.http.get<{ id: string; name: string }[]>(
-        'https://getcities-cvfeey4zvq-uc.a.run.app/'
-
+  return this.http.get<string[]>('https://getcities-cvfeey4zvq-uc.a.run.app/').pipe(
+    map((cities: string[]) =>
+      cities.map((cityName, index) => ({
+        id: index.toString(),
+        name: cityName
+      }))
+    )
   );
 }
+
 
 }
