@@ -1,22 +1,30 @@
-<div class="body">
+<div class="body admin-code-page">
   <form *ngIf="!isAdmin" class="id-container" (ngSubmit)="checkId()">
-    <div class="id-input">
-      <label for="adminId" class="label">הכנס קוד מנהל</label>
-      <input
-        class="styled-input"
-        id="adminId"
-        name="adminId"
-        [(ngModel)]="id"
-        required />
-      <div class="error" *ngIf="isError">{{ error }}</div>
-    </div>
+ <div class="input-with-button">
+  <!-- קלט + שגיאה -->
+  <div class="custom-input-wrapper-with-error">
+    <app-custom-input
+      [data]="adminIdModel"
+      [control]="adminIdControl"
+      [tabindex]="1">
+    </app-custom-input>
 
-    <button class="btn-submit" type="submit">
-      <svg class="ok-btn" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-        <path
-          d="M20.285 2.715a1.0001 1.0001 0 0 1 .121 1.41l-11 13a1.0001 1.0001 0 0 1-1.471.09l-7-6.999a1.0001 1.0001 0 1 1 1.414-1.414l6.293 6.293 10.293-12.292a1.0001 1.0001 0 0 1 1.41-.122z" />
-      </svg>
-    </button>
+    <div *ngIf="isError" class="error">{{ error }}</div>
+  </div>
+
+  <!-- כפתור שליחה -->
+  <button class="btn-submit"
+          type="submit"
+          [disabled]="adminIdControl.invalid"
+          [ngClass]="{ 'btn-disabled': adminIdControl.invalid, 'btn-active': adminIdControl.valid }">
+    <svg class="ok-btn" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+      <path d="M20.285 2.715a1.0001 1.0001 0 0 1 .121 1.41l-11 13a1.0001 1.0001 0 0 1-1.471.09l-7-6.999a1.0001 1.0001 0 1 1 1.414-1.414l6.293 6.293 10.293-12.292a1.0001 1.0001 0 0 1 1.41-.122z"/>
+    </svg>
+  </button>
+</div>
+
+
+
   </form>
 
 
