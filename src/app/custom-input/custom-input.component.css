@@ -18,6 +18,8 @@
 
   select{
     width: 219.2px;
+    font-size: 12px; /* או כל גודל שמתאים */
+
   }
 
   input:-webkit-autofill {
