@@ -142,3 +142,13 @@ button:disabled {
 .details p:last-child {
   margin-bottom: 0;
 }
+.field-error {
+  color: red;
+  font-size: 13px;
+  margin-top: 4px;
+  text-align: right;
+}
+.input-error {
+  border: 1px solid red !important;
+}
+
