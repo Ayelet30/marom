@@ -16,12 +16,12 @@ import { CustomInputComponent } from "../custom-input/custom-input.component";
 })
 export class ProviderTableComponent implements OnInit {
   getFormControl(name: string): FormControl {
-  if (!this.form.contains(name)) {
-    const initialValue = this.editingSupplier?.[name as keyof ProvidersDetails] || '';
-    this.form.addControl(name, new FormControl(initialValue));
+    if (!this.form.contains(name)) {
+      const initialValue = this.editingSupplier?.[name as keyof ProvidersDetails] || '';
+      this.form.addControl(name, new FormControl(initialValue));
+    }
+    return this.form.get(name) as FormControl;
   }
-  return this.form.get(name) as FormControl;
-}
 
   @Input() managerMode: boolean = false;
 
@@ -70,7 +70,7 @@ export class ProviderTableComponent implements OnInit {
     { id: '22', name: 'בנק סיטי' }
   ];
 
-form: FormGroup = new FormGroup({});
+  form: FormGroup = new FormGroup({});
 
 
 
@@ -141,7 +141,6 @@ form: FormGroup = new FormGroup({});
     const start = (this.currentPage - 1) * this.itemsPerPage;
     const end = this.currentPage * this.itemsPerPage;
     this.currentPageData = this.filteredData.slice(start, end);
-    console.log("@@@@@@@", this.currentPageData);
   }
 
   previousPage() {
@@ -179,7 +178,6 @@ form: FormGroup = new FormGroup({});
 
   selectSupplier(supplier: ProvidersDetails) {
     this.selectedSupplier = supplier;
-    console.log("!!!!!!!!", this.selectedSupplier);
   }
 
   async toggleEditMode() {
@@ -238,8 +236,11 @@ form: FormGroup = new FormGroup({});
 
     this.validateField('sortGroup');
     this.validateField('accountKey');
+    this.validateBranchNumber(); 
+
 
     return Object.keys(this.fieldErrors).length === 0;
+
   }
 
   validateField(field: keyof ProvidersDetails) {
@@ -263,17 +264,35 @@ form: FormGroup = new FormGroup({});
     }
   }
 
-onBankChange(event: Event) {
-  const target = event.target as HTMLSelectElement;
+  onBankChange(event: Event) {
+    const target = event.target as HTMLSelectElement;
 
-  if (this.editingSupplier) {
-    this.editingSupplier.bankNumber = target.value;
+    if (this.editingSupplier) {
+      this.editingSupplier.bankNumber = target.value;
+    }
+  }
+  getBankNameById(id: string): string {
+    const bank = this.bankList.find(b => b.id === id);
+    return bank ? bank.name : '';
+  }
+ validateBranchNumber() {
+  if (!this.editingSupplier) return;
+
+  const value = this.editingSupplier.branchNumber?.toString().trim() ?? '';
+
+  // איפוס שגיאה קיימת
+  delete this.fieldErrors.branchNumber;
+
+  if (!value) {
+    this.fieldErrors.branchNumber = 'נדרש להזין מספר סניף';
+  } else if (!/^\d+$/.test(value)) {
+    this.fieldErrors.branchNumber = 'יש להזין ספרות בלבד';
+  } else if (value.length !== 3) {
+    this.fieldErrors.branchNumber = 'מספר סניף חייב להכיל 3 ספרות בדיוק';
   }
 }
-getBankNameById(id: string): string {
-  const bank = this.bankList.find(b => b.id === id);
-  return bank ? bank.name : '';
-}
+
+
 
 
 

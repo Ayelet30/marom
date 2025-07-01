@@ -90,7 +90,6 @@ export const getCities = onRequest(async (req, res) => {
 
     res.status(200).json(cities);
   } catch (error) {
-    console.log("!!!!!!!!!!!!!!!!!!!!!");
     console.error("Error fetching cities:", error);
     res.status(500).send("Failed to fetch cities");
   }
