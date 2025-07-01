@@ -236,8 +236,10 @@ export class ProviderTableComponent implements OnInit {
 
     this.validateField('sortGroup');
     this.validateField('accountKey');
-    this.validateBranchNumber(); 
+    this.validateBranchNumber();
     this.validateAccountNumber();
+    this.validatePhone(); 
+
 
 
 
@@ -277,37 +279,50 @@ export class ProviderTableComponent implements OnInit {
     const bank = this.bankList.find(b => b.id === id);
     return bank ? bank.name : '';
   }
- validateBranchNumber() {
-  if (!this.editingSupplier) return;
+  validateBranchNumber() {
+    if (!this.editingSupplier) return;
 
-  const value = this.editingSupplier.branchNumber?.toString().trim() ?? '';
+    const value = this.editingSupplier.branchNumber?.toString().trim() ?? '';
 
-  // איפוס שגיאה קיימת
-  delete this.fieldErrors.branchNumber;
+    // איפוס שגיאה קיימת
+    delete this.fieldErrors.branchNumber;
 
-  if (!value) {
-    this.fieldErrors.branchNumber = 'נדרש להזין מספר סניף';
-  } else if (!/^\d+$/.test(value)) {
-    this.fieldErrors.branchNumber = 'יש להזין ספרות בלבד';
-  } else if (value.length !== 3) {
-    this.fieldErrors.branchNumber = 'מספר סניף חייב להכיל 3 ספרות בדיוק';
+    if (!value) {
+      this.fieldErrors.branchNumber = 'נדרש להזין מספר סניף';
+    } else if (!/^\d+$/.test(value)) {
+      this.fieldErrors.branchNumber = 'יש להזין ספרות בלבד';
+    } else if (value.length !== 3) {
+      this.fieldErrors.branchNumber = 'מספר סניף חייב להכיל 3 ספרות בדיוק';
+    }
   }
-}
-validateAccountNumber() {
-  if (!this.editingSupplier) return;
+  validateAccountNumber() {
+    if (!this.editingSupplier) return;
 
-  const value = this.editingSupplier.accountNumber?.toString().trim() ?? '';
+    const value = this.editingSupplier.accountNumber?.toString().trim() ?? '';
 
-  delete this.fieldErrors.accountNumber;
+    delete this.fieldErrors.accountNumber;
 
-  if (!value) {
-    this.fieldErrors.accountNumber = 'נדרש להזין מספר חשבון';
-  } else if (!/^\d+$/.test(value)) {
-    this.fieldErrors.accountNumber = 'יש להזין ספרות בלבד';
-  } else if (value.length < 5 || value.length > 10) {
-    this.fieldErrors.accountNumber = 'מספר חשבון צריך להכיל בין 5 ל-10 ספרות';
+    if (!value) {
+      this.fieldErrors.accountNumber = 'נדרש להזין מספר חשבון';
+    } else if (!/^\d+$/.test(value)) {
+      this.fieldErrors.accountNumber = 'יש להזין ספרות בלבד';
+    } else if (value.length < 5 || value.length > 10) {
+      this.fieldErrors.accountNumber = 'מספר חשבון צריך להכיל בין 5 ל-10 ספרות';
+    }
   }
-}
+  validatePhone() {
+    if (!this.editingSupplier) return;
+
+    const value = this.editingSupplier.phone?.toString().trim() ?? '';
+
+    delete this.fieldErrors.phone;
+
+    if (!value) {
+      this.fieldErrors.phone = 'נדרש להזין מספר פלאפון';
+    } else if (!/^05\d{8}$/.test(value)) {
+      this.fieldErrors.phone = 'מספר פלאפון צריך להתחיל ב־05 ולהכיל 10 ספרות';
+    }
+  }
 
 
 
