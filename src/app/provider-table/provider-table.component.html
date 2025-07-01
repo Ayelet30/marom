@@ -71,20 +71,17 @@
         </ng-container>
       </p>
 
-    <p>
-  <strong>מספר חשבון: </strong>
-  <span *ngIf="!isEditing">{{ selectedSupplier.accountNumber }}</span>
-  <ng-container *ngIf="isEditing">
-    <input
-      [(ngModel)]="editingSupplier!.accountNumber"
-      (input)="validateAccountNumber()"
-      [ngClass]="{ 'input-error': fieldErrors.branchNumber }"
-    />
-    <div class="field-error" *ngIf="fieldErrors.accountNumber">
-      {{ fieldErrors.accountNumber }}
-    </div>
-  </ng-container>
-</p>
+      <p>
+        <strong>מספר חשבון: </strong>
+        <span *ngIf="!isEditing">{{ selectedSupplier.accountNumber }}</span>
+        <ng-container *ngIf="isEditing">
+          <input [(ngModel)]="editingSupplier!.accountNumber" (input)="validateAccountNumber()"
+            [ngClass]="{ 'input-error': fieldErrors.branchNumber }" />
+          <div class="field-error" *ngIf="fieldErrors.accountNumber">
+            {{ fieldErrors.accountNumber }}
+          </div>
+        </ng-container>
+      </p>
 
 
       <p>
@@ -100,8 +97,14 @@
       <p>
         <strong>פלאפון: </strong>
         <span *ngIf="!isEditing">{{ selectedSupplier.phone }}</span>
-        <input *ngIf="isEditing" [(ngModel)]="editingSupplier!.phone">
+        <ng-container *ngIf="isEditing">
+          <input [(ngModel)]="editingSupplier!.phone" (input)="validatePhone()" [ngClass]="{ 'input-error': fieldErrors.phone }" />
+          <div class="field-error" *ngIf="fieldErrors.phone">
+            {{ fieldErrors.phone }}
+          </div>
+        </ng-container>
       </p>
+
       <p>
         <strong>מייל: </strong>
         <span *ngIf="!isEditing">{{ selectedSupplier.email }}</span>
