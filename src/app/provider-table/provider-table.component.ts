@@ -237,6 +237,8 @@ export class ProviderTableComponent implements OnInit {
     this.validateField('sortGroup');
     this.validateField('accountKey');
     this.validateBranchNumber(); 
+    this.validateAccountNumber();
+
 
 
     return Object.keys(this.fieldErrors).length === 0;
@@ -289,6 +291,21 @@ export class ProviderTableComponent implements OnInit {
     this.fieldErrors.branchNumber = 'יש להזין ספרות בלבד';
   } else if (value.length !== 3) {
     this.fieldErrors.branchNumber = 'מספר סניף חייב להכיל 3 ספרות בדיוק';
+  }
+}
+validateAccountNumber() {
+  if (!this.editingSupplier) return;
+
+  const value = this.editingSupplier.accountNumber?.toString().trim() ?? '';
+
+  delete this.fieldErrors.accountNumber;
+
+  if (!value) {
+    this.fieldErrors.accountNumber = 'נדרש להזין מספר חשבון';
+  } else if (!/^\d+$/.test(value)) {
+    this.fieldErrors.accountNumber = 'יש להזין ספרות בלבד';
+  } else if (value.length < 5 || value.length > 10) {
+    this.fieldErrors.accountNumber = 'מספר חשבון צריך להכיל בין 5 ל-10 ספרות';
   }
 }
 

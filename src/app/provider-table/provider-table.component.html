@@ -71,11 +71,22 @@
         </ng-container>
       </p>
 
-      <p>
-        <strong>מספר חשבון: </strong>
-        <span *ngIf="!isEditing">{{ selectedSupplier.accountNumber }}</span>
-        <input *ngIf="isEditing" [(ngModel)]="editingSupplier!.accountNumber">
-      </p>
+    <p>
+  <strong>מספר חשבון: </strong>
+  <span *ngIf="!isEditing">{{ selectedSupplier.accountNumber }}</span>
+  <ng-container *ngIf="isEditing">
+    <input
+      [(ngModel)]="editingSupplier!.accountNumber"
+      (input)="validateAccountNumber()"
+      [ngClass]="{ 'input-error': fieldErrors.branchNumber }"
+    />
+    <div class="field-error" *ngIf="fieldErrors.accountNumber">
+      {{ fieldErrors.accountNumber }}
+    </div>
+  </ng-container>
+</p>
+
+
       <p>
         <strong>כתובת: </strong>
         <span *ngIf="!isEditing">{{ selectedSupplier.address }}</span>
