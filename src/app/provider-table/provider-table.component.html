@@ -42,10 +42,23 @@
         <span>{{ selectedSupplier.taxFileNum }}</span>
       </p>
       <p>
-        <strong>מספר בנק: </strong>
-        <span *ngIf="!isEditing">{{ selectedSupplier.bankNumber }}</span>
-        <input *ngIf="isEditing" [(ngModel)]="editingSupplier!.bankNumber">
-      </p>
+  <strong>בנק: </strong>
+  <span *ngIf="!isEditing">
+  {{ getBankNameById(selectedSupplier.bankNumber) }} ({{ selectedSupplier.bankNumber }})
+</span>
+
+  <ng-container *ngIf="isEditing">
+    <select class="simple-bank-select" [(ngModel)]="editingSupplier!.bankNumber">
+      <option value="" disabled selected hidden>בחר בנק</option>
+      <option *ngFor="let bank of bankList" [value]="bank.id">
+  {{ bank.name }} ({{ bank.id }})
+</option>
+
+    </select>
+
+  </ng-container>
+</p>
+
       <p>
         <strong>מספר סניף: </strong>
         <span *ngIf="!isEditing">{{ selectedSupplier.branchNumber }}</span>
