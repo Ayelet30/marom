@@ -2,18 +2,27 @@ import { Component, Input, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FirestoreService } from '../services/firestore.service';
 import { ProvidersDetails } from '../models/providers-details.model';
-import { FormsModule } from '@angular/forms';
+import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { WizgroundService } from '../services/wizground.service';
+import { CustomInputComponent } from "../custom-input/custom-input.component";
 
 @Component({
   selector: 'app-provider-table',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule],
   templateUrl: './provider-table.component.html',
   styleUrls: ['./provider-table.component.css'],
 
 })
 export class ProviderTableComponent implements OnInit {
+  getFormControl(name: string): FormControl {
+  if (!this.form.contains(name)) {
+    const initialValue = this.editingSupplier?.[name as keyof ProvidersDetails] || '';
+    this.form.addControl(name, new FormControl(initialValue));
+  }
+  return this.form.get(name) as FormControl;
+}
+
   @Input() managerMode: boolean = false;
 
   data: ProvidersDetails[] = [];
@@ -23,10 +32,45 @@ export class ProviderTableComponent implements OnInit {
   itemsPerPage: number = 10;
   totalPages: number = 1;
   selectedSupplier: ProvidersDetails | undefined;
-  editingSupplier: ProvidersDetails | undefined;
+  editingSupplier?: ProvidersDetails;
   isEditing: boolean = false;
   fieldErrors: Partial<Record<keyof ProvidersDetails, string>> = {};
   successMessageVisible: boolean = false;
+  inputBankNumberModel = {
+    id: 'bankNumber',
+    name: 'bankNumber',
+    label: 'בחר בנק',
+    type: 'select',
+    value: this.editingSupplier?.bankNumber || '',
+  };
+
+  bankList = [
+    { id: '10', name: 'בנק לאומי' },
+    { id: '11', name: 'בנק דיסקונט' },
+    { id: '12', name: 'בנק הפועלים' },
+    { id: '20', name: 'בנק מזרחי טפחות' },
+    { id: '31', name: 'בנק הבינלאומי' },
+    { id: '14', name: 'בנק אוצר החייל' },
+    { id: '17', name: 'בנק מרכנתיל דיסקונט' },
+    { id: '9', name: 'בנק הדואר' },
+    { id: '13', name: 'בנק איגוד' },
+    { id: '46', name: 'בנק מסד' },
+    { id: '52', name: 'בנק פועלי אגודת ישראל ' },
+    { id: '90', name: 'בנק דיסקונט למשכנתאות' },
+    { id: '77', name: 'בנק לאומי למשכנתאות' },
+    { id: '04', name: 'בנק יהב' },
+    { id: '26', name: 'בנק יובנק' },
+    { id: '07', name: 'בנק לפיתוח התעשיה' },
+    { id: '08', name: 'בנק הספנות ישראל' },
+    { id: '06', name: 'בנק אדנים' },
+    { id: '54', name: 'בנק ירושלים ' },
+    { id: '34', name: 'בנק ערבי ישראל ' },
+    { id: '01', name: 'בנק יורו טרייד' },
+    { id: '19', name: 'בנק החקלאות לישראל' },
+    { id: '22', name: 'בנק סיטי' }
+  ];
+
+form: FormGroup = new FormGroup({});
 
 
 
@@ -190,33 +234,45 @@ export class ProviderTableComponent implements OnInit {
     this.loadData();
   }
   validateSupplierFields(supplier: ProvidersDetails): boolean {
-  this.fieldErrors = {};
+    this.fieldErrors = {};
 
-  this.validateField('sortGroup');
-  this.validateField('accountKey');
+    this.validateField('sortGroup');
+    this.validateField('accountKey');
 
-  return Object.keys(this.fieldErrors).length === 0;
+    return Object.keys(this.fieldErrors).length === 0;
+  }
+
+  validateField(field: keyof ProvidersDetails) {
+    if (!this.editingSupplier) return;
+
+    const value = this.editingSupplier[field]?.toString().trim() ?? '';
+    const numberRegex = /^\d+$/;
+
+    // איפוס שגיאה קודמת
+    delete this.fieldErrors[field];
+
+    // שלב ראשון: בדיקה אם ריק
+    if (!value) {
+      this.fieldErrors[field] = 'נדרש להכניס ערך';
+      return;
+    }
+
+    // שלב שני: בדיקה אם אמור להכיל רק מספרים
+    if ((field === 'sortGroup' || field === 'accountKey') && !numberRegex.test(value)) {
+      this.fieldErrors[field] = 'יש להזין ספרות בלבד';
+    }
+  }
+
+onBankChange(event: Event) {
+  const target = event.target as HTMLSelectElement;
+
+  if (this.editingSupplier) {
+    this.editingSupplier.bankNumber = target.value;
+  }
 }
-
- validateField(field: keyof ProvidersDetails) {
-  if (!this.editingSupplier) return;
-
-  const value = this.editingSupplier[field]?.toString().trim() ?? '';
-  const numberRegex = /^\d+$/;
-
-  // איפוס שגיאה קודמת
-  delete this.fieldErrors[field];
-
-  // שלב ראשון: בדיקה אם ריק
-  if (!value) {
-    this.fieldErrors[field] = 'נדרש להכניס ערך';
-    return;
-  }
-
-  // שלב שני: בדיקה אם אמור להכיל רק מספרים
-  if ((field === 'sortGroup' || field === 'accountKey' ) && !numberRegex.test(value)) {
-    this.fieldErrors[field] = 'יש להזין ספרות בלבד';
-  }
+getBankNameById(id: string): string {
+  const bank = this.bankList.find(b => b.id === id);
+  return bank ? bank.name : '';
 }
 
 
