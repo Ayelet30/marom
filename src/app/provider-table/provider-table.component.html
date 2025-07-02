@@ -94,7 +94,7 @@
   <span *ngIf="!isEditing">{{ selectedSupplier.city }}</span>
 
   <ng-container *ngIf="isEditing">
-    <select [(ngModel)]="editingSupplier!.city">
+    <select class="simple-bank-select" [(ngModel)]="editingSupplier!.city">
       <option value="" disabled selected hidden>בחר עיר</option>
       <option *ngFor="let city of cities" [value]="city.name">
         {{ city.name }}
@@ -196,7 +196,7 @@
         <span *ngIf="!isEditing">{{ selectedSupplier.NameFromMarom }}</span>
 
         <ng-container *ngIf="isEditing">
-          <select [(ngModel)]="editingSupplier!.NameFromMarom" (change)="onMaromContactChange($event)">
+          <select class="simple-bank-select" [(ngModel)]="editingSupplier!.NameFromMarom" (change)="onMaromContactChange($event)">
             <option value="" disabled selected hidden>בחר איש קשר</option>
             <option *ngFor="let contact of fromMaromList" [value]="contact.name">
               {{ contact.name }}
