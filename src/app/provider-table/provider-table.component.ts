@@ -276,6 +276,7 @@ this.firestoreService.getDocuments('/coordinators').then((ownersData: any[]) => 
     this.validateEmail();
     this.validateDeductionPercentage();
     this.validateMailFromCompany(); 
+    this.validateMailFromMarom(); 
 
 
 
@@ -428,6 +429,21 @@ onMaromContactChange(event: Event) {
   }
 }
 
+validateMailFromMarom() {
+  if (!this.editingSupplier) return;
+
+  const value = this.editingSupplier.mailFromMarom?.toString().trim() ?? '';
+
+  delete this.fieldErrors.mailFromMarom;
+
+  if (!value) {
+    this.fieldErrors.mailFromMarom = 'נדרש להזין כתובת מייל';
+  } else if (
+    !/^[\w.-]+@[a-zA-Z\d.-]+\.[a-zA-Z]{2,}$/.test(value)
+  ) {
+    this.fieldErrors.mailFromMarom = 'כתובת מייל אינה תקינה';
+  }
+}
 
 
 
