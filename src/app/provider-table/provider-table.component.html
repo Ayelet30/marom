@@ -98,55 +98,44 @@
         <strong>פלאפון: </strong>
         <span *ngIf="!isEditing">{{ selectedSupplier.phone }}</span>
         <ng-container *ngIf="isEditing">
-          <input [(ngModel)]="editingSupplier!.phone" (input)="validatePhone()" [ngClass]="{ 'input-error': fieldErrors.phone }" />
+          <input [(ngModel)]="editingSupplier!.phone" (input)="validatePhone()"
+            [ngClass]="{ 'input-error': fieldErrors.phone }" />
           <div class="field-error" *ngIf="fieldErrors.phone">
             {{ fieldErrors.phone }}
           </div>
         </ng-container>
       </p>
 
-     <p>
-  <strong>מייל: </strong>
-  <span *ngIf="!isEditing">{{ selectedSupplier.email }}</span>
-  <ng-container *ngIf="isEditing">
-    <input
-      [(ngModel)]="editingSupplier!.email"
-      (input)="validateEmail()"
-      [ngClass]="{ 'input-error': fieldErrors.email }"
-    />
-    <div class="field-error" *ngIf="fieldErrors.email">
-      {{ fieldErrors.email }}
-    </div>
-  </ng-container>
-</p>
+      <p>
+        <strong>מייל: </strong>
+        <span *ngIf="!isEditing">{{ selectedSupplier.email }}</span>
+        <ng-container *ngIf="isEditing">
+          <input [(ngModel)]="editingSupplier!.email" (input)="validateEmail()"
+            [ngClass]="{ 'input-error': fieldErrors.email }" />
+          <div class="field-error" *ngIf="fieldErrors.email">
+            {{ fieldErrors.email }}
+          </div>
+        </ng-container>
+      </p>
 
-     <p>
-  <strong>תוקף ניכוי במקור: </strong>
-  <span *ngIf="!isEditing">{{ selectedSupplier.DateHoldingTaxEffect }}</span>
-  <ng-container *ngIf="isEditing">
-    <input
-      type="date"
-      [(ngModel)]="editingSupplier!.DateHoldingTaxEffect"
-    />
-  </ng-container>
-</p>
+      <p>
+        <strong>תוקף ניכוי במקור: </strong>
+        <span *ngIf="!isEditing">{{ selectedSupplier.DateHoldingTaxEffect }}</span>
+        <ng-container *ngIf="isEditing">
+          <input type="date" [(ngModel)]="editingSupplier!.DateHoldingTaxEffect" />
+        </ng-container>
+      </p>
 
-    <p><strong>אחוזי ניכוי: </strong>
-  <span *ngIf="!isEditing">{{ selectedSupplier.DeductionPercentage }}</span>
-  <ng-container *ngIf="isEditing">
-    <input
-      type="number"
-      min="0"
-      max="100"
-      [(ngModel)]="editingSupplier!.DeductionPercentage"
-      (input)="validateDeductionPercentage()"
-      [ngClass]="{ 'input-error': fieldErrors.DeductionPercentage }"
-    />
-    <div class="field-error" *ngIf="fieldErrors.DeductionPercentage">
-      {{ fieldErrors.DeductionPercentage }}
-    </div>
-  </ng-container>
-</p>
+      <p><strong>אחוזי ניכוי: </strong>
+        <span *ngIf="!isEditing">{{ selectedSupplier.DeductionPercentage }}</span>
+        <ng-container *ngIf="isEditing">
+          <input type="number" min="0" max="100" [(ngModel)]="editingSupplier!.DeductionPercentage"
+            (input)="validateDeductionPercentage()" [ngClass]="{ 'input-error': fieldErrors.DeductionPercentage }" />
+          <div class="field-error" *ngIf="fieldErrors.DeductionPercentage">
+            {{ fieldErrors.DeductionPercentage }}
+          </div>
+        </ng-container>
+      </p>
 
       <p><strong>תיק במס הכנסה: </strong>
         <span *ngIf="!isEditing">{{ selectedSupplier.deductFile }}</span>
@@ -156,21 +145,21 @@
         <span *ngIf="!isEditing">{{ selectedSupplier.ProjectName }}</span>
         <input *ngIf="isEditing" [(ngModel)]="editingSupplier!.ProjectName">
       </p>
-  <p>
-  <strong>סוג התיק: </strong>
-  <span *ngIf="!isEditing">
-    {{ getTypeNameById(selectedSupplier.BagType) }} 
-  </span>
+      <p>
+        <strong>סוג התיק: </strong>
+        <span *ngIf="!isEditing">
+          {{ getTypeNameById(selectedSupplier.BagType) }}
+        </span>
 
-  <ng-container *ngIf="isEditing">
-    <select class="simple-bank-select" [(ngModel)]="editingSupplier!.BagType">
-      <option value="" disabled selected hidden>בחר סוג תיק</option>
-      <option *ngFor="let type of typeList" [value]="type.id">
-        {{ type.name }} 
-      </option>
-    </select>
-  </ng-container>
-</p>
+        <ng-container *ngIf="isEditing">
+          <select class="simple-bank-select" [(ngModel)]="editingSupplier!.BagType">
+            <option value="" disabled selected hidden>בחר סוג תיק</option>
+            <option *ngFor="let type of typeList" [value]="type.id">
+              {{ type.name }}
+            </option>
+          </select>
+        </ng-container>
+      </p>
 
 
       <p><strong>עיסוק:</strong>
@@ -187,8 +176,18 @@
       </p>
       <p><strong>איש קשר מטעם מרום: </strong>
         <span *ngIf="!isEditing">{{ selectedSupplier.NameFromMarom }}</span>
-        <input *ngIf="isEditing" [(ngModel)]="editingSupplier!.NameFromMarom">
+
+        <ng-container *ngIf="isEditing">
+          <select [(ngModel)]="editingSupplier!.NameFromMarom" (change)="onMaromContactChange($event)">
+            <option value="" disabled selected hidden>בחר איש קשר</option>
+            <option *ngFor="let contact of fromMaromList" [value]="contact.name">
+              {{ contact.name }}
+            </option>
+          </select>
+
+        </ng-container>
       </p>
+
       <p><strong>מייל איש קשר מטעם מרום: </strong>
         <span *ngIf="!isEditing">{{ selectedSupplier.mailFromMarom }}</span>
         <input *ngIf="isEditing" [(ngModel)]="editingSupplier!.mailFromMarom">

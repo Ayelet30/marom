@@ -37,6 +37,8 @@ export class ProviderTableComponent implements OnInit {
   isEditing: boolean = false;
   fieldErrors: Partial<Record<keyof ProvidersDetails, string>> = {};
   successMessageVisible: boolean = false;
+  fromMaromList: { id: string, name: string, email: string }[] = [];
+
   inputBankNumberModel = {
     id: 'bankNumber',
     name: 'bankNumber',
@@ -99,12 +101,19 @@ typeList = [
   ) {
   }
 
-  ngOnInit() {
+  async ngOnInit() {
     this.loadData();
    if (this.editingSupplier) {
   this.inputBagTypeModel.value = this.editingSupplier.BagType || '';
   this.dummyControl.setValue(this.inputBagTypeModel.value);
 }
+this.firestoreService.getDocuments('/coordinators').then((ownersData: any[]) => {
+  this.fromMaromList = ownersData.map(doc => ({
+    id: doc.coordinatorId,
+    name: doc.name,
+    email: doc.email
+  }));
+});
 
 
   }
@@ -395,6 +404,13 @@ getTypeNameById(id: string): string {
   return type ? type.name : '';
 }
 
+
+onMaromContactChange(event: Event) {
+  const selectedName = (event.target as HTMLSelectElement).value;
+  if (this.editingSupplier) {
+    this.editingSupplier.NameFromMarom = selectedName;
+  }
+}
 
 
 
