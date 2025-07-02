@@ -240,6 +240,7 @@ export class ProviderTableComponent implements OnInit {
     this.validateAccountNumber();
     this.validatePhone();
     this.validateEmail();
+    this.validateDeductionPercentage();
 
 
 
@@ -342,6 +343,23 @@ export class ProviderTableComponent implements OnInit {
   }
 
 
+validateDeductionPercentage() {
+  if (!this.editingSupplier) return;
+
+  const value = this.editingSupplier.DeductionPercentage?.toString().trim() ?? '';
+  delete this.fieldErrors.DeductionPercentage;
+
+  if (!value) {
+    this.fieldErrors.DeductionPercentage = 'נדרש להזין אחוז ניכוי';
+  } else if (!/^\d+(\.\d+)?$/.test(value)) {
+    this.fieldErrors.DeductionPercentage = 'יש להזין מספר חוקי';
+  } else {
+    const numericValue = parseFloat(value);
+    if (numericValue < 0 || numericValue > 100) {
+      this.fieldErrors.DeductionPercentage = 'הערך חייב להיות בין 0 ל-100';
+    }
+  }
+}
 
 
 
