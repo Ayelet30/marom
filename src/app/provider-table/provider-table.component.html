@@ -105,11 +105,21 @@
         </ng-container>
       </p>
 
-      <p>
-        <strong>מייל: </strong>
-        <span *ngIf="!isEditing">{{ selectedSupplier.email }}</span>
-        <input *ngIf="isEditing" [(ngModel)]="editingSupplier!.email">
-      </p>
+     <p>
+  <strong>מייל: </strong>
+  <span *ngIf="!isEditing">{{ selectedSupplier.email }}</span>
+  <ng-container *ngIf="isEditing">
+    <input
+      [(ngModel)]="editingSupplier!.email"
+      (input)="validateEmail()"
+      [ngClass]="{ 'input-error': fieldErrors.email }"
+    />
+    <div class="field-error" *ngIf="fieldErrors.email">
+      {{ fieldErrors.email }}
+    </div>
+  </ng-container>
+</p>
+
       <p>
         <strong>תוקף ניכוי במקור: </strong>
         <span *ngIf="!isEditing">{{ selectedSupplier.DateHoldingTaxEffect }}</span>
