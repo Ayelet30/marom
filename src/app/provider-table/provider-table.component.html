@@ -90,10 +90,19 @@
         <input *ngIf="isEditing" [(ngModel)]="editingSupplier!.address">
       </p>
       <p>
-        <strong>עיר: </strong>
-        <span *ngIf="!isEditing">{{ selectedSupplier.city }}</span>
-        <input *ngIf="isEditing" [(ngModel)]="editingSupplier!.city">
-      </p>
+  <strong>עיר: </strong>
+  <span *ngIf="!isEditing">{{ selectedSupplier.city }}</span>
+
+  <ng-container *ngIf="isEditing">
+    <select [(ngModel)]="editingSupplier!.city">
+      <option value="" disabled selected hidden>בחר עיר</option>
+      <option *ngFor="let city of cities" [value]="city.name">
+        {{ city.name }}
+      </option>
+    </select>
+  </ng-container>
+</p>
+
       <p>
         <strong>פלאפון: </strong>
         <span *ngIf="!isEditing">{{ selectedSupplier.phone }}</span>
