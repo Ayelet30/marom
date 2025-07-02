@@ -6,11 +6,13 @@ import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angul
 import { WizgroundService } from '../services/wizground.service';
 import { CustomInputComponent } from "../custom-input/custom-input.component";
 import { InputData } from '../models/input-data.model';
+import { CityService } from '../services/city.service';
+
 
 @Component({
   selector: 'app-provider-table',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, ],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule,],
   templateUrl: './provider-table.component.html',
   styleUrls: ['./provider-table.component.css'],
 
@@ -72,13 +74,13 @@ export class ProviderTableComponent implements OnInit {
     { id: '19', name: 'בנק החקלאות לישראל' },
     { id: '22', name: 'בנק סיטי' }
   ];
-typeList = [
-  { id: '1', name: 'עוסק מורשה' },
-  { id: '2', name: 'חברה' },
-  { id: '3', name: 'עוסק פטור' },
-  { id: '4', name: 'עוסק זעיר' },
-  { id: '5', name: 'עמותה' }
-];
+  typeList = [
+    { id: '1', name: 'עוסק מורשה' },
+    { id: '2', name: 'חברה' },
+    { id: '3', name: 'עוסק פטור' },
+    { id: '4', name: 'עוסק זעיר' },
+    { id: '5', name: 'עמותה' }
+  ];
 
   inputBagTypeModel: InputData = {
     id: 'BagType',
@@ -92,29 +94,39 @@ typeList = [
   dummyControl = new FormControl();
 
   form: FormGroup = new FormGroup({});
+  cities: { id: string; name: string }[] = [];
 
 
 
 
   constructor(private firestoreService: FirestoreService,
-    private wizground: WizgroundService
+    private wizground: WizgroundService,
+    private cityService: CityService,
+
   ) {
   }
 
   async ngOnInit() {
     this.loadData();
-   if (this.editingSupplier) {
-  this.inputBagTypeModel.value = this.editingSupplier.BagType || '';
-  this.dummyControl.setValue(this.inputBagTypeModel.value);
-}
-this.firestoreService.getDocuments('/coordinators').then((ownersData: any[]) => {
-  this.fromMaromList = ownersData.map(doc => ({
-    id: doc.coordinatorId,
-    name: doc.name,
-    email: doc.email
-  }));
-});
-
+    if (this.editingSupplier) {
+      this.inputBagTypeModel.value = this.editingSupplier.BagType || '';
+      this.dummyControl.setValue(this.inputBagTypeModel.value);
+    }
+    this.firestoreService.getDocuments('/coordinators').then((ownersData: any[]) => {
+      this.fromMaromList = ownersData.map(doc => ({
+        id: doc.coordinatorId,
+        name: doc.name,
+        email: doc.email
+      }));
+    });
+this.cityService.getCities().subscribe({
+    next: (cities) => {
+      this.cities = cities;
+    },
+    error: (err) => {
+      console.error("שגיאה בשליפת ערים:", err);
+    }
+  });
 
   }
 
@@ -275,8 +287,8 @@ this.firestoreService.getDocuments('/coordinators').then((ownersData: any[]) => 
     this.validatePhone();
     this.validateEmail();
     this.validateDeductionPercentage();
-    this.validateMailFromCompany(); 
-    this.validateMailFromMarom(); 
+    this.validateMailFromCompany();
+    this.validateMailFromMarom();
 
 
 
@@ -377,21 +389,21 @@ this.firestoreService.getDocuments('/coordinators').then((ownersData: any[]) => 
       this.fieldErrors.email = 'כתובת מייל אינה תקינה';
     }
   }
-validateMailFromCompany() {
-  if (!this.editingSupplier) return;
+  validateMailFromCompany() {
+    if (!this.editingSupplier) return;
 
-  const value = this.editingSupplier.mailFromCompany?.toString().trim() ?? '';
+    const value = this.editingSupplier.mailFromCompany?.toString().trim() ?? '';
 
-  delete this.fieldErrors.mailFromCompany;
+    delete this.fieldErrors.mailFromCompany;
 
-  if (!value) {
-    this.fieldErrors.mailFromCompany = 'נדרש להזין כתובת מייל';
-  } else if (
-    !/^[\w.-]+@[a-zA-Z\d.-]+\.[a-zA-Z]{2,}$/.test(value)
-  ) {
-    this.fieldErrors.mailFromCompany = 'כתובת מייל אינה תקינה';
+    if (!value) {
+      this.fieldErrors.mailFromCompany = 'נדרש להזין כתובת מייל';
+    } else if (
+      !/^[\w.-]+@[a-zA-Z\d.-]+\.[a-zA-Z]{2,}$/.test(value)
+    ) {
+      this.fieldErrors.mailFromCompany = 'כתובת מייל אינה תקינה';
+    }
   }
-}
 
 
   validateDeductionPercentage() {
@@ -411,39 +423,39 @@ validateMailFromCompany() {
       }
     }
   }
-onBagTypeChange(event: any) {
-if (this.editingSupplier) {
-  this.editingSupplier.BagType = event;
-}
-}
-getTypeNameById(id: string): string {
-  const type = this.typeList.find(t => t.id === id);
-  return type ? type.name : '';
-}
-
-
-onMaromContactChange(event: Event) {
-  const selectedName = (event.target as HTMLSelectElement).value;
-  if (this.editingSupplier) {
-    this.editingSupplier.NameFromMarom = selectedName;
+  onBagTypeChange(event: any) {
+    if (this.editingSupplier) {
+      this.editingSupplier.BagType = event;
+    }
   }
-}
-
-validateMailFromMarom() {
-  if (!this.editingSupplier) return;
-
-  const value = this.editingSupplier.mailFromMarom?.toString().trim() ?? '';
-
-  delete this.fieldErrors.mailFromMarom;
-
-  if (!value) {
-    this.fieldErrors.mailFromMarom = 'נדרש להזין כתובת מייל';
-  } else if (
-    !/^[\w.-]+@[a-zA-Z\d.-]+\.[a-zA-Z]{2,}$/.test(value)
-  ) {
-    this.fieldErrors.mailFromMarom = 'כתובת מייל אינה תקינה';
+  getTypeNameById(id: string): string {
+    const type = this.typeList.find(t => t.id === id);
+    return type ? type.name : '';
   }
-}
+
+
+  onMaromContactChange(event: Event) {
+    const selectedName = (event.target as HTMLSelectElement).value;
+    if (this.editingSupplier) {
+      this.editingSupplier.NameFromMarom = selectedName;
+    }
+  }
+
+  validateMailFromMarom() {
+    if (!this.editingSupplier) return;
+
+    const value = this.editingSupplier.mailFromMarom?.toString().trim() ?? '';
+
+    delete this.fieldErrors.mailFromMarom;
+
+    if (!value) {
+      this.fieldErrors.mailFromMarom = 'נדרש להזין כתובת מייל';
+    } else if (
+      !/^[\w.-]+@[a-zA-Z\d.-]+\.[a-zA-Z]{2,}$/.test(value)
+    ) {
+      this.fieldErrors.mailFromMarom = 'כתובת מייל אינה תקינה';
+    }
+  }
 
 
 
