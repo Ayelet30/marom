@@ -238,7 +238,8 @@ export class ProviderTableComponent implements OnInit {
     this.validateField('accountKey');
     this.validateBranchNumber();
     this.validateAccountNumber();
-    this.validatePhone(); 
+    this.validatePhone();
+    this.validateEmail();
 
 
 
@@ -324,6 +325,21 @@ export class ProviderTableComponent implements OnInit {
     }
   }
 
+  validateEmail() {
+    if (!this.editingSupplier) return;
+
+    const value = this.editingSupplier.email?.toString().trim() ?? '';
+
+    delete this.fieldErrors.email;
+
+    if (!value) {
+      this.fieldErrors.email = 'נדרש להזין כתובת מייל';
+    } else if (
+      !/^[\w.-]+@[a-zA-Z\d.-]+\.[a-zA-Z]{2,}$/.test(value)
+    ) {
+      this.fieldErrors.email = 'כתובת מייל אינה תקינה';
+    }
+  }
 
 
 
