@@ -120,11 +120,17 @@
   </ng-container>
 </p>
 
-      <p>
-        <strong>תוקף ניכוי במקור: </strong>
-        <span *ngIf="!isEditing">{{ selectedSupplier.DateHoldingTaxEffect }}</span>
-        <input *ngIf="isEditing" [(ngModel)]="editingSupplier!.DateHoldingTaxEffect">
-      </p>
+     <p>
+  <strong>תוקף ניכוי במקור: </strong>
+  <span *ngIf="!isEditing">{{ selectedSupplier.DateHoldingTaxEffect }}</span>
+  <ng-container *ngIf="isEditing">
+    <input
+      type="date"
+      [(ngModel)]="editingSupplier!.DateHoldingTaxEffect"
+    />
+  </ng-container>
+</p>
+
       <p><strong>אחוזי ניכוי: </strong>
         <span *ngIf="!isEditing">{{ selectedSupplier.DeductionPercentage }}</span>
         <input *ngIf="isEditing" [(ngModel)]="editingSupplier!.DeductionPercentage">
