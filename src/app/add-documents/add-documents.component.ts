@@ -10,8 +10,9 @@ import { buildPluginData } from '../../app/shared/utils';
 import { WizgroundService } from '../services/wizground.service';
 import { initializeApp } from 'firebase/app';
 import { FileUploadService } from '../services/upload.service';
-import { firstValueFrom } from 'rxjs';
+import { filter, finalize, firstValueFrom, map, Observable } from 'rxjs';
 import { Router } from '@angular/router';
+import { AngularFireStorage } from '@angular/fire/compat/storage';
 
 
 @Component({
@@ -26,6 +27,7 @@ export class AddDocumentComponent {
   selectedFiles: { [type: string]: string } = {};
   tasks: TaskDetails[] | undefined;
   dragOverIndex: string | null = null;
+  uploadPercent: Observable<number> | null = null;
 
   uploadSuccess = false;
   uploading = false;
@@ -72,13 +74,13 @@ export class AddDocumentComponent {
   supplierData: any;
 
   constructor(
-    private storage: Storage,
     private firestoreService: FirestoreService,
     private supplierService: SupplierService,
     private emailService: EmailService,
     private wizground: WizgroundService,
     private fileUploadService: FileUploadService,
-    private router: Router
+    private router: Router,
+    private storage: AngularFireStorage
   ) {
     this.supplierData = this.supplierService.getSupplier();
   }
@@ -146,12 +148,14 @@ export class AddDocumentComponent {
         const uploadPromise = (async () => {
           try {
             const url = await this.uploadFileToCloud(file);
-
-            this.uploadedFilesStatus[type] = {
+            if(url){
+              this.uploadedFilesStatus[type] = {
               fileName: file.name,
               url: url,
               status: 'success'
             };
+            }
+            
 
             // פתיחת משימה לרכז
 
@@ -203,22 +207,13 @@ export class AddDocumentComponent {
   //   this.emailService.sendEmail('ayelethury@gmail.com', 'בדיקה', 'שלום עולם').subscribe();
   // }
 
-
-  async uploadFileToCloud(file: File): Promise<string> {
-    if (file) {
-      try {
-        const res = await firstValueFrom(
-          this.fileUploadService.uploadFile(file)
-        );
-        console.log('✅ File uploaded', res);
-        return res.url;
-      } catch (err) {
-        console.error('❌ Upload error', err);
-        throw err;
-      }
-    } else {
+  async uploadFileToCloud(file: File): Promise<string | null> {
+    if (!file) {
       throw new Error('No file provided');
     }
+    const url = await this.fileUploadService.uploadFile(file);
+    console.log('הקובץ עלה לכתובת:', url);
+    return url;
   }
 }
 

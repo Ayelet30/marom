@@ -1,18 +1,17 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { environment } from '../../environments/environment';
+import { ref, uploadBytes, getDownloadURL, getStorage } from 'firebase/storage';
 
 @Injectable({
   providedIn: 'root'
 })
 export class FileUploadService {
-  constructor(private http: HttpClient) {}
+  private storage = getStorage(); 
 
-  uploadFile(file: File) {
-    const formData = new FormData();
-    formData.append('file', file);
-    
-    // שליחת הבקשה לשרת (שמריץ את index.js)
-   return this.http.post<{ url: string }>(`${environment.apiUrl}/upload`, formData);
+  async uploadFile(file: File): Promise<string> {
+    const filePath = `uploads/${Date.now()}_${file.name}`;
+    const fileRef = ref(this.storage, filePath); 
+    const snapshot = await uploadBytes(fileRef, file);
+    const downloadUrl = await getDownloadURL(snapshot.ref);
+    return downloadUrl;
   }
 }
