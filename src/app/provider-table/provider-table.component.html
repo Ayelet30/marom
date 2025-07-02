@@ -131,10 +131,23 @@
   </ng-container>
 </p>
 
-      <p><strong>אחוזי ניכוי: </strong>
-        <span *ngIf="!isEditing">{{ selectedSupplier.DeductionPercentage }}</span>
-        <input *ngIf="isEditing" [(ngModel)]="editingSupplier!.DeductionPercentage">
-      </p>
+    <p><strong>אחוזי ניכוי: </strong>
+  <span *ngIf="!isEditing">{{ selectedSupplier.DeductionPercentage }}</span>
+  <ng-container *ngIf="isEditing">
+    <input
+      type="number"
+      min="0"
+      max="100"
+      [(ngModel)]="editingSupplier!.DeductionPercentage"
+      (input)="validateDeductionPercentage()"
+      [ngClass]="{ 'input-error': fieldErrors.DeductionPercentage }"
+    />
+    <div class="field-error" *ngIf="fieldErrors.DeductionPercentage">
+      {{ fieldErrors.DeductionPercentage }}
+    </div>
+  </ng-container>
+</p>
+
       <p><strong>תיק במס הכנסה: </strong>
         <span *ngIf="!isEditing">{{ selectedSupplier.deductFile }}</span>
         <input *ngIf="isEditing" [(ngModel)]="editingSupplier!.deductFile">
