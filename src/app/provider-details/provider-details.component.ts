@@ -331,7 +331,6 @@ export class ProviderDetailsComponent implements OnInit {
       next: (cities) => {
         this.cities = cities;
 
-        console.log("!!!!", this.cities);
       },
       error: (err) => {
         console.error("שגיאה בשליפת ערים:", err);
@@ -409,7 +408,6 @@ export class ProviderDetailsComponent implements OnInit {
   }
 
   fillForm(supplierData: any) {
-    console.log("!!!!!", supplierData);
 
     // עדכון ה־value של כל אובייקט InputData, כדי שיוצג בשדות
     this.inputNameModel.value = supplierData.fullName;

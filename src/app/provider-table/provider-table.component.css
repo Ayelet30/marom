@@ -142,3 +142,26 @@ button:disabled {
 .details p:last-child {
   margin-bottom: 0;
 }
+.field-error {
+  color: red;
+  font-size: 13px;
+  margin-top: 4px;
+  text-align: right;
+}
+.input-error {
+  border: 1px solid red !important;
+}
+
+.simple-bank-select {
+  max-width: 200px;
+  height: 25px;
+  padding: 4px 8px;
+  font-size: 13px;
+  border: 1px solid #85649B;
+  background-color: white;
+  direction: rtl;
+  color :#85649b;
+  
+}
+
+
