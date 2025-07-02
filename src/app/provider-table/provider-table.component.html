@@ -170,10 +170,19 @@
         <span *ngIf="!isEditing">{{ selectedSupplier.NameFromCompany }}</span>
         <input *ngIf="isEditing" [(ngModel)]="editingSupplier!.NameFromCompany">
       </p>
-      <p><strong>מייל איש קשר מטעם הספק: </strong>
-        <span *ngIf="!isEditing">{{ selectedSupplier.mailFromCompany }}</span>
-        <input *ngIf="isEditing" [(ngModel)]="editingSupplier!.mailFromCompany">
-      </p>
+     <p>
+  <strong>מייל איש קשר מטעם הספק: </strong>
+  <span *ngIf="!isEditing">{{ selectedSupplier.mailFromCompany }}</span>
+  <ng-container *ngIf="isEditing">
+    <input [(ngModel)]="editingSupplier!.mailFromCompany" 
+           (input)="validateMailFromCompany()"
+           [ngClass]="{ 'input-error': fieldErrors.mailFromCompany }" />
+    <div class="field-error" *ngIf="fieldErrors.mailFromCompany">
+      {{ fieldErrors.mailFromCompany }}
+    </div>
+  </ng-container>
+</p>
+
       <p><strong>איש קשר מטעם מרום: </strong>
         <span *ngIf="!isEditing">{{ selectedSupplier.NameFromMarom }}</span>
 

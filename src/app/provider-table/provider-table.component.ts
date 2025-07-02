@@ -275,6 +275,7 @@ this.firestoreService.getDocuments('/coordinators').then((ownersData: any[]) => 
     this.validatePhone();
     this.validateEmail();
     this.validateDeductionPercentage();
+    this.validateMailFromCompany(); 
 
 
 
@@ -375,6 +376,21 @@ this.firestoreService.getDocuments('/coordinators').then((ownersData: any[]) => 
       this.fieldErrors.email = 'כתובת מייל אינה תקינה';
     }
   }
+validateMailFromCompany() {
+  if (!this.editingSupplier) return;
+
+  const value = this.editingSupplier.mailFromCompany?.toString().trim() ?? '';
+
+  delete this.fieldErrors.mailFromCompany;
+
+  if (!value) {
+    this.fieldErrors.mailFromCompany = 'נדרש להזין כתובת מייל';
+  } else if (
+    !/^[\w.-]+@[a-zA-Z\d.-]+\.[a-zA-Z]{2,}$/.test(value)
+  ) {
+    this.fieldErrors.mailFromCompany = 'כתובת מייל אינה תקינה';
+  }
+}
 
 
   validateDeductionPercentage() {
