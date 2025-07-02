@@ -5,11 +5,12 @@ import { ProvidersDetails } from '../models/providers-details.model';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { WizgroundService } from '../services/wizground.service';
 import { CustomInputComponent } from "../custom-input/custom-input.component";
+import { InputData } from '../models/input-data.model';
 
 @Component({
   selector: 'app-provider-table',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, ],
   templateUrl: './provider-table.component.html',
   styleUrls: ['./provider-table.component.css'],
 
@@ -69,6 +70,24 @@ export class ProviderTableComponent implements OnInit {
     { id: '19', name: 'בנק החקלאות לישראל' },
     { id: '22', name: 'בנק סיטי' }
   ];
+typeList = [
+  { id: '1', name: 'עוסק מורשה' },
+  { id: '2', name: 'חברה' },
+  { id: '3', name: 'עוסק פטור' },
+  { id: '4', name: 'עוסק זעיר' },
+  { id: '5', name: 'עמותה' }
+];
+
+  inputBagTypeModel: InputData = {
+    id: 'BagType',
+    label: 'סוג התיק',
+    value: '',
+    type: 'select',
+    name: 'BagType',
+    error: 'יש לבחור סוג מהרשימה',
+    requiredError: 'נדרש לבחור סוג תיק'
+  };
+  dummyControl = new FormControl();
 
   form: FormGroup = new FormGroup({});
 
@@ -82,6 +101,12 @@ export class ProviderTableComponent implements OnInit {
 
   ngOnInit() {
     this.loadData();
+   if (this.editingSupplier) {
+  this.inputBagTypeModel.value = this.editingSupplier.BagType || '';
+  this.dummyControl.setValue(this.inputBagTypeModel.value);
+}
+
+
   }
 
   async loadData() {
@@ -343,22 +368,31 @@ export class ProviderTableComponent implements OnInit {
   }
 
 
-validateDeductionPercentage() {
-  if (!this.editingSupplier) return;
+  validateDeductionPercentage() {
+    if (!this.editingSupplier) return;
 
-  const value = this.editingSupplier.DeductionPercentage?.toString().trim() ?? '';
-  delete this.fieldErrors.DeductionPercentage;
+    const value = this.editingSupplier.DeductionPercentage?.toString().trim() ?? '';
+    delete this.fieldErrors.DeductionPercentage;
 
-  if (!value) {
-    this.fieldErrors.DeductionPercentage = 'נדרש להזין אחוז ניכוי';
-  } else if (!/^\d+(\.\d+)?$/.test(value)) {
-    this.fieldErrors.DeductionPercentage = 'יש להזין מספר חוקי';
-  } else {
-    const numericValue = parseFloat(value);
-    if (numericValue < 0 || numericValue > 100) {
-      this.fieldErrors.DeductionPercentage = 'הערך חייב להיות בין 0 ל-100';
+    if (!value) {
+      this.fieldErrors.DeductionPercentage = 'נדרש להזין אחוז ניכוי';
+    } else if (!/^\d+(\.\d+)?$/.test(value)) {
+      this.fieldErrors.DeductionPercentage = 'יש להזין מספר חוקי';
+    } else {
+      const numericValue = parseFloat(value);
+      if (numericValue < 0 || numericValue > 100) {
+        this.fieldErrors.DeductionPercentage = 'הערך חייב להיות בין 0 ל-100';
+      }
     }
   }
+onBagTypeChange(event: any) {
+if (this.editingSupplier) {
+  this.editingSupplier.BagType = event;
+}
+}
+getTypeNameById(id: string): string {
+  const type = this.typeList.find(t => t.id === id);
+  return type ? type.name : '';
 }
 
 

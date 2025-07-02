@@ -156,10 +156,23 @@
         <span *ngIf="!isEditing">{{ selectedSupplier.ProjectName }}</span>
         <input *ngIf="isEditing" [(ngModel)]="editingSupplier!.ProjectName">
       </p>
-      <p><strong>סוג התיק: </strong>
-        <span *ngIf="!isEditing">{{ selectedSupplier.BagType }}</span>
-        <input *ngIf="isEditing" [(ngModel)]="editingSupplier!.BagType">
-      </p>
+  <p>
+  <strong>סוג התיק: </strong>
+  <span *ngIf="!isEditing">
+    {{ getTypeNameById(selectedSupplier.BagType) }} 
+  </span>
+
+  <ng-container *ngIf="isEditing">
+    <select class="simple-bank-select" [(ngModel)]="editingSupplier!.BagType">
+      <option value="" disabled selected hidden>בחר סוג תיק</option>
+      <option *ngFor="let type of typeList" [value]="type.id">
+        {{ type.name }} 
+      </option>
+    </select>
+  </ng-container>
+</p>
+
+
       <p><strong>עיסוק:</strong>
         <span *ngIf="!isEditing">{{ selectedSupplier.Occupation }}</span>
         <input *ngIf="isEditing" [(ngModel)]="editingSupplier!.Occupation">
